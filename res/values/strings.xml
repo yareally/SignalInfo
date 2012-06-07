@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Android Signal Info</string>
+    <string name="cdmaTitle">CDMA Signal Info</string>
+    <string name="cdmaSignal">CDMA RSSI Signal:</string>
+    <string name="cdmaECIO">CDMA ECIO:</string>
+    <string name="evdoSignal">EVDO RSSI Signal:</string>
+    <string name="evdoECIO">EVDO ECIO:</string>
+    <string name="evdoSNR">EVDO SNR:</string>
+    <string name="lteTitle">LTE Signal Info</string>
+    <string name="saveScreenShot">Save Screenshot</string>
+    <string name="phoneInfo">Phone Info</string>
+    <string name="phoneModel">Phone Model:</string>
+    <string name="androidVersion">Android Version:</string>
+    <string name="carrierName">Carrier:</string>
+    <string name="networkType">Network Type:</string>
+    <string name="rsrpSignal">LTE RSRP Signal:</string>
+    <string name="rssiSignal">LTE RSSI Signal:</string>
+    <string name="lteRSRQ">LTE RSRQ:</string>
+    <string name="lteSNR">LTE SNR:</string>
+    <string name="lteCQI">LTE CQI:</string>
+    <string name="lteSigStrength">LTE Signal Strength:</string>
+    <string name="gsmSigStrength">GSM Signal Strength:</string>
+    <string name="gsmBitError">GSM Bit Error Rate:</string>
+    <string name="na">N/A</string>
+    <string name="phoneName">Phone Name: </string>
+    <string name="copyright">©2012 codingcreation.com</string>
+    <string name="buildHost">Build Host:</string>
+</resources>
