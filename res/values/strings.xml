@@ -26,4 +26,5 @@
     <string name="phoneName">Phone Name: </string>
     <string name="copyright">©2012 codingcreation.com</string>
     <string name="buildHost">Build Host:</string>
+    <string name="contentDescTag">info</string>
 </resources>

@@ -25,30 +25,26 @@ http://www.opensource.org/licenses/mit-license.php
 
 package com.android.signalinfo;
 
-import android.R;
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Resources;
-import android.graphics.Bitmap;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.v4.app.FragmentActivity;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 import com.android.signalinfo.R.id;
 import com.android.signalinfo.R.layout;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * Make sure to add "android.permission.CHANGE_NETWORK_STATE"
@@ -57,27 +53,46 @@ import java.util.Arrays;
  * @author Wes Lanning
  * @version 1.0
  */
-public class SignalInfo extends Activity implements OnClickListener
+public class SignalInfo extends FragmentActivity // implements OnClickListener
 {
-    private static final String TAG = "Signal";
-    private MyPhoneStateListener listen;
-    private TelephonyManager     tm;
-    private static final String SD_DIR    = "/Android/data/signalinfo";
-    private static final String SS_SUFFIX = "signal-state.png";
-    private Button screenShotBtn;
+    private static final Pattern              SPACE_STR        = Pattern.compile(" ");
+    private static final String               SD_DIR           = "/Android/data/signalinfo";
+    private static final String               SS_SUFFIX        = "signal-state.png";
+    private static final int                  GSM_SIG_STRENGTH = 1;
+    private static final int                  GSM_BIT_ERROR    = 2;
+    private static final int                  CDMA_SIGNAL      = 3;
+    private static final int                  CDMA_ECIO        = 4;
+    private static final int                  EVDO_SIGNAL      = 5;
+    private static final int                  EVDO_ECIO        = 6;
+    private static final int                  EVDO_SNR         = 7;
+    private static final int                  LTE_SIG_STRENGTH = 8;
+    private static final int                  LTE_RSRP         = 9;
+    private static final int                  LTE_RSRQ         = 10;
+    private static final int                  LTE_SNR          = 11;
+    private static final int                  LTE_CQI          = 12;
+    private static final int                  IS_GSM           = 13;
+    private static final int                  LTE_RSSI         = 14;
+    private static final String               DEFAULT_TXT      = "N/A";
+    private final        String               TAG              = getClass().getSimpleName();
+    private              MyPhoneStateListener listen           = null;
+    private              TelephonyManager     tm               = null;
 
-    private static final int GSM_SIG_STRENGTH = 1;
-    private static final int GSM_BIT_ERROR    = 2;
-    private static final int CDMA_SIGNAL      = 3;
-    private static final int CDMA_ECIO        = 4;
-    private static final int EVDO_SIGNAL      = 5;
-    private static final int EVDO_ECIO        = 6;
-    private static final int EVDO_SNR         = 7;
-    private static final int LTE_SIG_STRENGTH = 8;
-    private static final int LTE_RSRP         = 9;
-    private static final int LTE_RSRQ         = 10;
-    private static final int LTE_SNR          = 11;
-    private static final int LTE_CQI          = 12;
+    private static int computeRssi(String rsrp, String rsrq)
+    {
+        return -17 - Integer.parseInt(rsrp) - Integer.parseInt(rsrq);
+    }
+
+    private static String[] formatSignalData(String... data)
+    {
+        for (int i = 0; i < data.length; ++i) {
+            data[i] = "-1".equals(data[i])
+                || "99".equals(data[i])
+                || "1000".compareTo(data[i]) == -1
+                ? "N/A"
+                : data[i];
+        }
+        return data;
+    }
 
     /**
      * Initialize the app.
@@ -92,19 +107,12 @@ public class SignalInfo extends Activity implements OnClickListener
 
 
         listen = new MyPhoneStateListener();
-        tm = (TelephonyManager) this.getSystemService(Context.TELEPHONY_SERVICE);
+        tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
         tm.listen(listen, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-/*        this.screenShotBtn = (Button) this.findViewById(id.saveScreenShot);
-        this.screenShotBtn.setOnClickListener(this);*/
 
-        this.setPhoneInfo();
-
+        setPhoneInfo();
     }
-
-
-
-
 
     /**
      * Set the phone model, OS version, carrier name on the screen
@@ -148,91 +156,97 @@ public class SignalInfo extends Activity implements OnClickListener
     }
 
     /**
-     * Handle button pushes
+     * Set the signal info the user sees.
      *
-     * @param view - the screen where the button was pushed.
+     * @param signalStrength - contains all the signal info
+     * @see android.telephony.SignalStrength for more info.
      */
-    public void onClick(View view)
+    private void setSignalInfo(SignalStrength signalStrength)
     {
-        if (this.screenShotBtn.isPressed()) {
-            String filename = this.getScreen(getWindow().getDecorView().findViewById(R.id.content));
+        Log.d(TAG, "formatting sig str");
+        String[] sigInfo = formatSignalData(SPACE_STR.split(signalStrength.toString()));
 
-            if ("".equals(filename)) {
-                Toast.makeText(this.getApplicationContext(), "Could not save screenshot", 3);
+        Log.d("Signal Array", Arrays.toString(sigInfo));
+        Map<Integer, TextView> signalDataMap = getSignalDataMap();
+
+        for (Map.Entry<Integer, TextView> data : signalDataMap.entrySet()) {
+            // TODO: maybe use an adapter of some sort instead of this (ListAdapter maybe?)
+            TextView currentTextView = data.getValue();
+
+            try {
+                String sigValue;
+
+                if (data.getKey() == LTE_RSSI) {
+                    sigValue = DEFAULT_TXT.equals(sigInfo[LTE_RSRP]) || DEFAULT_TXT.equals(sigInfo[LTE_RSRQ])
+                        ? DEFAULT_TXT
+                        : "-" + computeRssi(sigInfo[LTE_RSRP], sigInfo[LTE_RSRQ]);
+                }
+                else {
+                    sigValue = sigInfo[data.getKey()];
+                }
+                Log.d(TAG, "sigValue: " + sigValue);
+
+                if (!sigValue.equals(DEFAULT_TXT)) {
+                    String db = "";
+                    if (data.getKey() != IS_GSM) {
+                        db = " db";
+                    }
+                    Log.d(TAG, "sigvalue before setting: " + sigValue + db);
+                    currentTextView.setText(sigValue + db);
+                }
             }
-            else {
-                Toast.makeText(this.getApplicationContext(), "Screenshot saved to " + filename, 3);
+            catch (Resources.NotFoundException ignored) {
+                currentTextView.setText(DEFAULT_TXT);
             }
         }
     }
 
     /**
-     * Captures a screen shot.
+     * Get the TextView that matches with the signal data
+     * value and store both in a map entry. data value is tied to the
+     * order it would be returned in the toString() method to get
+     * all data from SignalStrength.
      *
-     * @return true if screen shot was taken and saved. False otherwise.
+     * @return - the mapped TextViews to their signal data key
      */
-    private String getScreen(View content)
+    private Map<Integer, TextView> getSignalDataMap()
     {
-        content.setDrawingCacheEnabled(true);
-        content.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
-            View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-        content.layout(0, 0, content.getMeasuredWidth(), content.getMeasuredHeight());
-        content.buildDrawingCache(true);
+        LinearLayout layout = (LinearLayout) this.findViewById(id.main);
+        Pattern uscore = Pattern.compile("_");
+        Map<Integer, TextView> signalData = new HashMap<Integer, TextView>(28);
+        ArrayList<View> signalInfoViews = new ArrayList<View>(0);
+        layout.findViewsWithText(
+            signalInfoViews, getString(R.string.contentDescTag), View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
+        Log.d(TAG, "Returned Views " + signalInfoViews.toString());
 
-        Bitmap bitmap = content.getDrawingCache();
-
-        Log.d(TAG, "Creating new directory at " + Environment.getExternalStorageDirectory()
-            + SD_DIR);
-
-        File file = new File(Environment.getExternalStorageDirectory()
-            + SD_DIR);
-
-        if (!file.mkdirs()) {
-            Log.e(TAG, "Could not make directory " +
-                Environment.getExternalStorageDirectory() + SD_DIR + '/' + SS_SUFFIX);
-        }
+        for (View signalView : signalInfoViews) {
+            try {
+                TextView currentView = (TextView) signalView;
+                Log.d(TAG, "Current text view: " + getResources().getResourceEntryName(currentView.getId()) + " id: " + currentView.getId());
+                String[] childName = uscore.split(
+                    getResources().getResourceEntryName(currentView.getId()));
 
 
-        file = new File(Environment.getExternalStorageDirectory() + "/"
-            + SD_DIR + '/' + System.currentTimeMillis() / 1000 + '-' + SS_SUFFIX);
-
-        Log.d(TAG, "Creating new file at " + file.getAbsolutePath());
-
-        FileOutputStream ostream = null;
-
-        try {
-            if (file.createNewFile()) {
-                ostream = new FileOutputStream(file);
-
-                if (bitmap.compress(Bitmap.CompressFormat.PNG, 100, ostream)) {
-                    //  content.setDrawingCacheEnabled(false);
-                    return file.getAbsolutePath();
+                if (childName.length > 1) {
+                    signalData.put(Integer.parseInt(childName[1]), currentView);
                 }
+                Log.d(TAG, "array data: " + Arrays.toString(childName));
+                Log.d(TAG, "array data len: " + childName.length);
+            }
+            catch (Resources.NotFoundException ignored) {
+                Log.e(TAG, "Could not parse signal array " + signalInfoViews.toString());
             }
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (ostream != null) {
-                try {
-                    ostream.close();
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return "";
+
+        Log.d(TAG, "Returning signal data: " + signalData.size());
+        return signalData;
     }
-
 
     /**
      * Private helper class to listen for network signal changes.
      */
     private class MyPhoneStateListener extends PhoneStateListener
     {
-
-
         /**
          * Get the Signal strength from the provider, each time there is an update
          *
@@ -245,88 +259,9 @@ public class SignalInfo extends Activity implements OnClickListener
 
             if (signalStrength != null) {
                 setSignalInfo(signalStrength);
+                Log.d(TAG, "getting sig strength");
                 Log.d(TAG, signalStrength.toString());
             }
         }
     }
-
-
-    /**
-     * Set the signal info the user sees.
-     *
-     * @param signalStrength - contains all the signal info
-     * @see SignalStrength for more info.
-     */
-    private void setSignalInfo(SignalStrength signalStrength)
-    {
-        TextView t = (TextView) findViewById(id.networkType);
-        t.setText(signalStrength.isGsm() ? "gsm | lte" : "cdma | evdo");
-        String[] sigInfo = signalStrength.toString().split(" ");
-        Log.d("Signal Array", Arrays.toString(sigInfo));
-
-        t = (TextView) findViewById(id.cdmaSignal);
-        t.setText(sigInfo[CDMA_SIGNAL] + " db");
-
-        t = (TextView) findViewById(id.evdoSignal);
-        t.setText(sigInfo[EVDO_SIGNAL] + " db");
-
-        t = (TextView) findViewById(id.cdmaECIO);
-
-        try {
-            t.setText(sigInfo[CDMA_ECIO]);
-        }
-        catch (Resources.NotFoundException e) {
-            t.setText("N/A");
-        }
-
-        t = (TextView) findViewById(id.evdoECIO);
-
-        try {
-            t.setText(sigInfo[EVDO_ECIO]);
-        }
-        catch (Resources.NotFoundException e) {
-            t.setText("N/A");
-        }
-
-        t = (TextView) findViewById(id.evdoSNR);
-
-        try {
-            t.setText(sigInfo[EVDO_SNR]);
-        }
-        catch (Resources.NotFoundException e) {
-            t.setText("N/A");
-        }
-
-        t = (TextView) findViewById(id.gsmSigStrength);
-        t.setText("99".equals(sigInfo[GSM_SIG_STRENGTH]) ? "N/A" : sigInfo[GSM_SIG_STRENGTH]);
-
-        t = (TextView) findViewById(id.gsmBitError);
-        t.setText("-1".equals(sigInfo[GSM_BIT_ERROR]) ? "N/A" : sigInfo[GSM_BIT_ERROR]);
-
-        if ("-1".equals(sigInfo[LTE_RSRP])) {
-            return; // no LTE
-        }
-
-        t = (TextView) findViewById(id.rsrpSignal);
-        t.setText(sigInfo[LTE_RSRP] + " db");
-
-        t = (TextView) findViewById(id.rssiSignal);
-        int rssi = -17 - Integer.parseInt(sigInfo[LTE_RSRP]) - Integer.parseInt(sigInfo[LTE_RSRQ]);
-        t.setText('-' + Integer.toString(rssi) + " db");
-
-
-        t = (TextView) findViewById(id.lteRSRQ);
-        t.setText('-' + sigInfo[LTE_RSRQ] + " db");
-
-        t = (TextView) findViewById(id.lteSNR);
-        t.setText(sigInfo[LTE_SNR]);
-
-        t = (TextView) findViewById(id.lteCQI);
-        t.setText(sigInfo[LTE_CQI]);
-
-
-        t = (TextView) findViewById(id.lteSigStrength);
-        t.setText(sigInfo[LTE_SIG_STRENGTH]);
-    }
-
 }
