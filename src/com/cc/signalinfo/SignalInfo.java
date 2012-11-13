@@ -23,7 +23,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 http://www.opensource.org/licenses/mit-license.php
 */
 
-package com.android.signalinfo;
+package com.cc.signalinfo;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -34,17 +34,17 @@ import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.view.View;
+import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.android.signalinfo.R.id;
-import com.android.signalinfo.R.layout;
+import com.cc.signalinfo.R.id;
+import com.cc.signalinfo.R.layout;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+
 
 /**
  * Make sure to add "android.permission.CHANGE_NETWORK_STATE"
@@ -55,27 +55,28 @@ import java.util.regex.Pattern;
  */
 public class SignalInfo extends FragmentActivity // implements OnClickListener
 {
-    private static final Pattern              SPACE_STR        = Pattern.compile(" ");
-    private static final String               SD_DIR           = "/Android/data/signalinfo";
-    private static final String               SS_SUFFIX        = "signal-state.png";
-    private static final int                  GSM_SIG_STRENGTH = 1;
-    private static final int                  GSM_BIT_ERROR    = 2;
-    private static final int                  CDMA_SIGNAL      = 3;
-    private static final int                  CDMA_ECIO        = 4;
-    private static final int                  EVDO_SIGNAL      = 5;
-    private static final int                  EVDO_ECIO        = 6;
-    private static final int                  EVDO_SNR         = 7;
-    private static final int                  LTE_SIG_STRENGTH = 8;
-    private static final int                  LTE_RSRP         = 9;
-    private static final int                  LTE_RSRQ         = 10;
-    private static final int                  LTE_SNR          = 11;
-    private static final int                  LTE_CQI          = 12;
-    private static final int                  IS_GSM           = 13;
-    private static final int                  LTE_RSSI         = 14;
-    private static final String               DEFAULT_TXT      = "N/A";
-    private final        String               TAG              = getClass().getSimpleName();
-    private              MyPhoneStateListener listen           = null;
-    private              TelephonyManager     tm               = null;
+    private static final Pattern              SPACE_STR          = Pattern.compile(" ");
+    private static final String               SD_DIR             = "/Android/data/signalinfo";
+    private static final String               SS_SUFFIX          = "signal-state.png";
+    private static final int                  GSM_SIG_STRENGTH   = 1;
+    private static final int                  GSM_BIT_ERROR      = 2;
+    private static final int                  CDMA_SIGNAL        = 3;
+    private static final int                  CDMA_ECIO          = 4;
+    private static final int                  EVDO_SIGNAL        = 5;
+    private static final int                  EVDO_ECIO          = 6;
+    private static final int                  EVDO_SNR           = 7;
+    private static final int                  LTE_SIG_STRENGTH   = 8;
+    private static final int                  LTE_RSRP           = 9;
+    private static final int                  LTE_RSRQ           = 10;
+    private static final int                  LTE_SNR            = 11;
+    private static final int                  LTE_CQI            = 12;
+    private static final int                  IS_GSM             = 13;
+    private static final int                  LTE_RSSI           = 14;
+    private static final String               DEFAULT_TXT        = "N/A";
+    private static final int                  MAX_SIGNAL_ENTRIES = 14;
+    private final        String               TAG                = getClass().getSimpleName();
+    private              MyPhoneStateListener listen             = null;
+    private              TelephonyManager     tm                 = null;
 
     private static int computeRssi(String rsrp, String rsrq)
     {
@@ -104,8 +105,9 @@ public class SignalInfo extends FragmentActivity // implements OnClickListener
     {
         super.onCreate(savedInstanceState);
         setContentView(layout.main);
-
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+/*        AdView ad = (AdView) findViewById(id.adView);
+        ad.loadAd(new AdRequest());*/
         listen = new MyPhoneStateListener();
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -214,15 +216,19 @@ public class SignalInfo extends FragmentActivity // implements OnClickListener
         LinearLayout layout = (LinearLayout) this.findViewById(id.main);
         Pattern uscore = Pattern.compile("_");
         Map<Integer, TextView> signalData = new HashMap<Integer, TextView>(28);
-        ArrayList<View> signalInfoViews = new ArrayList<View>(0);
-        layout.findViewsWithText(
-            signalInfoViews, getString(R.string.contentDescTag), View.FIND_VIEWS_WITH_CONTENT_DESCRIPTION);
-        Log.d(TAG, "Returned Views " + signalInfoViews.toString());
 
-        for (View signalView : signalInfoViews) {
+        for (int i = 1; i <= MAX_SIGNAL_ENTRIES; ++i) {
             try {
-                TextView currentView = (TextView) signalView;
-                Log.d(TAG, "Current text view: " + getResources().getResourceEntryName(currentView.getId()) + " id: " + currentView.getId());
+                TextView currentView = (TextView) layout.findViewWithTag(String.valueOf(i));
+                if (currentView != null) {
+                    Log.d(TAG, "Current text view: "
+                        + getResources().getResourceEntryName(currentView.getId())
+                        + " id: " + currentView.getId());
+                }
+                else {
+                    Log.d(TAG, "Current Text View retrieved was null");
+                    continue;
+                }
                 String[] childName = uscore.split(
                     getResources().getResourceEntryName(currentView.getId()));
 
@@ -234,10 +240,9 @@ public class SignalInfo extends FragmentActivity // implements OnClickListener
                 Log.d(TAG, "array data len: " + childName.length);
             }
             catch (Resources.NotFoundException ignored) {
-                Log.e(TAG, "Could not parse signal array " + signalInfoViews.toString());
+                Log.e(TAG, "Could not parse signal textviews");
             }
         }
-
         Log.d(TAG, "Returning signal data: " + signalData.size());
         return signalData;
     }

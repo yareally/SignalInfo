@@ -1,361 +1,408 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/main"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:paddingTop="5dp"
-              android:paddingLeft="10dp"
-              android:paddingRight="10dp">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:layout_height="fill_parent"
+    android:layout_width="wrap_content">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/main"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
+
+        <com.google.ads.AdView
+            android:id="@+id/adView"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            ads:adSize="BANNER"
+            ads:adUnitId="a150a0f996cbdbd" />
+        <!--        <com.google.ads.AdView android:id="@+id/ad"
+                                       android:layout_width="wrap_content"
+                                       android:layout_height="wrap_content"
+                                       ads:adSize="BANNER"
+                                       ads:adUnitId="AD_UNIT_ID_GOES_HERE"
+                                       ads:testDevices="android-6541168968af918"
+                                       ads:loadAdOnCreate="true"/>-->
+        <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/phoneInfo"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
 
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                 android:orientation="vertical"
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:stretchColumns="1"
-                 android:paddingTop="5dp"
-                 android:paddingLeft="10dp"
-                 android:paddingRight="10dp">
-        <TableRow>
-            <TextView
+        <TableLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1"
+            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/phoneName"
-                    />
-            <TextView
+                    android:text="@string/phoneName" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/phoneName"
-                    android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:text="@string/na" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/phoneModel"
-                    />
-            <TextView
+                    android:text="@string/phoneModel" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/phoneModel"
-                    android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:text="@string/na" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/androidVersion"
-                    />
-            <TextView
+                    android:text="@string/androidVersion" />
+
+                <TextView
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/androidVersion"
-                    android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:text="@string/na" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/carrierName"
-                    />
-            <TextView
+                    android:text="@string/carrierName" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/carrierName"
-                    android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:text="@string/na" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/buildHost"
-                    />
-            <TextView
+                    android:text="@string/buildHost" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/buildHost"
-                    android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:text="@string/na" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/networkType"
-                    />
-            <TextView
+                    android:text="@string/networkType" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/networkType_13"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-    </TableLayout>
+                    android:tag="13" />
+            </TableRow>
+        </TableLayout>
 
-    <TextView
+        <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/cdmaTitle"
             android:paddingTop="10dp"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
 
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                 android:orientation="vertical"
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:stretchColumns="1"
-                 android:paddingTop="5dp"
-                 android:paddingLeft="10dp"
-                 android:paddingRight="10dp">
-        <TableRow>
-            <TextView
+        <TableLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1"
+            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/cdmaSignal"
-                    />
-            <TextView
+                    android:text="@string/cdmaSignal" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/cdmaSignal_3"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:tag="3" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/evdoSignal"
-                    />
-            <TextView
+                    android:text="@string/evdoSignal" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/evdoSignal_5"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:tag="5" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/cdmaECIO"
-                    />
-            <TextView
+                    android:text="@string/cdmaECIO" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/cdmaECIO_4"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
+                    android:tag="4" />
+            </TableRow>
 
-        <TableRow>
-            <TextView
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/evdoECIO"
-                    />
-            <TextView
+                    android:text="@string/evdoECIO" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/evdoECIO_6"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:tag="6" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/evdoSNR"
-                    />
-            <TextView
+                    android:text="@string/evdoSNR" />
+
+                <TextView
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/evdoSNR_7"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-    </TableLayout>
+                    android:tag="7" />
+            </TableRow>
+        </TableLayout>
 
 
-    <TextView
+        <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/lteTitle"
             android:paddingTop="10dp"
-            android:textSize="20sp"
-            />
+            android:textSize="20sp" />
 
-    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
-                 android:orientation="vertical"
-                 android:layout_width="fill_parent"
-                 android:layout_height="wrap_content"
-                 android:stretchColumns="1"
-                 android:paddingTop="5dp"
-                 android:paddingBottom="10dp"
-                 android:paddingLeft="10dp"
-                 android:paddingRight="10dp">
-        <TableRow>
-            <TextView
+        <TableLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/rsrpSignal"
-                    />
-            <TextView
+                    android:text="@string/rsrpSignal" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/rsrpSignal_9"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:tag="9" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/rssiSignal"
-                    />
-            <TextView
+                    android:text="@string/rssiSignal" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/rssiSignal_14"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:tag="14" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/lteRSRQ"
-                    />
-            <TextView
+                    android:text="@string/lteRSRQ" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lteRSRQ_10"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:tag="10" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/lteSNR"
-                    />
-            <TextView
+                    android:text="@string/lteSNR" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lteSNR_11"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:tag="11" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/lteCQI"
-                    />
-            <TextView
+                    android:text="@string/lteCQI" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lteCQI_12"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:tag="12" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/lteSigStrength"
-                    />
-            <TextView
+                    android:text="@string/lteSigStrength" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lteSigStrength_8"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:tag="8" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/gsmSigStrength"
-                    />
-            <TextView
+                    android:text="@string/gsmSigStrength" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/gsmSigStrength_1"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-        <TableRow>
-            <TextView
+                    android:tag="1" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/gsmBitError"
-                    />
-            <TextView
+                    android:text="@string/gsmBitError" />
+
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/gsmBitError_2"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
-                    />
-        </TableRow>
-    </TableLayout>
-    <TextView
+                    android:tag="2" />
+            </TableRow>
+        </TableLayout>
+
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal|bottom"
-            android:text="@string/copyright"
-            />
-<!--    <Button android:id="@+id/saveScreenShot"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/saveScreenShot"
-            />-->
+            android:text="@string/copyright" />
+        <!--    <Button android:id="@+id/saveScreenShot"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/saveScreenShot"
+                    />-->
 
-</LinearLayout>
-
+    </LinearLayout>
+</ScrollView>
