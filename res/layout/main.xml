@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
     android:layout_height="fill_parent"
-    android:layout_width="wrap_content">
+    android:layout_width="fill_parent">
 
     <LinearLayout
         android:id="@+id/main"
@@ -394,6 +394,33 @@
         </TableLayout>
 
         <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/additionalInfoLbl"
+            android:paddingTop="10dp"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+
+
+            <Button
+                android:id="@+id/additionalInfo"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:text="@string/additionalInfoBtnTxt" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/copyright"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal|bottom"

@@ -27,4 +27,15 @@
     <string name="copyright">©2012 codingcreation.com</string>
     <string name="buildHost">Build Host:</string>
     <string name="contentDescTag">info</string>
+    <string name="additionalInfoLbl">Access and configure additional radio info
+        hidden in the system:</string>
+    <string name="additionalInfoBtnTxt">Additional Info</string>
+    <string name="warningDialogTitle">Proceed with Caution!</string>
+    <string name="warningDialogText">The settings found on the next screen are
+        normally hidden from users. Misconfiguration of these settings may harm
+        your network connection.
+    </string>
+    <string name="dialogNoPromptTxt">I promise I will not blame the developer, give him a bad review or make him my personal tech support
+        if I screw up these settings since I was warned ☺
+    </string>
 </resources>

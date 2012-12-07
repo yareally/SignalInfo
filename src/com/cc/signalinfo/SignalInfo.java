@@ -25,7 +25,11 @@ http://www.opensource.org/licenses/mit-license.php
 
 package com.cc.signalinfo;
 
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -34,11 +38,15 @@ import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.cc.signalinfo.R.id;
 import com.cc.signalinfo.R.layout;
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -53,11 +61,9 @@ import java.util.regex.Pattern;
  * @author Wes Lanning
  * @version 1.0
  */
-public class SignalInfo extends FragmentActivity // implements OnClickListener
+public class SignalInfo extends FragmentActivity implements View.OnClickListener
 {
     private static final Pattern              SPACE_STR          = Pattern.compile(" ");
-    private static final String               SD_DIR             = "/Android/data/signalinfo";
-    private static final String               SS_SUFFIX          = "signal-state.png";
     private static final int                  GSM_SIG_STRENGTH   = 1;
     private static final int                  GSM_BIT_ERROR      = 2;
     private static final int                  CDMA_SIGNAL        = 3;
@@ -106,15 +112,54 @@ public class SignalInfo extends FragmentActivity // implements OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(layout.main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        displayVersionName();
+
 /*        AdView ad = (AdView) findViewById(id.adView);
         ad.loadAd(new AdRequest());*/
         listen = new MyPhoneStateListener();
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
         tm.listen(listen, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-
+        findViewById(id.additionalInfo).setOnClickListener(this);
         setPhoneInfo();
     }
+
+    /**
+     * Shows additional radio settings contained in the Android OS.
+     *
+     * @param view - button that shows the settings.
+     */
+    @Override
+    public void onClick(View view)
+    {
+        if (userConsent(getPreferences(Context.MODE_PRIVATE))) {
+            startActivity(getAdditionalSettings());
+        }
+        else {
+            new WarningDialogFragment().show(getSupportFragmentManager(), "Warning");
+        }
+    }
+
+
+    public static boolean userConsent(SharedPreferences settings)
+    {
+        return !(!settings.contains(WarningDialogFragment.PROMPT_SETTING)
+            || !settings.getBoolean(WarningDialogFragment.PROMPT_SETTING, false));
+    }
+
+    /**
+     * Get the intent that launches the additional radio settings screen
+     *
+     * @return the intent for the settings area
+     */
+    public static Intent getAdditionalSettings()
+    {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        ComponentName showSettings = new ComponentName(
+            "com.android.settings", "com.android.settings.TestingSettings");
+        return intent.setComponent(showSettings);
+    }
+
 
     /**
      * Set the phone model, OS version, carrier name on the screen
@@ -168,7 +213,17 @@ public class SignalInfo extends FragmentActivity // implements OnClickListener
         Log.d(TAG, "formatting sig str");
         String[] sigInfo = formatSignalData(SPACE_STR.split(signalStrength.toString()));
 
-        Log.d("Signal Array", Arrays.toString(sigInfo));
+        if (sigInfo.length > 0) {
+            Log.d("Signal Array", Arrays.toString(sigInfo));
+            displaySignalInfo(sigInfo);
+        }
+        else {
+            Toast.makeText(this, "Your device/Android OS version does not seem to support showing network information or is currently not connected to a cellular network. Please try again later.", Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void displaySignalInfo(String... sigInfo)
+    {
         Map<Integer, TextView> signalDataMap = getSignalDataMap();
 
         for (Map.Entry<Integer, TextView> data : signalDataMap.entrySet()) {
@@ -226,6 +281,7 @@ public class SignalInfo extends FragmentActivity // implements OnClickListener
                         + " id: " + currentView.getId());
                 }
                 else {
+
                     Log.d(TAG, "Current Text View retrieved was null");
                     continue;
                 }
@@ -247,6 +303,7 @@ public class SignalInfo extends FragmentActivity // implements OnClickListener
         return signalData;
     }
 
+
     /**
      * Private helper class to listen for network signal changes.
      */
@@ -267,6 +324,19 @@ public class SignalInfo extends FragmentActivity // implements OnClickListener
                 Log.d(TAG, "getting sig strength");
                 Log.d(TAG, signalStrength.toString());
             }
+        }
+    }
+
+    private void displayVersionName()
+    {
+        try {
+            TextView copyright = (TextView) findViewById(id.copyright);
+            copyright.setText(copyright.getText()
+                + " | v. "
+                + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
         }
     }
 }
