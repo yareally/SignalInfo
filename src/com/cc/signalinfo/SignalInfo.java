@@ -45,8 +45,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.cc.signalinfo.R.id;
 import com.cc.signalinfo.R.layout;
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -89,7 +87,14 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
         return -17 - Integer.parseInt(rsrp) - Integer.parseInt(rsrq);
     }
 
-    private static String[] formatSignalData(String... data)
+    /**
+     * Removes any crap that might show weird numbers because the phone does not support
+     * some reading or avoids causing an exception by removing it.
+     *
+     * @param data - data to filter
+     * @return filtered data with "n/a" instead of the bad value
+     */
+    private static String[] filterSignalData(String... data)
     {
         for (int i = 0; i < data.length; ++i) {
             data[i] = "-1".equals(data[i])
@@ -211,7 +216,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
     private void setSignalInfo(SignalStrength signalStrength)
     {
         Log.d(TAG, "formatting sig str");
-        String[] sigInfo = formatSignalData(SPACE_STR.split(signalStrength.toString()));
+        String[] sigInfo = filterSignalData(SPACE_STR.split(signalStrength.toString()));
 
         if (sigInfo.length > 0) {
             Log.d("Signal Array", Arrays.toString(sigInfo));
