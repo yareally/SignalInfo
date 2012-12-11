@@ -225,7 +225,6 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
      */
     private void setSignalInfo(SignalStrength signalStrength)
     {
-        Log.d(TAG, "formatting sig str");
         String[] sigInfo = filterSignalData(SPACE_STR.split(signalStrength.toString()));
 
         if (sigInfo.length > 0) {
@@ -259,14 +258,11 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
                         : DEFAULT_TXT;
                 }
 
-                Log.d(TAG, "sigValue: " + sigValue);
-
                 if (!sigValue.equals(DEFAULT_TXT)) {
                     String db = "";
                     if (data.getKey() != IS_GSM) {
                         db = " db";
                     }
-                    Log.d(TAG, "sigvalue before setting: " + sigValue + db);
                     currentTextView.setText(sigValue + db);
                 }
             }
@@ -293,31 +289,20 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
         for (int i = 1; i <= MAX_SIGNAL_ENTRIES; ++i) {
             try {
                 TextView currentView = (TextView) layout.findViewWithTag(String.valueOf(i));
+
                 if (currentView != null) {
-                    Log.d(TAG, "Current text view: "
-                        + getResources().getResourceEntryName(currentView.getId())
-                        + " id: " + currentView.getId());
-                }
-                else {
+                    String[] childName = uscore.split(
+                        getResources().getResourceEntryName(currentView.getId()));
 
-                    Log.d(TAG, "Current Text View retrieved was null");
-                    continue;
+                    if (childName.length > 1) {
+                        signalData.put(Integer.parseInt(childName[1]), currentView);
+                    }
                 }
-                String[] childName = uscore.split(
-                    getResources().getResourceEntryName(currentView.getId()));
-
-
-                if (childName.length > 1) {
-                    signalData.put(Integer.parseInt(childName[1]), currentView);
-                }
-                Log.d(TAG, "array data: " + Arrays.toString(childName));
-                Log.d(TAG, "array data len: " + childName.length);
             }
             catch (Resources.NotFoundException ignored) {
                 Log.e(TAG, "Could not parse signal textviews");
             }
         }
-        Log.d(TAG, "Returning signal data: " + signalData.size());
         return signalData;
     }
 
