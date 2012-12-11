@@ -45,6 +45,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.cc.signalinfo.R.id;
 import com.cc.signalinfo.R.layout;
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -82,6 +84,14 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
     private              MyPhoneStateListener listen             = null;
     private              TelephonyManager     tm                 = null;
 
+    /**
+     * Computest the LTE RSSI by what is most likely the default number of
+     * channels on the LTE device (at least for Verizon).
+     *
+     * @param rsrp - the RSRP LTE signal
+     * @param rsrq - the RSRQ LTE signal
+     * @return the RSSI signal
+     */
     private static int computeRssi(String rsrp, String rsrq)
     {
         return -17 - Integer.parseInt(rsrp) - Integer.parseInt(rsrq);
@@ -109,7 +119,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
     /**
      * Initialize the app.
      *
-     * @param savedInstanceState
+     * @param savedInstanceState - umm... the saved instance state
      */
     @Override
     public void onCreate(Bundle savedInstanceState)
@@ -119,8 +129,8 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         displayVersionName();
 
-/*        AdView ad = (AdView) findViewById(id.adView);
-        ad.loadAd(new AdRequest());*/
+        AdView ad = (AdView) findViewById(id.adView);
+        ad.loadAd(new AdRequest());
         listen = new MyPhoneStateListener();
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -223,7 +233,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
             displaySignalInfo(sigInfo);
         }
         else {
-            Toast.makeText(this, "Your device/Android OS version does not seem to support showing network information or is currently not connected to a cellular network. Please try again later.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.deviceNotSupported), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -244,8 +254,11 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
                         : "-" + computeRssi(sigInfo[LTE_RSRP], sigInfo[LTE_RSRQ]);
                 }
                 else {
-                    sigValue = sigInfo[data.getKey()];
+                    sigValue = data.getKey() < sigInfo.length
+                        ? sigInfo[data.getKey()]
+                        : DEFAULT_TXT;
                 }
+
                 Log.d(TAG, "sigValue: " + sigValue);
 
                 if (!sigValue.equals(DEFAULT_TXT)) {
@@ -308,6 +321,21 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
         return signalData;
     }
 
+    /**
+     * Displays the version number in the app
+     */
+    private void displayVersionName()
+    {
+        try {
+            TextView copyright = (TextView) findViewById(id.copyright);
+            copyright.setText(copyright.getText()
+                + " | v. "
+                + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
+        }
+        catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Private helper class to listen for network signal changes.
@@ -329,19 +357,6 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
                 Log.d(TAG, "getting sig strength");
                 Log.d(TAG, signalStrength.toString());
             }
-        }
-    }
-
-    private void displayVersionName()
-    {
-        try {
-            TextView copyright = (TextView) findViewById(id.copyright);
-            copyright.setText(copyright.getText()
-                + " | v. "
-                + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
-        }
-        catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
         }
     }
 }

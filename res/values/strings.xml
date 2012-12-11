@@ -38,4 +38,8 @@
     <string name="dialogNoPromptTxt">I promise I will not blame the developer, give him a bad review or make him my personal tech support
         if I screw up these settings since I was warned ☺
     </string>
+    <string name="deviceNotSupported">Your device/Android OS version does not
+        seem to support showing network information or is currently not
+        connected to a cellular network. Please try again later.
+    </string>
 </resources>
