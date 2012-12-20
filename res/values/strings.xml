@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Android Signal Info</string>
+    <string name="app_name">Advanced Signal Status</string>
     <string name="cdmaTitle">CDMA Signal Info</string>
     <string name="cdmaSignal">CDMA RSSI Signal:</string>
     <string name="cdmaECIO">CDMA ECIO:</string>
@@ -39,7 +39,10 @@
         if I screw up these settings since I was warned ☺
     </string>
     <string name="deviceNotSupported">Your device/Android OS version does not
-        seem to support showing network information or is currently not
-        connected to a cellular network. Please try again later.
+        seem to support showing all network information or is currently not
+        connected to a cellular network. Info that can be shown will be displayed.
+    </string>
+    <string name="noAdditionalSettingSupport">Your device manufacturer did not
+        add support for these settings, sorry :(
     </string>
 </resources>

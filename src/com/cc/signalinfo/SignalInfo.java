@@ -25,6 +25,7 @@ http://www.opensource.org/licenses/mit-license.php
 
 package com.cc.signalinfo;
 
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -33,10 +34,9 @@ import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
-import android.telephony.PhoneStateListener;
-import android.telephony.SignalStrength;
-import android.telephony.TelephonyManager;
+import android.telephony.*;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
@@ -50,6 +50,7 @@ import com.google.ads.AdView;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -132,8 +133,8 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
         AdView ad = (AdView) findViewById(id.adView);
         ad.loadAd(new AdRequest());
         listen = new MyPhoneStateListener();
-        tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
 
+        tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         tm.listen(listen, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
         findViewById(id.additionalInfo).setOnClickListener(this);
         setPhoneInfo();
@@ -148,7 +149,11 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
     public void onClick(View view)
     {
         if (userConsent(getPreferences(Context.MODE_PRIVATE))) {
-            startActivity(getAdditionalSettings());
+            try {
+                startActivity(getAdditionalSettings());
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show();
+            }
         }
         else {
             new WarningDialogFragment().show(getSupportFragmentManager(), "Warning");
@@ -188,7 +193,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
         t.setText(Build.PRODUCT + '/' + Build.DEVICE + " (" + Build.ID + ") ");
 
         t = (TextView) findViewById(id.androidVersion);
-        t.setText(Build.VERSION.RELEASE + " (API version " + Build.VERSION.SDK_INT + ')');
+        t.setText(String.format("%s (API version %d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
 
         t = (TextView) findViewById(id.carrierName);
         t.setText(tm.getNetworkOperatorName());
@@ -268,6 +273,9 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
             }
             catch (Resources.NotFoundException ignored) {
                 currentTextView.setText(DEFAULT_TXT);
+            }
+            catch (ArrayIndexOutOfBoundsException e) {
+                Toast.makeText(this, getString(R.string.deviceNotSupported), Toast.LENGTH_SHORT).show();
             }
         }
     }
