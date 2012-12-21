@@ -25,7 +25,8 @@ http://www.opensource.org/licenses/mit-license.php
 
 package com.cc.signalinfo;
 
-import android.content.*;
+import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -47,6 +48,7 @@ import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -63,13 +65,13 @@ import static com.cc.signalinfo.util.SignalConstants.*;
  */
 public class SignalInfo extends FragmentActivity implements View.OnClickListener
 {
-    private static final Pattern SPACE_STR = Pattern.compile(" ");
-    private static final Pattern FILTER_SIGNAL = Pattern.compile("-1|-?99|-?[1-9][0-9]{3,}");
-    private final String               TAG           = getClass().getSimpleName();
-    private       String[]             sigInfoTitles = null;
-    private       TypedArray           sigInfoIds    = null;
-    private       MyPhoneStateListener listen        = null;
-    private       TelephonyManager     tm            = null;
+    private static final Pattern              SPACE_STR     = Pattern.compile(" ");
+    private static final Pattern              FILTER_SIGNAL = Pattern.compile("-1|-?99|-?[1-9][0-9]{3,}");
+    private final        String               TAG           = getClass().getSimpleName();
+    private              String[]             sigInfoTitles = null;
+    private              TypedArray           sigInfoIds    = null;
+    private              MyPhoneStateListener listen        = null;
+    private              TelephonyManager     tm            = null;
 
     /**
      * Removes any crap that might show weird numbers because the phone does not support
@@ -112,10 +114,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(layout.main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        displayVersionName();
-
-        AdView ad = (AdView) findViewById(id.adView);
-        ad.loadAd(new AdRequest());
+        formatFooter();
 
         listen = new MyPhoneStateListener();
         sigInfoTitles = getResources().getStringArray(R.array.sigInfoTitles);
@@ -124,6 +123,9 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
         tm.listen(listen, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
         findViewById(id.additionalInfo).setOnClickListener(this);
         setPhoneInfo();
+
+        AdView ad = (AdView) findViewById(id.adView);
+        ad.loadAd(new AdRequest());
     }
 
     /**
@@ -147,7 +149,6 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
         }
     }
 
-
     /**
      * Set the phone model, OS version, carrier name on the screen
      */
@@ -167,6 +168,24 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
 
         t = (TextView) findViewById(id.buildHost);
         t.setText(Build.HOST);
+    }
+
+    /**
+     * Formats the page footer with in the following format:
+     * ©YEAR codingcreation.com | v. version-number-here
+     */
+    private void formatFooter()
+    {
+        try {
+            ((TextView) findViewById(id.copyright))
+                .setText(String.format(
+                    getString(R.string.copyright),
+                    Calendar.getInstance().get(Calendar.YEAR),
+                    getPackageManager().getPackageInfo(getPackageName(), 0).versionName));
+        }
+        catch (PackageManager.NameNotFoundException ignored) {
+            Log.wtf(TAG, "Could not display app version number!");
+        }
     }
 
     /**
@@ -268,22 +287,6 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
             }
         }
         return signalData;
-    }
-
-    /**
-     * Displays the version number in the app
-     */
-    private void displayVersionName()
-    {
-        try {
-            TextView copyright = (TextView) findViewById(id.copyright);
-            copyright.setText(copyright.getText()
-                + " | v. "
-                + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
-        }
-        catch (PackageManager.NameNotFoundException ignored) {
-            Log.wtf(TAG, "Could not display app version number!");
-        }
     }
 
     /**
