@@ -128,7 +128,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/networkType_13"
+                    android:id="@+id/networkType"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="13" />
@@ -162,7 +162,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/cdmaSignal_3"
+                    android:id="@+id/cdmaSignal"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="3" />
@@ -179,7 +179,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/evdoSignal_5"
+                    android:id="@+id/evdoSignal"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="5" />
@@ -196,7 +196,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/cdmaECIO_4"
+                    android:id="@+id/cdmaECIO"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="4" />
@@ -213,7 +213,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/evdoECIO_6"
+                    android:id="@+id/evdoECIO"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="6" />
@@ -231,7 +231,7 @@
 
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/evdoSNR_7"
+                    android:id="@+id/evdoSNR"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="7" />
@@ -267,7 +267,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rsrpSignal_9"
+                    android:id="@+id/rsrpSignal"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="9" />
@@ -284,7 +284,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rssiSignal_14"
+                    android:id="@+id/rssiSignal"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="14" />
@@ -301,7 +301,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/lteRSRQ_10"
+                    android:id="@+id/lteRSRQ"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="10" />
@@ -318,7 +318,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/lteSNR_11"
+                    android:id="@+id/lteSNR"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="11" />
@@ -335,7 +335,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/lteCQI_12"
+                    android:id="@+id/lteCQI"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="12" />
@@ -352,7 +352,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/lteSigStrength_8"
+                    android:id="@+id/lteSigStrength"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="8" />
@@ -369,7 +369,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/gsmSigStrength_1"
+                    android:id="@+id/gsmSigStrength"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="1" />
@@ -386,7 +386,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/gsmBitError_2"
+                    android:id="@+id/gsmBitError"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="2" />
@@ -425,11 +425,5 @@
             android:layout_height="match_parent"
             android:gravity="center_horizontal|bottom"
             android:text="@string/copyright" />
-        <!--    <Button android:id="@+id/saveScreenShot"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/saveScreenShot"
-                    />-->
-
     </LinearLayout>
 </ScrollView>

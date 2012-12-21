@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sigInfoTitles">
+        <item>@string/na</item>
+        <item>GSM Signal Strength:</item>
+        <item>GSM Bit Error Rate:</item>
+        <item>CDMA RSSI Signal:</item>
+        <item>CDMA ECIO:</item>
+        <item>EVDO RSSI Signal:</item>
+        <item>EVDO ECIO:</item>
+        <item>EVDO SNR:</item>
+        <item>LTE Signal Strength:</item>
+        <item>LTE RSRP Signal:</item>
+        <item>LTE RSRQ:</item>
+        <item>LTE SNR:</item>
+        <item>LTE CQI:</item>
+        <item>Network Type:</item>
+        <item>LTE RSSI Signal:</item>
+    </string-array>
+
+    <array name="sigInfoIds">
+        <item>@string/na</item>
+        <item>@id/gsmSigStrength</item>
+        <item>@id/gsmBitError</item>
+        <item>@id/cdmaSignal</item>
+        <item>@id/cdmaECIO</item>
+        <item>@id/evdoSignal</item>
+        <item>@id/evdoECIO</item>
+        <item>@id/evdoSNR</item>
+        <item>@id/lteSigStrength</item>
+        <item>@id/rsrpSignal</item>
+        <item>@id/lteRSRQ</item>
+        <item>@id/lteSNR</item>
+        <item>@id/lteCQI</item>
+        <item>@id/networkType</item>
+        <item>@id/rssiSignal</item>
+    </array>
+</resources>

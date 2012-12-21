@@ -41,7 +41,10 @@ import android.widget.CompoundButton;
  * Date: 12/7/12
  * Time: 8:02 AM
  */
-public class WarningDialogFragment extends DialogFragment implements DialogInterface.OnShowListener, DialogInterface.OnClickListener, CompoundButton.OnCheckedChangeListener
+public class WarningDialogFragment extends DialogFragment
+    implements DialogInterface.OnShowListener,
+    DialogInterface.OnClickListener,
+    CompoundButton.OnCheckedChangeListener
 {
     private             View   form           = null;
     public static final String PROMPT_SETTING = "promptWarningDialog";

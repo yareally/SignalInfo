@@ -25,22 +25,19 @@ http://www.opensource.org/licenses/mit-license.php
 
 package com.cc.signalinfo;
 
-import android.content.ActivityNotFoundException;
-import android.content.ComponentName;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.*;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.app.FragmentActivity;
-import android.telephony.*;
+import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.cc.signalinfo.R.id;
@@ -50,7 +47,6 @@ import com.google.ads.AdView;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -82,8 +78,35 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
     private static final String               DEFAULT_TXT        = "N/A";
     private static final int                  MAX_SIGNAL_ENTRIES = 14;
     private final        String               TAG                = getClass().getSimpleName();
+    private              String[]             sigInfoTitles      = null;
+    private              TypedArray           sigInfoIds         = null;
     private              MyPhoneStateListener listen             = null;
     private              TelephonyManager     tm                 = null;
+
+    /**
+     * Initialize the app.
+     *
+     * @param savedInstanceState - umm... the saved instance state
+     */
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        setContentView(layout.main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        displayVersionName();
+
+        AdView ad = (AdView) findViewById(id.adView);
+        ad.loadAd(new AdRequest());
+
+        listen = new MyPhoneStateListener();
+        sigInfoTitles = getResources().getStringArray(R.array.sigInfoTitles);
+        sigInfoIds = getResources().obtainTypedArray(R.array.sigInfoIds);
+        tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+        tm.listen(listen, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        findViewById(id.additionalInfo).setOnClickListener(this);
+        setPhoneInfo();
+    }
 
     /**
      * Computest the LTE RSSI by what is most likely the default number of
@@ -118,29 +141,6 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
     }
 
     /**
-     * Initialize the app.
-     *
-     * @param savedInstanceState - umm... the saved instance state
-     */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(layout.main);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
-        displayVersionName();
-
-        AdView ad = (AdView) findViewById(id.adView);
-        ad.loadAd(new AdRequest());
-        listen = new MyPhoneStateListener();
-
-        tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-        tm.listen(listen, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-        findViewById(id.additionalInfo).setOnClickListener(this);
-        setPhoneInfo();
-    }
-
-    /**
      * Shows additional radio settings contained in the Android OS.
      *
      * @param view - button that shows the settings.
@@ -151,7 +151,8 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
         if (userConsent(getPreferences(Context.MODE_PRIVATE))) {
             try {
                 startActivity(getAdditionalSettings());
-            } catch (ActivityNotFoundException e) {
+            }
+            catch (ActivityNotFoundException e) {
                 Toast.makeText(this, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show();
             }
         }
@@ -274,7 +275,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
             catch (Resources.NotFoundException ignored) {
                 currentTextView.setText(DEFAULT_TXT);
             }
-            catch (ArrayIndexOutOfBoundsException e) {
+            catch (ArrayIndexOutOfBoundsException ignored) {
                 Toast.makeText(this, getString(R.string.deviceNotSupported), Toast.LENGTH_SHORT).show();
             }
         }
@@ -290,25 +291,14 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
      */
     private Map<Integer, TextView> getSignalDataMap()
     {
-        LinearLayout layout = (LinearLayout) this.findViewById(id.main);
-        Pattern uscore = Pattern.compile("_");
         Map<Integer, TextView> signalData = new HashMap<Integer, TextView>(28);
 
-        for (int i = 1; i <= MAX_SIGNAL_ENTRIES; ++i) {
-            try {
-                TextView currentView = (TextView) layout.findViewWithTag(String.valueOf(i));
+        for (int i = 1; i <= sigInfoIds.length(); ++i) {
+            int id = sigInfoIds.getResourceId(i, -1);
 
-                if (currentView != null) {
-                    String[] childName = uscore.split(
-                        getResources().getResourceEntryName(currentView.getId()));
-
-                    if (childName.length > 1) {
-                        signalData.put(Integer.parseInt(childName[1]), currentView);
-                    }
-                }
-            }
-            catch (Resources.NotFoundException ignored) {
-                Log.e(TAG, "Could not parse signal textviews");
+            if (id != -1) {
+                TextView currentView = (TextView) findViewById(id);
+                signalData.put(i, currentView);
             }
         }
         return signalData;
@@ -325,8 +315,8 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
                 + " | v. "
                 + getPackageManager().getPackageInfo(getPackageName(), 0).versionName);
         }
-        catch (PackageManager.NameNotFoundException e) {
-            e.printStackTrace();
+        catch (PackageManager.NameNotFoundException ignored) {
+            Log.wtf(TAG, "Could not display app version number!");
         }
     }
 
