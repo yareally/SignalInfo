@@ -84,18 +84,12 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
             data[i] = FILTER_SIGNAL.matcher(data[i]).matches()
                 ? DEFAULT_TXT
                 : data[i];
-
-            /*data[i] = "-1".equals(data[i])
-                || "99".equals(data[i])
-                || "1000".compareTo(data[i]) == -1
-                ? "N/A"
-                : data[i];*/
         }
         return data;
     }
 
     /**
-     * Computest the LTE RSSI by what is most likely the default number of
+     * Computes the LTE RSSI by what is most likely the default number of
      * channels on the LTE device (at least for Verizon).
      *
      * @param rsrp - the RSRP LTE signal
@@ -248,7 +242,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
                 currentTextView.setText(DEFAULT_TXT);
             }
             catch (ArrayIndexOutOfBoundsException ignored) {
-                Toast.makeText(this, getString(R.string.deviceNotSupported), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(this, getString(R.string.deviceNotSupported), Toast.LENGTH_SHORT).show();
             }
         }
     }

@@ -39,9 +39,8 @@ import com.cc.signalinfo.util.SignalConstants;
 import com.cc.signalinfo.util.SignalHelpers;
 
 /**
- * User: admin
- * Date: 12/7/12
- * Time: 8:02 AM
+ * @author Wes Lanning
+ * @version 2012-12-21
  */
 public class WarningDialogFragment extends DialogFragment
     implements DialogInterface.OnShowListener,
