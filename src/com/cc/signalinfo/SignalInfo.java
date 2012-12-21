@@ -63,12 +63,13 @@ import static com.cc.signalinfo.util.SignalConstants.*;
  */
 public class SignalInfo extends FragmentActivity implements View.OnClickListener
 {
-    private static final Pattern              SPACE_STR          = Pattern.compile(" ");
-    private final        String               TAG                = getClass().getSimpleName();
-    private              String[]             sigInfoTitles      = null;
-    private              TypedArray           sigInfoIds         = null;
-    private              MyPhoneStateListener listen             = null;
-    private              TelephonyManager     tm                 = null;
+    private static final Pattern SPACE_STR = Pattern.compile(" ");
+    private static final Pattern FILTER_SIGNAL = Pattern.compile("-1|-?99|-?[1-9][0-9]{3,}");
+    private final String               TAG           = getClass().getSimpleName();
+    private       String[]             sigInfoTitles = null;
+    private       TypedArray           sigInfoIds    = null;
+    private       MyPhoneStateListener listen        = null;
+    private       TelephonyManager     tm            = null;
 
     /**
      * Removes any crap that might show weird numbers because the phone does not support
@@ -80,7 +81,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
     public static String[] filterSignalData(String... data)
     {
         for (int i = 0; i < data.length; ++i) {
-            data[i] = data[i].matches("-1|-?99|-?[1-9][0-9]{3,}")
+            data[i] = FILTER_SIGNAL.matcher(data[i]).matches()
                 ? DEFAULT_TXT
                 : data[i];
 
