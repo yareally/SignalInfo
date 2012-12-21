@@ -35,6 +35,8 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import com.cc.signalinfo.util.SignalConstants;
+import com.cc.signalinfo.util.SignalHelpers;
 
 /**
  * User: admin
@@ -47,7 +49,6 @@ public class WarningDialogFragment extends DialogFragment
     CompoundButton.OnCheckedChangeListener
 {
     private             View   form           = null;
-    public static final String PROMPT_SETTING = "promptWarningDialog";
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
@@ -71,8 +72,8 @@ public class WarningDialogFragment extends DialogFragment
     @Override
     public void onClick(DialogInterface dialogInterface, int i)
     {
-        if (SignalInfo.userConsent(getActivity().getPreferences(Context.MODE_PRIVATE))) {
-            startActivity(SignalInfo.getAdditionalSettings());
+        if (SignalHelpers.userConsent(getActivity().getPreferences(Context.MODE_PRIVATE))) {
+            startActivity(SignalHelpers.getAdditionalSettings());
         }
     }
 
@@ -100,6 +101,6 @@ public class WarningDialogFragment extends DialogFragment
         ((AlertDialog) this.getDialog()).getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(checkState);
         SharedPreferences settings = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(PROMPT_SETTING, checkState).commit();
+        editor.putBoolean(SignalConstants.PROMPT_SETTING, checkState).commit();
     }
 }

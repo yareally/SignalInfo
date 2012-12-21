@@ -42,6 +42,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.cc.signalinfo.R.id;
 import com.cc.signalinfo.R.layout;
+import com.cc.signalinfo.util.SignalHelpers;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
@@ -49,6 +50,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import static com.cc.signalinfo.util.SignalConstants.*;
 
 
 /**
@@ -61,27 +64,47 @@ import java.util.regex.Pattern;
 public class SignalInfo extends FragmentActivity implements View.OnClickListener
 {
     private static final Pattern              SPACE_STR          = Pattern.compile(" ");
-    private static final int                  GSM_SIG_STRENGTH   = 1;
-    private static final int                  GSM_BIT_ERROR      = 2;
-    private static final int                  CDMA_SIGNAL        = 3;
-    private static final int                  CDMA_ECIO          = 4;
-    private static final int                  EVDO_SIGNAL        = 5;
-    private static final int                  EVDO_ECIO          = 6;
-    private static final int                  EVDO_SNR           = 7;
-    private static final int                  LTE_SIG_STRENGTH   = 8;
-    private static final int                  LTE_RSRP           = 9;
-    private static final int                  LTE_RSRQ           = 10;
-    private static final int                  LTE_SNR            = 11;
-    private static final int                  LTE_CQI            = 12;
-    private static final int                  IS_GSM             = 13;
-    private static final int                  LTE_RSSI           = 14;
-    private static final String               DEFAULT_TXT        = "N/A";
-    private static final int                  MAX_SIGNAL_ENTRIES = 14;
     private final        String               TAG                = getClass().getSimpleName();
     private              String[]             sigInfoTitles      = null;
     private              TypedArray           sigInfoIds         = null;
     private              MyPhoneStateListener listen             = null;
     private              TelephonyManager     tm                 = null;
+
+    /**
+     * Removes any crap that might show weird numbers because the phone does not support
+     * some reading or avoids causing an exception by removing it.
+     *
+     * @param data - data to filter
+     * @return filtered data with "n/a" instead of the bad value
+     */
+    public static String[] filterSignalData(String... data)
+    {
+        for (int i = 0; i < data.length; ++i) {
+            data[i] = data[i].matches("-1|-?99|-?[1-9][0-9]{3,}")
+                ? DEFAULT_TXT
+                : data[i];
+
+            /*data[i] = "-1".equals(data[i])
+                || "99".equals(data[i])
+                || "1000".compareTo(data[i]) == -1
+                ? "N/A"
+                : data[i];*/
+        }
+        return data;
+    }
+
+    /**
+     * Computest the LTE RSSI by what is most likely the default number of
+     * channels on the LTE device (at least for Verizon).
+     *
+     * @param rsrp - the RSRP LTE signal
+     * @param rsrq - the RSRQ LTE signal
+     * @return the RSSI signal
+     */
+    public static int computeRssi(String rsrp, String rsrq)
+    {
+        return -17 - Integer.parseInt(rsrp) - Integer.parseInt(rsrq);
+    }
 
     /**
      * Initialize the app.
@@ -109,38 +132,6 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
     }
 
     /**
-     * Computest the LTE RSSI by what is most likely the default number of
-     * channels on the LTE device (at least for Verizon).
-     *
-     * @param rsrp - the RSRP LTE signal
-     * @param rsrq - the RSRQ LTE signal
-     * @return the RSSI signal
-     */
-    private static int computeRssi(String rsrp, String rsrq)
-    {
-        return -17 - Integer.parseInt(rsrp) - Integer.parseInt(rsrq);
-    }
-
-    /**
-     * Removes any crap that might show weird numbers because the phone does not support
-     * some reading or avoids causing an exception by removing it.
-     *
-     * @param data - data to filter
-     * @return filtered data with "n/a" instead of the bad value
-     */
-    private static String[] filterSignalData(String... data)
-    {
-        for (int i = 0; i < data.length; ++i) {
-            data[i] = "-1".equals(data[i])
-                || "99".equals(data[i])
-                || "1000".compareTo(data[i]) == -1
-                ? "N/A"
-                : data[i];
-        }
-        return data;
-    }
-
-    /**
      * Shows additional radio settings contained in the Android OS.
      *
      * @param view - button that shows the settings.
@@ -148,37 +139,17 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
     @Override
     public void onClick(View view)
     {
-        if (userConsent(getPreferences(Context.MODE_PRIVATE))) {
+        if (SignalHelpers.userConsent(getPreferences(Context.MODE_PRIVATE))) {
             try {
-                startActivity(getAdditionalSettings());
+                startActivity(SignalHelpers.getAdditionalSettings());
             }
-            catch (ActivityNotFoundException e) {
+            catch (ActivityNotFoundException ignored) {
                 Toast.makeText(this, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show();
             }
         }
         else {
             new WarningDialogFragment().show(getSupportFragmentManager(), "Warning");
         }
-    }
-
-
-    public static boolean userConsent(SharedPreferences settings)
-    {
-        return !(!settings.contains(WarningDialogFragment.PROMPT_SETTING)
-            || !settings.getBoolean(WarningDialogFragment.PROMPT_SETTING, false));
-    }
-
-    /**
-     * Get the intent that launches the additional radio settings screen
-     *
-     * @return the intent for the settings area
-     */
-    public static Intent getAdditionalSettings()
-    {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        ComponentName showSettings = new ComponentName(
-            "com.android.settings", "com.android.settings.TestingSettings");
-        return intent.setComponent(showSettings);
     }
 
 
