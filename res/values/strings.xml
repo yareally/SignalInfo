@@ -2,7 +2,7 @@
 <resources>
     <string name="app_name">Advanced Signal Status</string>
     <string name="cdmaTitle">CDMA (3g) Signal Info</string>
-    <string name="cdmaSignal">CDMA (voice/sms) RSSI Signal:</string>
+    <string name="cdmaSignal">CDMA (voice) RSSI Signal:</string>
     <string name="cdmaECIO">CDMA ECIO:</string>
     <string name="evdoSignal">EVDO (data) RSSI Signal:</string>
     <string name="evdoECIO">EVDO ECIO:</string>
@@ -46,5 +46,9 @@
     </string>
     <string name="noAdditionalSettingSupport">Your device manufacturer did not
         add support for these settings, sorry :(
+    </string>
+    <string name="additionalSettingPermDenied">The manufacturer of your device
+        either did not include access to this feature in the OS version used or
+        restricts access to it (Permission denial)
     </string>
 </resources>

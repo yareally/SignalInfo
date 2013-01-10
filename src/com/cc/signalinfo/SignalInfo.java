@@ -100,7 +100,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
      */
     public static int computeRssi(String rsrp, String rsrq)
     {
-        return -17 - Integer.parseInt(rsrp) - Integer.parseInt(rsrq);
+        return -(-17 - Integer.parseInt(rsrp) - Integer.parseInt(rsrq));
     }
 
     /**
@@ -124,8 +124,8 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
         findViewById(id.additionalInfo).setOnClickListener(this);
         setPhoneInfo();
 
-        AdView ad = (AdView) findViewById(id.adView);
-        ad.loadAd(new AdRequest());
+        /*AdView ad = (AdView) findViewById(id.adView);
+        ad.loadAd(new AdRequest());*/
     }
 
     /**
@@ -142,6 +142,9 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
             }
             catch (ActivityNotFoundException ignored) {
                 Toast.makeText(this, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show();
+            }
+            catch (SecurityException ignored) {
+                Toast.makeText(this, getString(R.string.additionalSettingPermDenied), Toast.LENGTH_LONG).show();
             }
         }
         else {
@@ -172,7 +175,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
 
     /**
      * Formats the page footer with in the following format:
-     * ©YEAR codingcreation.com | v. version-number-here
+     * ©YEAR codingcreation.com | v. x.xx
      */
     private void formatFooter()
     {
@@ -241,7 +244,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
                 if (data.getKey() == LTE_RSSI) {
                     sigValue = DEFAULT_TXT.equals(sigInfo[LTE_RSRP]) || DEFAULT_TXT.equals(sigInfo[LTE_RSRQ])
                         ? DEFAULT_TXT
-                        : "-" + computeRssi(sigInfo[LTE_RSRP], sigInfo[LTE_RSRQ]);
+                        : computeRssi(sigInfo[LTE_RSRP], sigInfo[LTE_RSRQ]) + " ";
                 }
                 else {
                     sigValue = data.getKey() < sigInfo.length
