@@ -8,7 +8,7 @@
 /build.xml
 /local.properties
 /proguard-project.txt
-/gen
+/gen/*
 /assets
 /assets/icudt46l.zip
 /gen/com/android/signalinfo/R.java
@@ -21,3 +21,4 @@
 /libs/armeabi/libdatabase_sqlcipher.so
 /libs/armeabi/libsqlcipher_android.so
 .idea/*
+out/*
