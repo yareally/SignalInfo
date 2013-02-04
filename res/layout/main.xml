@@ -13,19 +13,19 @@
         android:paddingLeft="10dp"
         android:paddingRight="10dp">
 
-        <com.google.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            ads:adSize="BANNER"
-            ads:adUnitId="a150a0f996cbdbd" />
-        <!--        <com.google.ads.AdView android:id="@+id/ad"
-                                       android:layout_width="wrap_content"
-                                       android:layout_height="wrap_content"
-                                       ads:adSize="BANNER"
-                                       ads:adUnitId="AD_UNIT_ID_GOES_HERE"
-                                       ads:testDevices="android-6541168968af918"
-                                       ads:loadAdOnCreate="true"/>-->
+                <com.google.ads.AdView
+                    android:id="@+id/adView"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    ads:adSize="BANNER"
+                    ads:adUnitId="a150a0f996cbdbd" />
+        <!--          <com.google.ads.AdView android:id="@+id/ad"
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  ads:adSize="BANNER"
+                                  ads:adUnitId="AD_UNIT_ID_GOES_HERE"
+                                  ads:testDevices="android-6541168968af918"
+                                  ads:loadAdOnCreate="true"/>-->
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

@@ -20,3 +20,4 @@
 /libs/armeabi/libstlport_shared.so
 /libs/armeabi/libdatabase_sqlcipher.so
 /libs/armeabi/libsqlcipher_android.so
+.idea/*

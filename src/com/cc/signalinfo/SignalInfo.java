@@ -32,7 +32,6 @@ import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
@@ -41,6 +40,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
+import com.actionbarsherlock.app.ActionBar;
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.cc.signalinfo.R.id;
 import com.cc.signalinfo.R.layout;
 import com.cc.signalinfo.util.SignalHelpers;
@@ -63,15 +64,16 @@ import static com.cc.signalinfo.util.SignalConstants.*;
  * @author Wes Lanning
  * @version 1.0
  */
-public class SignalInfo extends FragmentActivity implements View.OnClickListener
+public class SignalInfo extends SherlockFragmentActivity implements View.OnClickListener
 {
     private static final Pattern              SPACE_STR     = Pattern.compile(" ");
     private static final Pattern              FILTER_SIGNAL = Pattern.compile("-1|-?99|-?[1-9][0-9]{3,}");
-    private final        String               TAG           = getClass().getSimpleName();
+    private final        String               TAG           = getLocalClassName();
     private              String[]             sigInfoTitles = null;
     private              TypedArray           sigInfoIds    = null;
     private              MyPhoneStateListener listen        = null;
     private              TelephonyManager     tm            = null;
+    private              ActionBar            actionBar     = null;
 
     /**
      * Removes any crap that might show weird numbers because the phone does not support
@@ -112,6 +114,7 @@ public class SignalInfo extends FragmentActivity implements View.OnClickListener
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        actionBar = getSupportActionBar();
         setContentView(layout.main);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         formatFooter();

@@ -29,6 +29,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+
 /**
  * @author Wes Lanning
  * @version 2012-12-21
@@ -40,7 +41,7 @@ public final class SignalHelpers
      *
      * @return the intent for the settings area
      */
-    public static Intent getAdditionalSettings()
+    public static Intent getAdditionalSettings() throws SecurityException
     {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         ComponentName showSettings = new ComponentName(
