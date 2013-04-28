@@ -45,7 +45,6 @@ public class SignalInfoTest extends ActivityInstrumentationTestCase2<SignalInfo>
 {
     private String[] signalInfo = null;
 
-
     @Override
     public void setUp() throws Exception
     {
@@ -71,7 +70,6 @@ public class SignalInfoTest extends ActivityInstrumentationTestCase2<SignalInfo>
     {
         super(SignalInfo.class);
     }
-
 
     /**
      * Tests that filtering bad signal values only filters what it should and nothing else

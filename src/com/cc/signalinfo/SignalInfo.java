@@ -83,7 +83,7 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
      * @param data - data to filter
      * @return filtered data with "n/a" instead of the bad value
      */
-    private static Map<Integer, String> filterSignalData(String... data)
+    public static Map<Integer, String> filterSignalData(String... data)
     {
         Map<Integer, String> signalData = new HashMap<Integer, String>(24);
         // TODO: store in a map instead with key = signalConstant, value = signalData
