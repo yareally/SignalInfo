@@ -1,6 +1,3 @@
-[submodule "libs/actionbarsherlock"]
-	path = libs/actionbarsherlock
-	url = G:/androidDev/SignalInfo/libs/actionbarsherlock
 [submodule "ActionBarSherlock"]
-	path = ActionBarSherlock
+	path = libs/actionbarsherlock
 	url = https://github.com/JakeWharton/ActionBarSherlock.git
