@@ -54,6 +54,7 @@ import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.cc.signalinfo.util.SignalConstants.*;
+import static com.cc.signalinfo.util.SignalHelpers.computeRssi;
 import static com.cc.signalinfo.util.SignalHelpers.hasLteRssi;
 
 /**
@@ -82,7 +83,7 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
      * @param data - data to filter
      * @return filtered data with "n/a" instead of the bad value
      */
-    public static Map<Integer, String> filterSignalData(String... data)
+    private static Map<Integer, String> filterSignalData(String... data)
     {
         Map<Integer, String> signalData = new HashMap<Integer, String>(24);
         // TODO: store in a map instead with key = signalConstant, value = signalData
@@ -92,26 +93,7 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
                 : data[i];
             signalData.put(i, signalValue);
         }
-
-        for (int i = 0; i < data.length; ++i) {
-            data[i] = FILTER_SIGNAL.matcher(data[i]).matches()
-                ? DEFAULT_TXT
-                : data[i];
-        }
         return signalData;
-    }
-
-    /**
-     * Computes the LTE RSSI by what is most likely the default number of
-     * channels on the LTE device (at least for Verizon).
-     *
-     * @param rsrp - the RSRP LTE signal
-     * @param rsrq - the RSRQ LTE signal
-     * @return the RSSI signal
-     */
-    public static int computeRssi(String rsrp, String rsrq)
-    {
-        return -(-17 - Integer.parseInt(rsrp) - Integer.parseInt(rsrq));
     }
 
     /**

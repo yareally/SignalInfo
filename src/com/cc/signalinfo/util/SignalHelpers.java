@@ -81,4 +81,17 @@ public final class SignalHelpers
             && !DEFAULT_TXT.equals(rsrp)
             && !DEFAULT_TXT.equals(rsrq);
     }
+
+    /**
+     * Computes the LTE RSSI by what is most likely the default number of
+     * channels on the LTE device (at least for Verizon).
+     *
+     * @param rsrp - the RSRP LTE signal
+     * @param rsrq - the RSRQ LTE signal
+     * @return the RSSI signal
+     */
+    public static int computeRssi(String rsrp, String rsrq)
+    {
+        return -(-17 - Integer.parseInt(rsrp) - Integer.parseInt(rsrq));
+    }
 }
