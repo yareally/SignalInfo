@@ -1,6 +1,6 @@
 #Android generated
-bin
-gen
+bin/*
+gen/*
 
 #Eclipse
 .project
@@ -13,7 +13,7 @@ gen
 *.iml
 *.ipr
 *.iws
-classes
+classes/*
 gen-external-apklibs
 
 #Maven
@@ -30,4 +30,4 @@ proguard-project.txt
 
 #Other
 .DS_Store
-tmp
+tmp/*
