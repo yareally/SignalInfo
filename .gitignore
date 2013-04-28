@@ -23,4 +23,6 @@
 /libs/armeabi/libsqlcipher_android.so
 .idea/*
 /out/*
-/SignalInfoTest/gen/*
+/SignalInfoTest/gen/R.java
+/SignalInfoTest/gen/BuildConfig.java
+/SignalInfoTest/gen/Manifest.java
