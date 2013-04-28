@@ -29,6 +29,7 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
+import static com.cc.signalinfo.util.SignalConstants.DEFAULT_TXT;
 
 /**
  * @author Wes Lanning
@@ -36,6 +37,8 @@ import android.content.SharedPreferences;
  */
 public final class SignalHelpers
 {
+    private SignalHelpers() {}
+
     /**
      * Get the intent that launches the additional radio settings screen
      *
@@ -60,5 +63,22 @@ public final class SignalHelpers
     {
         return !(!settings.contains(SignalConstants.PROMPT_SETTING)
             || !settings.getBoolean(SignalConstants.PROMPT_SETTING, false));
+    }
+
+    /**
+     * Checks to see if we have an rsrp and rsrq signal. If either
+     * is the DEFAULT_TXT set for the rsrp/rsrq or null, then we assume
+     * we can't calculate an estimated RSSI signal.
+     *
+     * @param rsrp - the RSRP LTE signal
+     * @param rsrq - the RSRQ LTE signal
+     * @return true if RSSI possible, false if not
+     */
+    public static boolean hasLteRssi(String rsrp, String rsrq)
+    {
+        return rsrp != null
+            && rsrq != null
+            && !DEFAULT_TXT.equals(rsrp)
+            && !DEFAULT_TXT.equals(rsrq);
     }
 }

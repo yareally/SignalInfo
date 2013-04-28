@@ -48,14 +48,13 @@ import com.cc.signalinfo.util.SignalHelpers;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
 import static com.cc.signalinfo.util.SignalConstants.*;
-
+import static com.cc.signalinfo.util.SignalHelpers.hasLteRssi;
 
 /**
  * Make sure to add "android.permission.CHANGE_NETWORK_STATE"
@@ -64,11 +63,12 @@ import static com.cc.signalinfo.util.SignalConstants.*;
  * @author Wes Lanning
  * @version 1.0
  */
+@SuppressWarnings({"RedundantFieldInitialization", "ReuseOfLocalVariable"})
 public class SignalInfo extends SherlockFragmentActivity implements View.OnClickListener
 {
     private static final Pattern              SPACE_STR     = Pattern.compile(" ");
     private static final Pattern              FILTER_SIGNAL = Pattern.compile("-1|-?99|-?[1-9][0-9]{3,}");
-    private final        String               TAG           = getLocalClassName();
+    private final        String               TAG           = getClass().getSimpleName();
     private              String[]             sigInfoTitles = null;
     private              TypedArray           sigInfoIds    = null;
     private              MyPhoneStateListener listen        = null;
@@ -82,14 +82,23 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
      * @param data - data to filter
      * @return filtered data with "n/a" instead of the bad value
      */
-    public static String[] filterSignalData(String... data)
+    public static Map<Integer, String> filterSignalData(String... data)
     {
+        Map<Integer, String> signalData = new HashMap<Integer, String>(24);
+        // TODO: store in a map instead with key = signalConstant, value = signalData
+        for (int i = 0; i < data.length; ++i) {
+            String signalValue = FILTER_SIGNAL.matcher(data[i]).matches()
+                ? DEFAULT_TXT
+                : data[i];
+            signalData.put(i, signalValue);
+        }
+
         for (int i = 0; i < data.length; ++i) {
             data[i] = FILTER_SIGNAL.matcher(data[i]).matches()
                 ? DEFAULT_TXT
                 : data[i];
         }
-        return data;
+        return signalData;
     }
 
     /**
@@ -127,8 +136,8 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
         findViewById(id.additionalInfo).setOnClickListener(this);
         setPhoneInfo();
 
-        /*AdView ad = (AdView) findViewById(id.adView);
-        ad.loadAd(new AdRequest());*/
+        AdView ad = (AdView) findViewById(id.adView);
+        ad.loadAd(new AdRequest());
     }
 
     /**
@@ -142,11 +151,9 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
         if (SignalHelpers.userConsent(getPreferences(Context.MODE_PRIVATE))) {
             try {
                 startActivity(SignalHelpers.getAdditionalSettings());
-            }
-            catch (ActivityNotFoundException ignored) {
+            } catch (ActivityNotFoundException ignored) {
                 Toast.makeText(this, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show();
-            }
-            catch (SecurityException ignored) {
+            } catch (SecurityException ignored) {
                 Toast.makeText(this, getString(R.string.additionalSettingPermDenied), Toast.LENGTH_LONG).show();
             }
         }
@@ -161,10 +168,10 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
     private void setPhoneInfo()
     {
         TextView t = (TextView) findViewById(id.phoneName);
-        t.setText(Build.MANUFACTURER + ' ' + Build.MODEL);
+        t.setText(String.format("%s %s", Build.MANUFACTURER, Build.MODEL));
 
         t = (TextView) findViewById(id.phoneModel);
-        t.setText(Build.PRODUCT + '/' + Build.DEVICE + " (" + Build.ID + ") ");
+        t.setText(String.format("%s/%s (%s) ", Build.PRODUCT, Build.DEVICE, Build.ID));
 
         t = (TextView) findViewById(id.androidVersion);
         t.setText(String.format("%s (API version %d)", Build.VERSION.RELEASE, Build.VERSION.SDK_INT));
@@ -188,8 +195,7 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
                     getString(R.string.copyright),
                     Calendar.getInstance().get(Calendar.YEAR),
                     getPackageManager().getPackageInfo(getPackageName(), 0).versionName));
-        }
-        catch (PackageManager.NameNotFoundException ignored) {
+        } catch (PackageManager.NameNotFoundException ignored) {
             Log.wtf(TAG, "Could not display app version number!");
         }
     }
@@ -222,10 +228,10 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
      */
     private void setSignalInfo(SignalStrength signalStrength)
     {
-        String[] sigInfo = filterSignalData(SPACE_STR.split(signalStrength.toString()));
+        Map<Integer, String> sigInfo = filterSignalData(SPACE_STR.split(signalStrength.toString()));
 
-        if (sigInfo.length > 0) {
-            Log.d("Signal Array", Arrays.toString(sigInfo));
+        if (!sigInfo.isEmpty()) {
+            Log.d("Signal Array", sigInfo.toString());
             displaySignalInfo(sigInfo);
         }
         else {
@@ -233,7 +239,7 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
         }
     }
 
-    private void displaySignalInfo(String... sigInfo)
+    private void displaySignalInfo(Map<Integer, String> sigInfo)
     {
         Map<Integer, TextView> signalDataMap = getSignalDataMap();
 
@@ -245,14 +251,12 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
                 String sigValue;
 
                 if (data.getKey() == LTE_RSSI) {
-                    sigValue = DEFAULT_TXT.equals(sigInfo[LTE_RSRP]) || DEFAULT_TXT.equals(sigInfo[LTE_RSRQ])
-                        ? DEFAULT_TXT
-                        : computeRssi(sigInfo[LTE_RSRP], sigInfo[LTE_RSRQ]) + " ";
+                    sigValue = hasLteRssi(sigInfo.get(LTE_RSRP), sigInfo.get(LTE_RSRQ))
+                        ? computeRssi(sigInfo.get(LTE_RSRP), sigInfo.get(LTE_RSRQ)) + " "
+                        : DEFAULT_TXT;
                 }
                 else {
-                    sigValue = data.getKey() < sigInfo.length
-                        ? sigInfo[data.getKey()]
-                        : DEFAULT_TXT;
+                    sigValue = sigInfo.get(data.getKey());
                 }
 
                 if (!sigValue.equals(DEFAULT_TXT)) {
@@ -262,12 +266,8 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
                     }
                     currentTextView.setText(sigValue + db);
                 }
-            }
-            catch (Resources.NotFoundException ignored) {
+            } catch (Resources.NotFoundException ignored) {
                 currentTextView.setText(DEFAULT_TXT);
-            }
-            catch (ArrayIndexOutOfBoundsException ignored) {
-                //Toast.makeText(this, getString(R.string.deviceNotSupported), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -300,6 +300,10 @@ public class SignalInfo extends SherlockFragmentActivity implements View.OnClick
      */
     private class MyPhoneStateListener extends PhoneStateListener
     {
+        /* TODO: think about making this a singleton if ever needed outside of just this file
+           so we're not creating a bunch of telephony listeners
+        */
+
         /**
          * Get the Signal strength from the provider, each time there is an update
          *

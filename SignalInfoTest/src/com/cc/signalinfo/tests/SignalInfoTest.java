@@ -29,6 +29,7 @@ import android.test.ActivityInstrumentationTestCase2;
 import com.cc.signalinfo.SignalInfo;
 import com.cc.signalinfo.util.SignalConstants;
 
+import java.util.Map;
 
 /**
  * This is a simple framework for a test of an Application.  See
@@ -77,14 +78,14 @@ public class SignalInfoTest extends ActivityInstrumentationTestCase2<SignalInfo>
      */
     public void testFilterSignalData()
     {
-        String[] filteredSigInfo = SignalInfo.filterSignalData(signalInfo);
+        Map<Integer, String> filteredSigInfo = SignalInfo.filterSignalData(signalInfo);
 
-        for (int i = 0; i < filteredSigInfo.length; ++i) {
+        for (int i = 0; i < filteredSigInfo.size(); ++i) {
             if (i > 0 && i < 4) {
-                assertEquals("Value should be " + SignalConstants.DEFAULT_TXT, SignalConstants.DEFAULT_TXT, filteredSigInfo[i]);
+                assertEquals("Value should be " + SignalConstants.DEFAULT_TXT, SignalConstants.DEFAULT_TXT, filteredSigInfo.get(i));
             }
             else {
-                assertEquals("Value should be " + signalInfo[i], signalInfo[i], filteredSigInfo[i]);
+                assertEquals("Value should be " + signalInfo[i], signalInfo[i], filteredSigInfo.get(i));
             }
         }
     }
