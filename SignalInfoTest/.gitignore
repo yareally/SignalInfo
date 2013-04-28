@@ -1,6 +1,6 @@
 #Android generated
-bin/*
-gen/*
+/bin/*
+/gen/*
 
 #Eclipse
 .project
@@ -31,3 +31,6 @@ proguard-project.txt
 #Other
 .DS_Store
 tmp/*
+gen/R.java
+gen/BuildConfig.java
+gen/Manifest.java
