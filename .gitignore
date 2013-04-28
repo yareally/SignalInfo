@@ -7,6 +7,7 @@
 /ant.properties
 /build.xml
 /local.properties
+/signalinfo.properties
 /proguard-project.txt
 /gen/*
 /assets
@@ -21,4 +22,5 @@
 /libs/armeabi/libdatabase_sqlcipher.so
 /libs/armeabi/libsqlcipher_android.so
 .idea/*
-out/*
+/out/*
+/SignalInfoTest/gen/*
