@@ -25,43 +25,36 @@
  * /
  */
 
-package com.cc.signalinfo.util;
+package com.cc.signalinfo;
 
 /**
  * @author Wes Lanning
- * @version 2013-04-28
+ * @version 2013-04-29
  */
-public class StringUtils
+public enum Signal
 {
-    private StringUtils() {}
+/*    NONE(0),*/
+    GSM_SIG_STRENGTH(1),
+    GSM_BIT_ERROR(2),
+    CDMA_RSSI(3),
+    CDMA_ECIO(4),
+    EVDO_RSSI(5),
+    EVDO_ECIO(6),
+    EVDO_SNR(7),
+    LTE_SIG_STRENGTH(8),
+    LTE_RSRP(9),
+    LTE_RSRQ(10),
+    LTE_SNR(11),
+    LTE_CQI(12),
+    IS_GSM(13),
+    LTE_RSSI(14),
+    GSM_RSSI(15),
+    GSM_ASU(16);
 
-    /**
-     * Like C#'s isNullOrEmpty
-     *
-     * @param value - value to check for null or empty
-     * @return true if null or empty
-     */
-    public static boolean isNullOrEmpty(String value)
-    {
-        return value == null || value.isEmpty();
-    }
+    private int value;
 
-    /**
-     * Like C#'s isNullOrWhiteSpace
-     *
-     * @param value - value to check for null or whitespace
-     * @return true if the string is null or just whitespace
-     */
-    public static boolean isNullOrWhiteSpace(CharSequence value)
+    Signal(int value)
     {
-        if (value == null) {
-            return true;
-        }
-        for (int index = 0; index < value.length(); ++index) {
-            if (!Character.isWhitespace(value.charAt(index))) {
-                return false;
-            }
-        }
-        return true;
+        this.value = value;
     }
 }

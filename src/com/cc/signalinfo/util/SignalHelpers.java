@@ -64,34 +64,4 @@ public final class SignalHelpers
         return !(!settings.contains(SignalConstants.PROMPT_SETTING)
             || !settings.getBoolean(SignalConstants.PROMPT_SETTING, false));
     }
-
-    /**
-     * Checks to see if we have an rsrp and rsrq signal. If either
-     * is the DEFAULT_TXT set for the rsrp/rsrq or null, then we assume
-     * we can't calculate an estimated RSSI signal.
-     *
-     * @param rsrp - the RSRP LTE signal
-     * @param rsrq - the RSRQ LTE signal
-     * @return true if RSSI possible, false if not
-     */
-    public static boolean hasLteRssi(String rsrp, String rsrq)
-    {
-        return rsrp != null
-            && rsrq != null
-            && !DEFAULT_TXT.equals(rsrp)
-            && !DEFAULT_TXT.equals(rsrq);
-    }
-
-    /**
-     * Computes the LTE RSSI by what is most likely the default number of
-     * channels on the LTE device (at least for Verizon).
-     *
-     * @param rsrp - the RSRP LTE signal
-     * @param rsrq - the RSRQ LTE signal
-     * @return the RSSI signal
-     */
-    public static int computeRssi(String rsrp, String rsrq)
-    {
-        return -(-17 - Integer.parseInt(rsrp) - Integer.parseInt(rsrq));
-    }
 }

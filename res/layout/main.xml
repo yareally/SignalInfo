@@ -157,12 +157,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/cdmaSignal" />
+                    android:text="@string/cdmaRSSI" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/cdmaSignal"
+                    android:id="@+id/cdmaRSSI"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="3" />
@@ -174,12 +174,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/evdoSignal" />
+                    android:text="@string/evdoRSSI" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/evdoSignal"
+                    android:id="@+id/evdoRSSI"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="5" />
@@ -262,12 +262,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/rsrpSignal" />
+                    android:text="@string/lteRSRP" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rsrpSignal"
+                    android:id="@+id/lteRSRP"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="9" />
@@ -279,12 +279,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/rssiSignal" />
+                    android:text="@string/lteRSSI" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/rssiSignal"
+                    android:id="@+id/lteRSSI"
                     android:contentDescription="@string/contentDescTag"
                     android:text="@string/na"
                     android:tag="14" />

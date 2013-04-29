@@ -25,8 +25,9 @@ http://www.opensource.org/licenses/mit-license.php
 
 package com.cc.signalinfo.tests;
 
-import android.test.ActivityInstrumentationTestCase2;
-import com.cc.signalinfo.SignalInfo;
+import android.test.AndroidTestCase;
+import com.cc.signalinfo.Signal;
+import com.cc.signalinfo.SignalData;
 import com.cc.signalinfo.util.SignalConstants;
 
 import java.util.Map;
@@ -41,7 +42,7 @@ import java.util.Map;
  * -e class com.cc.signalinfo.SignalInfoTest \
  * com.cc.signalinfo.tests/android.test.InstrumentationTestRunner
  */
-public class SignalInfoTest extends ActivityInstrumentationTestCase2<SignalInfo>
+public class SignalInfoTest extends AndroidTestCase
 {
     private String[] signalInfo = null;
 
@@ -66,9 +67,9 @@ public class SignalInfoTest extends ActivityInstrumentationTestCase2<SignalInfo>
         };
     }
 
-    public SignalInfoTest()
+    public void testGetInstance() throws Exception
     {
-        super(SignalInfo.class);
+        assertNotNull("Test array was null. How the hell did that happen?? >:(", signalInfo);
     }
 
     /**
@@ -76,14 +77,21 @@ public class SignalInfoTest extends ActivityInstrumentationTestCase2<SignalInfo>
      */
     public void testFilterSignalData()
     {
-        Map<Integer, String> filteredSigInfo = SignalInfo.filterSignalData(signalInfo);
+        Map<Signal, String> filteredSigInfo = SignalData.filterSignalData(signalInfo);
+        Signal[] values = Signal.values();
 
         for (int i = 0; i < filteredSigInfo.size(); ++i) {
             if (i > 0 && i < 4) {
-                assertEquals("Value should be " + SignalConstants.DEFAULT_TXT, SignalConstants.DEFAULT_TXT, filteredSigInfo.get(i));
+                assertEquals(
+                    String.format("Value should be %s", SignalConstants.DEFAULT_TXT),
+                    SignalConstants.DEFAULT_TXT,
+                    filteredSigInfo.get(values[i]));
             }
             else {
-                assertEquals("Value should be " + signalInfo[i], signalInfo[i], filteredSigInfo.get(i));
+                assertEquals(
+                    String.format("Value should be %s", signalInfo[i]),
+                    signalInfo[i],
+                    filteredSigInfo.get(values[i]));
             }
         }
     }

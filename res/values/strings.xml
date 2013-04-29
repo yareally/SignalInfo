@@ -2,9 +2,9 @@
 <resources>
     <string name="app_name">Advanced Signal Status</string>
     <string name="cdmaTitle">CDMA (3g) Signal Info</string>
-    <string name="cdmaSignal">CDMA (voice) RSSI Signal:</string>
+    <string name="cdmaRSSI">CDMA (voice) RSSI Signal:</string>
     <string name="cdmaECIO">CDMA ECIO:</string>
-    <string name="evdoSignal">EVDO (data) RSSI Signal:</string>
+    <string name="evdoRSSI">EVDO (data) RSSI Signal:</string>
     <string name="evdoECIO">EVDO ECIO:</string>
     <string name="evdoSNR">EVDO SNR:</string>
     <string name="lteTitle">LTE (4g) Signal Info</string>
@@ -13,8 +13,8 @@
     <string name="androidVersion">Android Version:</string>
     <string name="carrierName">Carrier:</string>
     <string name="networkType">Network Type:</string>
-    <string name="rsrpSignal">LTE RSRP Signal:</string>
-    <string name="rssiSignal">LTE RSSI Signal:</string>
+    <string name="lteRSRP">LTE RSRP Signal:</string>
+    <string name="lteRSSI">LTE RSSI Signal:</string>
     <string name="lteRSRQ">LTE RSRQ:</string>
     <string name="lteSNR">LTE SNR:</string>
     <string name="lteCQI">LTE CQI:</string>
@@ -26,6 +26,7 @@
     <string name="copyright" formatted="false">©%s codingcreation.com | v. %s</string>
     <string name="buildHost">Build Host:</string>
     <string name="contentDescTag">info</string>
+    <string name="unitMeasure">db</string>
     <string name="additionalInfoLbl">Access and configure additional radio info
         hidden in the system:
     </string>

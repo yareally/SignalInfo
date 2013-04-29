@@ -46,7 +46,8 @@ public final class SignalConstants
       http://stackoverflow.com/questions/15054498/android-signalstrength-terminology-explanation
       http://books.google.com/books?id=fuUwM1Hiu24C&dq=cdma+rssi+signal+range
       http://books.google.com/books?id=dAGfSkX3_vgC&pg=PA277&lpg=PA277&dq=cdma+dynamic+range&source=bl&ots=9xMZBtbHn8&sig=wyGFPugmM6nnCid3JXdc05i0mnA&hl=en&sa=X&ei=Zb97UaDINqno2gX464D4BA&ved=0CE8Q6AEwBQ#v=onepage&q=cdma%20dynamic%20range&f=false
-      http://www.telecomhall.com/what-is-ecio-and-ebno.aspx
+      http://www.telecomhall.com/what-is-ecio-and-ebno.aspx (↓↓ basically rips off the source below ↓↓)
+      ftp://hazards.cr.usgs.gov/Eq_Effects/GeekPack/Procedures-Configs-Info/2_Radios/Raven-X_XE/What-is-%20EcIo_Explanation.pdf
 
       Reference Source code:
       https://github.com/android/platform_frameworks_base/blob/master/telephony/java/android/telephony/SignalStrength.java
@@ -145,31 +146,31 @@ public final class SignalConstants
     public static final int GSM_BIT_ERROR = 2;
 
     /**
-     * Defined in dBm
+     * Defined in dBm. Range varies, but probably -40dB to -140dB (really -120 on devices)
      */
-    public static final int CDMA_SIGNAL = 3;
+    public static final int CDMA_RSSI = 3;
 
     /**
      * Valid values are positive integers.  This value is the actual Ec/Io multiplied
      * by -10.  Example: If the actual Ec/Io is -12.5 dB, then this response value
-     * will be 125.
+     * will be 125. Range is 0 (best) to -160 (worst, though really goes to -200)
      */
     public static final int CDMA_ECIO = 4;
 
     /**
-     * Defined in dBm
+     * Defined in dBm. Range varies, but probably -40dB to -140dB (really -120 on devices)
      */
-    public static final int EVDO_SIGNAL = 5;
+    public static final int EVDO_RSSI = 5;
 
     /**
      * Valid values are positive integers.  This value is the actual Ec/Io multiplied
      * by -10.  Example: If the actual Ec/Io is -12.5 dB, then this response value
-     * will be 125.
+     * will be 125. Range is 0 (best) to -160 (worst, though really goes to -200)
      */
     public static final int EVDO_ECIO = 6;
 
     /**
-     * EVDO_SNR: 0dB (lowest) to 8dB (highest)
+     * EVDO_SNR: 0dB (best) to 8dB (worst)
      */
     public static final int EVDO_SNR = 7;
 
@@ -181,46 +182,47 @@ public final class SignalConstants
 
     /**
      * The current Reference Signal Receive Power in dBm multiplied by -1.
-     * Range: 44 to 140 dBm. 2147483647 denotes invalid value.
+     * Range: 44dBm (best) to 140 dBm (really 120dBm on devices). 2147483647 denotes invalid value.
      * Reference: 3GPP TS 36.133 9.1.4
      */
     public static final int LTE_RSRP = 9;
 
     /**
      * The current Reference Signal Receive Quality in dB multiplied by -1.
-     * Range: 20 to 3 dB. 2147483647 denotes invalid value.
+     * Range: 20dB (worst) to 3 dB (best). 2147483647 denotes invalid value.
      * Reference: 3GPP TS 36.133 9.1.7
      */
     public static final int LTE_RSRQ = 10;
 
     /**
      * The current reference signal signal-to-noise ratio in 0.1 dB units.
-     * Range: -200 to +300 (-200 = -20.0 dB, +300 = 30dB). 2147483647 denotes invalid value.
+     * Range: -200 (best) to +300 (-200 = -20.0 dB, +300 = 30dB). 2147483647 denotes invalid value.
      * Reference: 3GPP TS 36.101 8.1.1
      */
     public static final int LTE_SNR = 11;
 
     /**
      * The current Channel Quality Indicator.
-     * Range: 0 to 15. 2147483647 denotes invalid value.
+     * Range: 0 (best) to 15. 2147483647 denotes invalid value.
+     * Reference: 3GPP TS 36.101 9.2, 9.3, A.4
      */
     public static final int LTE_CQI = 12;
 
-    /**
-     * The current Channel Quality Indicator.
-     * Range: 0 to 15. 2147483647 denotes invalid value.
-     * Reference: 3GPP TS 36.101 9.2, 9.3, A.4
-     */
     public static final int IS_GSM = 13;
 
     /**
      * RSSI compute value = (carrier bandwidth) * log (# resource blocks)
      * Example RSSI (for verizon) = -(-17 + RSRP + RSRQ) (assuming RSRP and RSRQ are positive) (result should be positive)
      * RSSI is arbitrary as it depends on the compute value (which varies by carrier),
-     * RSSI is estimated to be to 27dBm to 143dBm (by verizon calculations)
+     * RSSI is estimated to be to 27dBm to 143dBm (by verizon calculations).
      * The 17 derived from 10 log 50
      */
-    public static final int    LTE_RSSI    = 14;
+    public static final int LTE_RSSI = 14;
+
+    /**
+     * Since it's a pain to use the xml string representation in a static context, redefining
+     * n/a here. see strings.xml#na
+     */
     public static final String DEFAULT_TXT = "N/A";
 
 
