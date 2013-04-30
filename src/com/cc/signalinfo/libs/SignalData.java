@@ -25,7 +25,7 @@
  * /
  */
 
-package com.cc.signalinfo;
+package com.cc.signalinfo.libs;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,7 +33,10 @@ import android.content.res.TypedArray;
 import android.telephony.SignalStrength;
 import android.util.Log;
 import android.widget.TextView;
-import com.cc.signalinfo.util.SignalConstants;
+import com.cc.signalinfo.enums.NetworkType;
+import com.cc.signalinfo.enums.Signal;
+import com.cc.signalinfo.signals.ISignal;
+import com.cc.signalinfo.config.SignalConstants;
 import com.cc.signalinfo.util.StringUtils;
 
 import java.util.Arrays;
@@ -42,20 +45,21 @@ import java.util.EnumMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static com.cc.signalinfo.util.SignalConstants.DEFAULT_TXT;
-
 /**
  * @author Wes Lanning
  * @version 2013-04-29
  */
 public class SignalData
 {
+    // TODO: use the stuff in the signals package now that it's implemented.
+
     private static final Pattern SPACE_STR     = Pattern.compile(" ");
     private static final Pattern FILTER_SIGNAL = Pattern.compile("-1|-?99|-?[1-9][0-9]{3,}");
 
     private Map<Signal, String> signalData = new EnumMap<Signal, String>(Signal.class);
     private Context context;
-    private Map<Signal, TextView> signalTextViewMap = new EnumMap<Signal, TextView>(Signal.class);
+    private Map<Signal, TextView>     signalTextViewMap = new EnumMap<Signal, TextView>(Signal.class);
+    private Map<NetworkType, ISignal> networkMap        = new EnumMap<NetworkType, ISignal>(NetworkType.class);
 
     public SignalData(Context context, SignalStrength signalStrength)
     {
@@ -72,6 +76,8 @@ public class SignalData
      */
     public static Map<Signal, String> filterSignalData(String[] data)
     {
+        // TODO: shitty old devices without lte in their api, I should account for by skipping over lte values (because network type gets set to lte_sig_strength for them)
+        // example (on 2.3 gsm phone): {GSM_SIG_STRENGTH=7, GSM_BIT_ERROR=N/A, CDMA_RSSI=N/A, CDMA_ECIO=N/A, EVDO_RSSI=N/A, EVDO_ECIO=N/A, EVDO_SNR=N/A, LTE_SIG_STRENGTH=gsm}
         Map<Signal, String> signalData = new EnumMap<Signal, String>(Signal.class);
         Signal[] values = Signal.values();
 
@@ -79,7 +85,6 @@ public class SignalData
             String signalValue = FILTER_SIGNAL.matcher(data[i]).matches()
                 ? SignalConstants.DEFAULT_TXT
                 : data[i];
-
             signalData.put(values[i], signalValue);
         }
         String lteRssi = SignalConstants.DEFAULT_TXT;
@@ -122,8 +127,8 @@ public class SignalData
     {
         if (!StringUtils.isNullOrEmpty(rsrp)
             && !StringUtils.isNullOrEmpty(rsrq)
-            && !DEFAULT_TXT.equals(rsrp)
-            && !DEFAULT_TXT.equals(rsrq)) {
+            && !SignalConstants.DEFAULT_TXT.equals(rsrp)
+            && !SignalConstants.DEFAULT_TXT.equals(rsrq)) {
             return true;
         }
         else {

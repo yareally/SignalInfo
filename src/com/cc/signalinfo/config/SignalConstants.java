@@ -23,7 +23,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 http://www.opensource.org/licenses/mit-license.php
 */
 
-package com.cc.signalinfo.util;
+package com.cc.signalinfo.config;
 
 /**
  * @author Wes Lanning
@@ -234,6 +234,12 @@ public final class SignalConstants
      * Key name for the stored preference that checks if a user agreed to warning prompt screen
      */
     public static final String PROMPT_SETTING = "promptWarningDialog";
+
+    /**
+     * Yeah dude, you really need to update your device because the LTE api settings have been there for 3+ years.
+     * Making me have to work around your super old device with unneeded settings and code >:(
+     */
+    public static final String OLD_FUCKING_DEVICE = "hasNoLteApiSettings";
 
     private SignalConstants() {}
 }

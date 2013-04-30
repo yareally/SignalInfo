@@ -23,7 +23,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 http://www.opensource.org/licenses/mit-license.php
 */
 
-package com.cc.signalinfo;
+package com.cc.signalinfo.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -35,7 +35,8 @@ import android.support.v4.app.DialogFragment;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import com.cc.signalinfo.util.SignalConstants;
+import com.cc.signalinfo.R;
+import com.cc.signalinfo.config.SignalConstants;
 import com.cc.signalinfo.util.SignalHelpers;
 
 /**

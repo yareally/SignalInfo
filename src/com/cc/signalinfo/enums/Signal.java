@@ -1,6 +1,6 @@
 /*
  *
- * Copyright (c) 2012 Wes Lanning, http://codingcreation.com
+ * Copyright (c) 2013 Wes Lanning, http://codingcreation.com
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the
@@ -25,40 +25,36 @@
  * /
  */
 
-package com.cc.signalinfo;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Pattern;
+package com.cc.signalinfo.enums;
 
 /**
  * @author Wes Lanning
- * @version 2012-12-21
+ * @version 2013-04-29
  */
-public class SignalStats
+public enum Signal
 {
-    private Map<Integer, Map<String, Integer>> stats;
-    private static final Pattern FILTER_NUM = Pattern.compile("-?\\d+");
+/*    NONE(0),*/
+    GSM_SIG_STRENGTH(1),
+    GSM_BIT_ERROR(2),
+    CDMA_RSSI(3),
+    CDMA_ECIO(4),
+    EVDO_RSSI(5),
+    EVDO_ECIO(6),
+    EVDO_SNR(7),
+    LTE_SIG_STRENGTH(8),
+    LTE_RSRP(9),
+    LTE_RSRQ(10),
+    LTE_SNR(11),
+    LTE_CQI(12),
+    IS_GSM(13),
+    LTE_RSSI(14),
+    GSM_RSSI(15),
+    GSM_ASU(16);
 
-    public SignalStats(String[] stats)
+    private int value;
+
+    Signal(int value)
     {
-        this.stats = new HashMap<Integer, Map<String, Integer>>(20);
-
-        for (int i = 0; i < stats.length; ++i) {
-            if (FILTER_NUM.matcher(stats[i]).matches()) {
-                Map<String, Integer> statValues = new HashMap<String, Integer>(0);
-                statValues.put("current", Integer.parseInt(stats[i]));
-                statValues.put("count", 1);
-                statValues.put("average", 1);
-                this.stats.put(i, statValues);
-            }
-        }
-    }
-
-    private double computeAverage()
-    {
-        return 0;
+        this.value = value;
     }
 }

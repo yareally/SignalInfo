@@ -23,7 +23,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 http://www.opensource.org/licenses/mit-license.php
 */
 
-package com.cc.signalinfo;
+package com.cc.signalinfo.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -42,19 +42,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
+import com.cc.signalinfo.R;
 import com.cc.signalinfo.R.id;
 import com.cc.signalinfo.R.layout;
+import com.cc.signalinfo.libs.SignalData;
+import com.cc.signalinfo.dialogs.WarningDialogFragment;
+import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.util.SignalHelpers;
 import com.cc.signalinfo.util.StringUtils;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
-import static com.cc.signalinfo.util.SignalConstants.*;
+import static com.cc.signalinfo.config.SignalConstants.*;
 // ↑ Because the over verbosity on the constants will probably give me brain damage...
 
 /**

@@ -25,24 +25,32 @@ http://www.opensource.org/licenses/mit-license.php
 
 package com.cc.signalinfo.util;
 
+import android.app.Activity;
 import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
+import com.cc.signalinfo.config.SignalConstants;
 
-import static com.cc.signalinfo.util.SignalConstants.DEFAULT_TXT;
+import java.util.Set;
 
 /**
+ * The type Signal helpers.
  * @author Wes Lanning
- * @version 2012-12-21
+ * @version 2012 -12-21
  */
 public final class SignalHelpers
 {
+    private static final String TAG = SignalHelpers.class.getSimpleName();
+
     private SignalHelpers() {}
 
     /**
      * Get the intent that launches the additional radio settings screen
      *
      * @return the intent for the settings area
+     * @throws SecurityException the security exception
      */
     public static Intent getAdditionalSettings() throws SecurityException
     {
@@ -63,5 +71,144 @@ public final class SignalHelpers
     {
         return !(!settings.contains(SignalConstants.PROMPT_SETTING)
             || !settings.getBoolean(SignalConstants.PROMPT_SETTING, false));
+    }
+
+    /**
+     * Has lte api.
+     *
+     * @param settings the settings
+     * @return the boolean
+     */
+    public static boolean hasLteApi(SharedPreferences settings)
+    {
+        return !(!settings.contains(SignalConstants.OLD_FUCKING_DEVICE)
+            || !settings.getBoolean(SignalConstants.OLD_FUCKING_DEVICE, false));
+    }
+
+    /**
+     * Gets shared preferences.
+     *
+     * @param activity the activity
+     * @return the shared preferences
+     */
+    public static SharedPreferences getSharedPreferences(Activity activity)
+    {
+        return activity.getPreferences(Context.MODE_PRIVATE);
+    }
+
+    /**
+     * Add shared preference.
+     *
+     * @param activity the activity
+     * @param settingName the setting name
+     * @param settingValue the setting value
+     * @return the boolean
+     */
+    public static boolean addSharedPreference(Activity activity, String settingName, Object settingValue)
+    {
+        SharedPreferences settings = getSharedPreferences(activity);
+        SharedPreferences.Editor editor = settings.edit();
+
+        try {
+            if (settingValue instanceof Boolean) {
+                return editor.putBoolean(settingName, (Boolean) settingValue).commit();
+            }
+            else if (settingValue instanceof String) {
+                return editor.putString(settingName, (String) settingValue).commit();
+            }
+            else if (settingValue instanceof Integer) {
+                return editor.putInt(settingName, (Integer) settingValue).commit();
+            }
+            else if (settingValue instanceof Set) { // requires android 3.0 or higher
+                return editor.putStringSet(settingName, (Set<String>) settingValue).commit();
+            }
+            else if (settingValue instanceof Float) {
+                return editor.putFloat(settingName, (Float) settingValue).commit();
+            }
+            else if (settingValue instanceof Long) {
+                return editor.putLong(settingName, (Long) settingValue).commit();
+            }
+        } catch (ClassCastException e) {
+            Log.e(TAG, String.format("Cannot convert %s", settingValue.toString()), e);
+        }
+        return false;
+    }
+
+    /**
+     * Gets preference.
+     *
+     * @param activity the activity
+     * @param preferenceName the preference name
+     * @param defaultReturnValue the default return value
+     * @return the preference
+     */
+    public static boolean getPreference(Activity activity, String preferenceName, boolean defaultReturnValue)
+    {
+        return getSharedPreferences(activity).getBoolean(preferenceName, defaultReturnValue);
+    }
+
+    /**
+     * Gets preference.
+     *
+     * @param activity the activity
+     * @param preferenceName the preference name
+     * @param defaultReturnValue the default return value
+     * @return the preference
+     */
+    public static String getPreference(Activity activity, String preferenceName, String defaultReturnValue)
+    {
+        return getSharedPreferences(activity).getString(preferenceName, defaultReturnValue);
+    }
+
+    /**
+     * Gets preference.
+     *
+     * @param activity the activity
+     * @param preferenceName the preference name
+     * @param defaultReturnValue the default return value
+     * @return the preference
+     */
+    public static int getPreference(Activity activity, String preferenceName, int defaultReturnValue)
+    {
+        return getSharedPreferences(activity).getInt(preferenceName, defaultReturnValue);
+    }
+
+    /**
+     * Gets preference.
+     *
+     * @param activity the activity
+     * @param preferenceName the preference name
+     * @param defaultReturnValue the default return value
+     * @return the preference
+     */
+    public static float getPreference(Activity activity, String preferenceName, float defaultReturnValue)
+    {
+        return getSharedPreferences(activity).getFloat(preferenceName, defaultReturnValue);
+    }
+
+    /**
+     * Gets preference.
+     *
+     * @param activity the activity
+     * @param preferenceName the preference name
+     * @param defaultReturnValue the default return value
+     * @return the preference
+     */
+    public static long getPreference(Activity activity, String preferenceName, long defaultReturnValue)
+    {
+        return getSharedPreferences(activity).getLong(preferenceName, defaultReturnValue);
+    }
+
+    /**
+     * Gets preference.
+     *
+     * @param activity the activity
+     * @param preferenceName the preference name
+     * @param defaultReturnValue the default return value
+     * @return the preference
+     */
+    public static Set<String> getPreference(Activity activity, String preferenceName, Set<String> defaultReturnValue)
+    {
+        return getSharedPreferences(activity).getStringSet(preferenceName, defaultReturnValue);
     }
 }

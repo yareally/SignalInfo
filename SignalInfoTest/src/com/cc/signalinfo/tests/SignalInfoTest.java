@@ -26,9 +26,9 @@ http://www.opensource.org/licenses/mit-license.php
 package com.cc.signalinfo.tests;
 
 import android.test.AndroidTestCase;
-import com.cc.signalinfo.Signal;
-import com.cc.signalinfo.SignalData;
-import com.cc.signalinfo.util.SignalConstants;
+import com.cc.signalinfo.enums.Signal;
+import com.cc.signalinfo.libs.SignalData;
+import com.cc.signalinfo.config.SignalConstants;
 
 import java.util.Map;
 

@@ -31,7 +31,7 @@ package com.cc.signalinfo.util;
  * @author Wes Lanning
  * @version 2013-04-28
  */
-public class StringUtils
+public final class StringUtils
 {
     private StringUtils() {}
 
