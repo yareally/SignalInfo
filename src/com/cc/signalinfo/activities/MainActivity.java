@@ -268,11 +268,10 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
             return;
         }
         SignalData signalData = new SignalData(signalStrength, tm);
-        SettingsHelpers.getSharedPreferences(this).edit().remove(OLD_FUCKING_DEVICE).commit();
-        if (SettingsHelpers.getPreference(this, SignalConstants.OLD_FUCKING_DEVICE, -1) == -1) {
-
+        // SettingsHelpers.getSharedPreferences(this).edit().remove(OLD_FUCKING_DEVICE).commit();
+        if (SettingsHelpers.getPreference(this, OLD_FUCKING_DEVICE, -1) == -1) {
             // set if this is some old device or not for sanity purposes later
-            SettingsHelpers.addSharedPreference(this, SignalConstants.OLD_FUCKING_DEVICE, signalData.legacyDevice());
+            SettingsHelpers.addSharedPreference(this, OLD_FUCKING_DEVICE, signalData.legacyDevice());
         }
 
         if (signalData.hasData()) {
