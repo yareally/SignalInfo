@@ -30,13 +30,16 @@ package com.cc.signalinfo.libs;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build;
 import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.signals.ISignal;
 import com.cc.signalinfo.config.SignalConstants;
+import com.cc.signalinfo.util.SettingsHelpers;
 import com.cc.signalinfo.util.StringUtils;
 
 import java.util.Arrays;
@@ -58,12 +61,14 @@ public class SignalData
 
     private Map<Signal, String> signalData = new EnumMap<Signal, String>(Signal.class);
     private Context context;
+    private final TelephonyManager tm;
     private Map<Signal, TextView>     signalTextViewMap = new EnumMap<Signal, TextView>(Signal.class);
     private Map<NetworkType, ISignal> networkMap        = new EnumMap<NetworkType, ISignal>(NetworkType.class);
 
-    public SignalData(Context context, SignalStrength signalStrength)
+    public SignalData(Context context, SignalStrength signalStrength, TelephonyManager tm)
     {
         this.context = context;
+        this.tm = tm;
         this.signalData = processSignalInfo(signalStrength);
     }
 
@@ -77,12 +82,13 @@ public class SignalData
     public static Map<Signal, String> filterSignalData(String[] data)
     {
         // TODO: shitty old devices without lte in their api, I should account for by skipping over lte values (because network type gets set to lte_sig_strength for them)
-        // example (on 2.3 gsm phone): {GSM_SIG_STRENGTH=7, GSM_BIT_ERROR=N/A, CDMA_RSSI=N/A, CDMA_ECIO=N/A, EVDO_RSSI=N/A, EVDO_ECIO=N/A, EVDO_SNR=N/A, LTE_SIG_STRENGTH=gsm}
+        // use a switch or something for it with the enum I made
+        // example of suckage: (on 2.3 gsm phone): {GSM_SIG_STRENGTH=7, GSM_BIT_ERROR=N/A, CDMA_RSSI=N/A, CDMA_ECIO=N/A, EVDO_RSSI=N/A, EVDO_ECIO=N/A, EVDO_SNR=N/A, LTE_SIG_STRENGTH=gsm}
         Map<Signal, String> signalData = new EnumMap<Signal, String>(Signal.class);
         Signal[] values = Signal.values();
 
         for (int i = 0; i < data.length; ++i) {
-            String signalValue = FILTER_SIGNAL.matcher(data[i]).matches()
+            String signalValue = data[i] == null || FILTER_SIGNAL.matcher(data[i]).matches()
                 ? SignalConstants.DEFAULT_TXT
                 : data[i];
             signalData.put(values[i], signalValue);
@@ -105,10 +111,24 @@ public class SignalData
      * @param signalStrength - contains all the signal info
      * @see android.telephony.SignalStrength for more info.
      */
-    private static Map<Signal, String> processSignalInfo(SignalStrength signalStrength)
+    private Map<Signal, String> processSignalInfo(SignalStrength signalStrength)
     {
         String[] signalArray = SPACE_STR.split(signalStrength.toString());
         signalArray = Arrays.copyOfRange(signalArray, 1, signalArray.length);
+
+        // deal with shitty old devices that don't have all the LTE API stuff
+        if (signalArray.length < 14) {
+            // deal with moving is_gsm to the end of the new array to be compatible.
+            String isGsm = signalArray[signalArray.length - 1];
+            signalArray[signalArray.length - 1] = null;
+
+            // will give nulls (on new array buckets), so have to deal with that later
+            signalArray = Arrays.copyOf(signalArray, 13);
+
+            // move is_gsm back to the end of the array
+            signalArray[signalArray.length - 1] = isGsm;
+            SettingsHelpers.addSharedPreference((Activity) context, SignalConstants.OLD_FUCKING_DEVICE, true);
+        }
         Map<Signal, String> sigInfo = filterSignalData(signalArray);
         Log.d("Signal Array", sigInfo.toString());
         return sigInfo;
@@ -125,15 +145,10 @@ public class SignalData
      */
     public static boolean hasLteRssi(String rsrp, String rsrq)
     {
-        if (!StringUtils.isNullOrEmpty(rsrp)
+        return !StringUtils.isNullOrEmpty(rsrp)
             && !StringUtils.isNullOrEmpty(rsrq)
             && !SignalConstants.DEFAULT_TXT.equals(rsrp)
-            && !SignalConstants.DEFAULT_TXT.equals(rsrq)) {
-            return true;
-        }
-        else {
-            return false;
-        }
+            && !SignalConstants.DEFAULT_TXT.equals(rsrq);
     }
 
     /**

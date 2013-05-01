@@ -1,5 +1,6 @@
 package com.cc.signalinfo.signals;
 
+import android.telephony.TelephonyManager;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.util.StringUtils;
@@ -12,14 +13,14 @@ import java.util.Map;
  */
 public class GsmInfo extends SignalInfo
 {
-    protected GsmInfo(Map<Signal, String> signals)
+    protected GsmInfo(TelephonyManager tm, Map<Signal, String> signals)
     {
-        super(NetworkType.GSM, signals);
+        super(NetworkType.GSM, tm, signals);
     }
 
-    protected GsmInfo()
+    protected GsmInfo(TelephonyManager tm)
     {
-        super(NetworkType.GSM);
+        super(NetworkType.GSM, tm);
     }
 
     @Override

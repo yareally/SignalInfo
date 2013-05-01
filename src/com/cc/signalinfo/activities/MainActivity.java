@@ -45,9 +45,11 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.cc.signalinfo.R;
 import com.cc.signalinfo.R.id;
 import com.cc.signalinfo.R.layout;
-import com.cc.signalinfo.libs.SignalData;
 import com.cc.signalinfo.dialogs.WarningDialogFragment;
 import com.cc.signalinfo.enums.Signal;
+import com.cc.signalinfo.libs.SignalData;
+import com.cc.signalinfo.listeners.ActivityListener;
+import com.cc.signalinfo.listeners.SignalListener;
 import com.cc.signalinfo.util.SignalHelpers;
 import com.cc.signalinfo.util.StringUtils;
 import com.google.ads.AdRequest;
@@ -56,7 +58,7 @@ import com.google.ads.AdView;
 import java.util.Calendar;
 import java.util.Map;
 
-import static com.cc.signalinfo.config.SignalConstants.*;
+import static com.cc.signalinfo.config.SignalConstants.DEFAULT_TXT;
 // ↑ Because the over verbosity on the constants will probably give me brain damage...
 
 /**
@@ -67,14 +69,15 @@ import static com.cc.signalinfo.config.SignalConstants.*;
  * @version 1.0
  */
 @SuppressWarnings({"RedundantFieldInitialization", "ReuseOfLocalVariable"})
-public class MainActivity extends SherlockFragmentActivity implements View.OnClickListener
+public class MainActivity extends SherlockFragmentActivity implements View.OnClickListener, ActivityListener
 {
-    private final        String           TAG           = getClass().getSimpleName();
-    private              String[]         sigInfoTitles = null;
-    private              TypedArray       sigInfoIds    = null;
-    private              SignalListener   listener      = null;
-    private              TelephonyManager tm            = null;
-    private              ActionBar        actionBar     = null;
+    private final String           TAG            = getClass().getSimpleName();
+    private       String[]         sigInfoTitles  = null;
+    private       TypedArray       sigInfoIds     = null;
+    private       SignalListener   listener       = null;
+    private       TelephonyManager tm             = null;
+    private       ActionBar        actionBar      = null;
+    private       SignalStrength   signalStrength = null;
 
     /**
      * Initialize the app.
@@ -90,11 +93,12 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         formatFooter();
 
-        listener = new SignalListener();
+        listener = new SignalListener(this);
         sigInfoTitles = getResources().getStringArray(R.array.sigInfoTitles);
         sigInfoIds = getResources().obtainTypedArray(R.array.sigInfoIds);
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         tm.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+
         findViewById(id.additionalInfo).setOnClickListener(this);
         setPhoneInfo();
 
@@ -182,24 +186,6 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         tm.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
     }
 
-    /**
-     * Set the signal info the user sees.
-     *
-     * @param signalStrength - contains all the signal info
-     * @see android.telephony.SignalStrength for more info.
-     */
-    private void setSignalInfo(SignalStrength signalStrength)
-    {
-        SignalData signalData = new SignalData(this, signalStrength);
-
-        if (signalData.hasData()) {
-            displaySignalInfo(signalData);
-        }
-        else {
-            Toast.makeText(this, getString(R.string.deviceNotSupported), Toast.LENGTH_LONG).show();
-        }
-    }
-
     private void displaySignalInfo(SignalData signalData)
     {
         Map<Signal, String> sigInfo = signalData.getData();
@@ -223,33 +209,28 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
                 currentTextView.setText(DEFAULT_TXT);
             }
         }
-
     }
 
     /**
-     * Private helper class to listener for network signal changes.
+     * Set the signal info the user sees.
+     *
+     * @param signalStrength - contains all the signal info
+     * @see android.telephony.SignalStrength for more info.
      */
-    private class SignalListener extends PhoneStateListener
+    @Override
+    public void setData(SignalStrength signalStrength)
     {
-        /* TODO: think about making this a singleton if ever needed outside of just this file
-           so we're not creating a bunch of telephony listeners
-        */
+        if (signalStrength == null) {
+            return;
+        }
+        this.signalStrength = signalStrength;
+        SignalData signalData = new SignalData(this, signalStrength, tm);
 
-        /**
-         * Get the Signal strength from the provider, each time there is an update
-         *
-         * @param signalStrength - has all the useful signal stuff in it.
-         */
-        @Override
-        public void onSignalStrengthsChanged(SignalStrength signalStrength)
-        {
-            super.onSignalStrengthsChanged(signalStrength);
-
-            if (signalStrength != null) {
-                setSignalInfo(signalStrength);
-                Log.d(TAG, "getting sig strength");
-                Log.d(TAG, signalStrength.toString());
-            }
+        if (signalData.hasData()) {
+            displaySignalInfo(signalData);
+        }
+        else {
+            Toast.makeText(this, getString(R.string.deviceNotSupported), Toast.LENGTH_LONG).show();
         }
     }
 }

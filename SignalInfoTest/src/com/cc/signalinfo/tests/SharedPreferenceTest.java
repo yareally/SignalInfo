@@ -31,7 +31,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.test.ActivityInstrumentationTestCase2;
 import com.cc.signalinfo.activities.MainActivity;
-import com.cc.signalinfo.util.SignalHelpers;
+import com.cc.signalinfo.util.SettingsHelpers;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -78,40 +78,40 @@ public class SharedPreferenceTest extends ActivityInstrumentationTestCase2<MainA
     public void testGettingBool() throws Exception
     {
         boolean expected = true;
-        boolean result = SignalHelpers.addSharedPreference(activity, "test", expected);
+        boolean result = SettingsHelpers.addSharedPreference(activity, "test", expected);
         assertTrue(errorMsg(expected, false), result);
 
-        boolean actual = SignalHelpers.getPreference(activity, "test", false);
+        boolean actual = SettingsHelpers.getPreference(activity, "test", false);
         assertTrue(errorMsg(expected, actual), actual);
     }
 
     public void testGettingString() throws Exception
     {
         String expected = "String to test";
-        boolean result = SignalHelpers.addSharedPreference(activity, "testString", expected);
+        boolean result = SettingsHelpers.addSharedPreference(activity, "testString", expected);
         assertTrue(errorMsg("true", result), result);
 
-        String actual = SignalHelpers.getPreference(activity, "testString", "");
+        String actual = SettingsHelpers.getPreference(activity, "testString", "");
         assertEquals(errorMsg(expected, actual), expected, actual);
     }
 
     public void testGettingInteger() throws Exception
     {
         int expected = 1200;
-        boolean result = SignalHelpers.addSharedPreference(activity, "testString", expected);
+        boolean result = SettingsHelpers.addSharedPreference(activity, "testString", expected);
         assertTrue(errorMsg("true", result), result);
 
-        int actual = SignalHelpers.getPreference(activity, "testString", -1);
+        int actual = SettingsHelpers.getPreference(activity, "testString", -1);
         assertEquals(errorMsg(expected, actual), expected, actual);
     }
 
     public void testGettingFloat() throws Exception
     {
         float expected = 1200.11f;
-        boolean result = SignalHelpers.addSharedPreference(activity, "testString", expected);
+        boolean result = SettingsHelpers.addSharedPreference(activity, "testString", expected);
         assertTrue(errorMsg("true", result), result);
 
-        float actual = SignalHelpers.getPreference(activity, "testString", -1.0f);
+        float actual = SettingsHelpers.getPreference(activity, "testString", -1.0f);
         assertEquals(errorMsg(expected, actual), expected, actual);
     }
 
@@ -121,10 +121,10 @@ public class SharedPreferenceTest extends ActivityInstrumentationTestCase2<MainA
         expected.add("test");
         expected.add("test 2");
 
-        boolean result = SignalHelpers.addSharedPreference(activity, "testString", expected);
+        boolean result = SettingsHelpers.addSharedPreference(activity, "testString", expected);
         assertTrue(errorMsg("true", result), result);
 
-        Collection<String> actual = SignalHelpers.getPreference(activity, "testString", new HashSet<String>(0));
+        Collection<String> actual = SettingsHelpers.getPreference(activity, "testString", new HashSet<String>(0));
         assertEquals(errorMsg(expected, actual), expected, actual);
         assertEquals(errorMsg(expected.size(), actual.size()), expected.size(), actual.size());
     }

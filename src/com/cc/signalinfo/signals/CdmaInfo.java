@@ -1,5 +1,6 @@
 package com.cc.signalinfo.signals;
 
+import android.telephony.TelephonyManager;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.util.StringUtils;
@@ -12,14 +13,14 @@ import java.util.Map;
  */
 public class CdmaInfo extends SignalInfo
 {
-    protected CdmaInfo(Map<Signal, String> signals)
+    protected CdmaInfo(TelephonyManager tm, Map<Signal, String> signals)
     {
-        super(NetworkType.CDMA, signals);
+        super(NetworkType.CDMA, tm, signals);
     }
 
-    protected CdmaInfo()
+    protected CdmaInfo(TelephonyManager tm)
     {
-        super(NetworkType.CDMA);
+        super(NetworkType.CDMA, tm);
     }
 
     @Override
@@ -28,5 +29,4 @@ public class CdmaInfo extends SignalInfo
         return !StringUtils.isNullOrEmpty(signals.get(Signal.CDMA_RSSI))
             || !StringUtils.isNullOrEmpty(signals.get(Signal.EVDO_RSSI));
     }
-
 }

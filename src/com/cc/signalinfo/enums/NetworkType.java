@@ -6,8 +6,15 @@ package com.cc.signalinfo.enums;
  */
 public enum NetworkType
 {
-    GSM,
-    CDMA,
-    LTE,
-    UNKNOWN
+    GSM(1),
+    CDMA(2),
+    LTE(3),
+    UNKNOWN(0);
+
+    private int value;
+
+    NetworkType(int value)
+    {
+        this.value = value;
+    }
 }

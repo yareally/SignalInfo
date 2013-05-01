@@ -1,5 +1,6 @@
 package com.cc.signalinfo.signals;
 
+import android.telephony.TelephonyManager;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.util.StringUtils;
@@ -12,14 +13,14 @@ import java.util.Map;
  */
 public class LteInfo extends SignalInfo
 {
-    protected LteInfo(Map<Signal, String> signals)
+    protected LteInfo(TelephonyManager tm, Map<Signal, String> signals)
     {
-        super(NetworkType.LTE, signals);
+        super(NetworkType.LTE, tm, signals);
     }
 
-    protected LteInfo()
+    protected LteInfo(TelephonyManager tm)
     {
-        super(NetworkType.LTE);
+        super(NetworkType.LTE, tm);
     }
 
     @Override
