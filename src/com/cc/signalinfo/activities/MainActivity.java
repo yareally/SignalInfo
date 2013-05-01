@@ -45,7 +45,6 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.cc.signalinfo.R;
 import com.cc.signalinfo.R.id;
 import com.cc.signalinfo.R.layout;
-import com.cc.signalinfo.config.SignalConstants;
 import com.cc.signalinfo.dialogs.WarningDialogFragment;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
@@ -212,7 +211,6 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         for (Map.Entry<Signal, TextView> data : signalDataMap.entrySet()) {
             // TODO: maybe use an adapter of some sort instead of this (ListAdapter maybe?)
             TextView currentTextView = data.getValue();
-            // TODO: fix this mess
             try {
                 NetworkType signalNetwork = SignalData.getNetworkType(networkTypes, data.getKey());
 

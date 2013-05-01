@@ -9,11 +9,19 @@ import java.util.EnumSet;
 import java.util.Map;
 
 /**
+ * The type Gsm info.
+ *
  * @author Wes Lanning
- * @version 2013-04-29
+ * @version 2013 -04-29
  */
 public class GsmInfo extends SignalInfo
 {
+    /**
+     * Instantiates a new Gsm info.
+     *
+     * @param tm the tm
+     * @param signals the signals
+     */
     public GsmInfo(TelephonyManager tm, Map<Signal, String> signals)
     {
         super(NetworkType.GSM, tm, signals);
@@ -21,11 +29,23 @@ public class GsmInfo extends SignalInfo
             EnumSet.of(Signal.GSM_SIG_STRENGTH, Signal.GSM_RSSI, Signal.GSM_ASU, Signal.GSM_BIT_ERROR);
     }
 
+    /**
+     * Instantiates a new Gsm info.
+     *
+     * @param tm the tm
+     */
     public GsmInfo(TelephonyManager tm)
     {
         this(tm, null);
     }
 
+    /**
+     * Is the current network type being used on the device?
+     * Return of false means there's no signal currently, not that
+     * the device cannot receive signals of this type of network.
+     *
+     * @return true if enabled
+     */
     @Override
     public boolean enabled()
     {

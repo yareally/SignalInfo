@@ -9,22 +9,42 @@ import java.util.EnumSet;
 import java.util.Map;
 
 /**
+ * The type Cdma info.
+ *
  * @author Wes Lanning
- * @version 2013-04-29
+ * @version 2013 -04-29
  */
 public class CdmaInfo extends SignalInfo
 {
+    /**
+     * Instantiates a new Cdma info.
+     *
+     * @param tm the tm
+     * @param signals the signals
+     */
     public CdmaInfo(TelephonyManager tm, Map<Signal, String> signals)
     {
         super(NetworkType.CDMA, tm, signals);
         possibleValues = EnumSet.range(Signal.CDMA_RSSI, Signal.EVDO_SNR);
     }
 
+    /**
+     * Instantiates a new Cdma info.
+     *
+     * @param tm the tm
+     */
     public CdmaInfo(TelephonyManager tm)
     {
         this(tm, null);
     }
 
+    /**
+     * Is the current network type being used on the device?
+     * Return of false means there's no signal currently, not that
+     * the device cannot receive signals of this type of network.
+     *
+     * @return true if enabled
+     */
     @Override
     public boolean enabled()
     {

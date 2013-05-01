@@ -7,17 +7,38 @@ import com.cc.signalinfo.enums.Signal;
 import java.util.*;
 
 /**
+ * The type Signal info.
+ *
  * @author Wes Lanning
- * @version 2013-04-29
+ * @version 2013 -04-29
  */
 @SuppressWarnings({"MethodWithMultipleReturnPoints", "OverlyComplexMethod", "SwitchStatementWithTooManyBranches"})
 public abstract class SignalInfo implements ISignal
 {
+    /**
+     * The TelephonyManager for accessing some network stuff
+     */
     protected TelephonyManager    tm;
+    /**
+     * Holds all the signal values and key mappings for them
+     */
     protected Map<Signal, String> signals;
+    /**
+     * The network type for the current SignalInfo instantiation
+     */
     protected NetworkType         type;
+    /**
+     * The Possible values for the current network type
+     */
     protected EnumSet<Signal> possibleValues = EnumSet.noneOf(Signal.class);
 
+    /**
+     * Instantiates a new Signal info.
+     *
+     * @param type the type
+     * @param tm the tm
+     * @param signals the signals
+     */
     protected SignalInfo(NetworkType type, TelephonyManager tm, Map<Signal, String> signals)
     {
         this.type = type;
@@ -27,29 +48,59 @@ public abstract class SignalInfo implements ISignal
             : new EnumMap<Signal, String>(signals);
     }
 
+    /**
+     * Instantiates a new Signal info.
+     *
+     * @param type the type
+     * @param tm the tm
+     */
     protected SignalInfo(NetworkType type, TelephonyManager tm)
     {
         this(type, tm, null);
     }
 
+    /**
+     * Gets signal string given the SignalType
+     *
+     * @param signalType the signalType
+     * @return the signal string or null if doesn't exist
+     */
     @Override
-    public String getSignalString(Signal name)
+    public String getSignalString(Signal signalType)
     {
-        return signals.get(name);
+        return signals.get(signalType);
     }
 
+    /**
+     * Gets the signal reading for the given signal type as an integer value
+     *
+     * @param name the name of the signal reading (RSSI, SNR, etc)
+     * @return the signal reading (you better make sure it exists before getting it)
+     */
     @Override
     public int getSignal(Signal name)
     {
         return Integer.parseInt(signals.get(name));
     }
 
+    /**
+     * Gets all the signal types and readings for the current
+     * network collection.
+     *
+     * @return the signals
+     */
     @Override
     public Map<Signal, String> getSignals()
     {
         return Collections.unmodifiableMap(signals);
     }
 
+    /**
+     * Gets signal type names for the currently stored
+     * signal readings.
+     *
+     * @return the signal names
+     */
     @Override
     public Set<Signal> getSignalNames()
     {
@@ -60,6 +111,7 @@ public abstract class SignalInfo implements ISignal
      * Does the current network type (gsm, cdma, etc)
      * contain the given type of signal?
      *
+     * @param type the type
      * @return true if network type contains this type of signal
      */
     public boolean containsSignalType(Signal type)
@@ -85,6 +137,7 @@ public abstract class SignalInfo implements ISignal
      *
      * Newer supported network types are near the bottom to avoid any issues with shitty old devices.
      *
+     * @param tm the tm
      * @return the given name for the network type the device is using currently for data
      */
     public static String getConnectedNetworkString(TelephonyManager tm)
@@ -174,7 +227,7 @@ public abstract class SignalInfo implements ISignal
     }
 
     /**
-     * Gets network type.
+     * Gets the network type for this SignalType instantiation
      *
      * @return the network type
      */
@@ -185,10 +238,10 @@ public abstract class SignalInfo implements ISignal
     }
 
     /**
-     * Add signal value.
+     * Add a signal value to the current network type collection.
      *
-     * @param type the type
-     * @param value the value
+     * @param type the type (like RSSI, RSRP, SNR, etc)
+     * @param value the value (the current reading from the tower for the signal)
      * @return the value of any previous signal value with the
      *         specified type or null if there was no signal already added.
      */
