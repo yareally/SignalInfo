@@ -25,10 +25,6 @@ http://www.opensource.org/licenses/mit-license.php
 
 package com.cc.signalinfo.config;
 
-import android.telephony.TelephonyManager;
-
-import java.util.HashMap;
-
 /**
  * @author Wes Lanning
  * @version 2012-12-21

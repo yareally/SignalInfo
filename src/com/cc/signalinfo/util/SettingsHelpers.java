@@ -96,7 +96,7 @@ public final class SettingsHelpers
      *
      * @param activity the activity
      * @param preferenceName the preference name
-     * @param defaultReturnValue the default return value
+     * @param defaultReturnValue the default return value if value doesn't exist
      * @return the preference
      */
     public static boolean getPreference(Activity activity, String preferenceName, boolean defaultReturnValue)
@@ -109,7 +109,7 @@ public final class SettingsHelpers
      *
      * @param activity the activity
      * @param preferenceName the preference name
-     * @param defaultReturnValue the default return value
+     * @param defaultReturnValue the default return value if value doesn't exist
      * @return the preference
      */
     public static String getPreference(Activity activity, String preferenceName, String defaultReturnValue)
@@ -122,7 +122,7 @@ public final class SettingsHelpers
      *
      * @param activity the activity
      * @param preferenceName the preference name
-     * @param defaultReturnValue the default return value
+     * @param defaultReturnValue the default return value if value doesn't exist
      * @return the preference
      */
     public static int getPreference(Activity activity, String preferenceName, int defaultReturnValue)
@@ -135,7 +135,7 @@ public final class SettingsHelpers
      *
      * @param activity the activity
      * @param preferenceName the preference name
-     * @param defaultReturnValue the default return value
+     * @param defaultReturnValue the default return value if value doesn't exist
      * @return the preference
      */
     public static float getPreference(Activity activity, String preferenceName, float defaultReturnValue)
@@ -148,7 +148,7 @@ public final class SettingsHelpers
      *
      * @param activity the activity
      * @param preferenceName the preference name
-     * @param defaultReturnValue the default return value
+     * @param defaultReturnValue the default return value if value doesn't exist
      * @return the preference
      */
     public static long getPreference(Activity activity, String preferenceName, long defaultReturnValue)
@@ -161,7 +161,7 @@ public final class SettingsHelpers
      *
      * @param activity the activity
      * @param preferenceName the preference name
-     * @param defaultReturnValue the default return value
+     * @param defaultReturnValue the default return value if value doesn't exist
      * @return the preference
      */
     public static Set<String> getPreference(Activity activity, String preferenceName, Set<String> defaultReturnValue)

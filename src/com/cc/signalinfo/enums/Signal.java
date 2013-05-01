@@ -33,7 +33,7 @@ package com.cc.signalinfo.enums;
  */
 public enum Signal
 {
-/*    NONE(0),*/
+    /*    NONE(0),*/
     GSM_SIG_STRENGTH(1),
     GSM_BIT_ERROR(2),
     CDMA_RSSI(3),
@@ -46,10 +46,9 @@ public enum Signal
     LTE_RSRQ(10),
     LTE_SNR(11),
     LTE_CQI(12),
-    IS_GSM(13),
-    LTE_RSSI(14),
-    GSM_RSSI(15),
-    GSM_ASU(16);
+    LTE_RSSI(13),
+    GSM_RSSI(14),
+    GSM_ASU(15);
 
     private int value;
 

@@ -48,7 +48,7 @@ public class WarningDialogFragment extends DialogFragment
     DialogInterface.OnClickListener,
     CompoundButton.OnCheckedChangeListener
 {
-    private             View   form           = null;
+    private View form = null;
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState)
@@ -64,7 +64,7 @@ public class WarningDialogFragment extends DialogFragment
             .setNegativeButton(android.R.string.cancel, null)
             .create();
 
-        AlertDialog  ad = builder.show();
+        AlertDialog ad = builder.show();
         ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
         return ad;
     }
@@ -80,7 +80,7 @@ public class WarningDialogFragment extends DialogFragment
     @Override
     public void onShow(DialogInterface dialog)
     {
-        ((AlertDialog)this.getDialog()).getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
+        ((AlertDialog) this.getDialog()).getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false);
     }
 
     @Override

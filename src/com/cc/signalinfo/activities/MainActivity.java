@@ -45,20 +45,28 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.cc.signalinfo.R;
 import com.cc.signalinfo.R.id;
 import com.cc.signalinfo.R.layout;
+import com.cc.signalinfo.config.SignalConstants;
 import com.cc.signalinfo.dialogs.WarningDialogFragment;
+import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.libs.SignalData;
 import com.cc.signalinfo.listeners.ActivityListener;
 import com.cc.signalinfo.listeners.SignalListener;
+import com.cc.signalinfo.signals.ISignal;
+import com.cc.signalinfo.signals.SignalInfo;
+import com.cc.signalinfo.util.SettingsHelpers;
 import com.cc.signalinfo.util.SignalHelpers;
 import com.cc.signalinfo.util.StringUtils;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.EnumMap;
 import java.util.Map;
 
 import static com.cc.signalinfo.config.SignalConstants.DEFAULT_TXT;
+import static com.cc.signalinfo.config.SignalConstants.OLD_FUCKING_DEVICE;
 // ↑ Because the over verbosity on the constants will probably give me brain damage...
 
 /**
@@ -71,13 +79,14 @@ import static com.cc.signalinfo.config.SignalConstants.DEFAULT_TXT;
 @SuppressWarnings({"RedundantFieldInitialization", "ReuseOfLocalVariable"})
 public class MainActivity extends SherlockFragmentActivity implements View.OnClickListener, ActivityListener
 {
-    private final String           TAG            = getClass().getSimpleName();
-    private       String[]         sigInfoTitles  = null;
-    private       TypedArray       sigInfoIds     = null;
-    private       SignalListener   listener       = null;
-    private       TelephonyManager tm             = null;
-    private       ActionBar        actionBar      = null;
-    private       SignalStrength   signalStrength = null;
+    private final String           TAG        = getClass().getSimpleName();
+    //private       String[]         sigInfoTitles  = null;
+    private       TypedArray       sigInfoIds = null;
+    private       SignalListener   listener   = null;
+    private       TelephonyManager tm         = null;
+    private       ActionBar        actionBar  = null;
+
+    private Map<Signal, TextView> signalTextViewMap = new EnumMap<Signal, TextView>(Signal.class);
 
     /**
      * Initialize the app.
@@ -94,7 +103,7 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         formatFooter();
 
         listener = new SignalListener(this);
-        sigInfoTitles = getResources().getStringArray(R.array.sigInfoTitles);
+        // sigInfoTitles = getResources().getStringArray(R.array.sigInfoTitles);
         sigInfoIds = getResources().obtainTypedArray(R.array.sigInfoIds);
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         tm.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
@@ -102,8 +111,8 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         findViewById(id.additionalInfo).setOnClickListener(this);
         setPhoneInfo();
 
-        AdView ad = (AdView) findViewById(id.adView);
-        ad.loadAd(new AdRequest());
+/*        AdView ad = (AdView) findViewById(id.adView);
+        ad.loadAd(new AdRequest());*/
     }
 
     /**
@@ -147,6 +156,14 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
 
         t = (TextView) findViewById(id.buildHost);
         t.setText(Build.HOST);
+
+        setNetworkTypeText();
+    }
+
+    private void setNetworkTypeText()
+    {
+        TextView t = (TextView) findViewById(id.networkType);
+        t.setText(SignalInfo.getConnectedNetworkString(tm));
     }
 
     /**
@@ -188,27 +205,54 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
 
     private void displaySignalInfo(SignalData signalData)
     {
-        Map<Signal, String> sigInfo = signalData.getData();
-        Map<Signal, TextView> signalDataMap = signalData.getSignalTextViewMap(sigInfoIds);
+        Map<NetworkType, ISignal> networkTypes = signalData.getNetworkMap();
+        Map<Signal, TextView> signalDataMap = getSignalTextViewMap(sigInfoIds, false);
         String unit = getString(R.string.unitMeasure);
 
         for (Map.Entry<Signal, TextView> data : signalDataMap.entrySet()) {
             // TODO: maybe use an adapter of some sort instead of this (ListAdapter maybe?)
             TextView currentTextView = data.getValue();
-
+            // TODO: fix this mess
             try {
-                String sigValue = sigInfo.get(data.getKey());
+                NetworkType signalNetwork = SignalData.getNetworkType(networkTypes, data.getKey());
 
-                if (!StringUtils.isNullOrEmpty(sigValue) && !sigValue.equals(DEFAULT_TXT)) {
-                    String db = data.getKey() == Signal.IS_GSM
-                        ? ""
-                        : String.format(" %s", unit);
-                    currentTextView.setText(sigValue + db);
+                if (signalNetwork != NetworkType.UNKNOWN) {
+                    String sigValue = networkTypes.get(signalNetwork).getSignalString(data.getKey());
+
+                    if (!StringUtils.isNullOrEmpty(sigValue) && !DEFAULT_TXT.equals(sigValue)) {
+                        currentTextView.setText(String.format("%s %s", sigValue, unit));
+                    }
                 }
             } catch (Resources.NotFoundException ignored) {
                 currentTextView.setText(DEFAULT_TXT);
             }
         }
+        setNetworkTypeText(); // update the network connection type
+    }
+
+    /**
+     * Gets the TextViews that map to the signal info data in the code for binding.
+     *
+     * @param sigInfoIds - the array containing the IDs to the TextView resources
+     * @param refreshMap - should we recreate the map or reuse it? (in case we some reason added some, somehow)
+     * @return map of the Signal data enumeration types (keys) and corresponding TextViews (values)
+     */
+    public Map<Signal, TextView> getSignalTextViewMap(TypedArray sigInfoIds, boolean refreshMap)
+    {
+        // no reason to do this over and over if it's already filled (we keep the same text stuff
+        if (signalTextViewMap.isEmpty() || refreshMap) {
+            Signal[] values = Signal.values();
+
+            for (int i = 1; i <= sigInfoIds.length(); ++i) {
+                int id = sigInfoIds.getResourceId(i, -1);
+
+                if (id != -1) {
+                    TextView currentView = (TextView) findViewById(id);
+                    signalTextViewMap.put(values[i], currentView);
+                }
+            }
+        }
+        return Collections.unmodifiableMap(signalTextViewMap);
     }
 
     /**
@@ -223,8 +267,13 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         if (signalStrength == null) {
             return;
         }
-        this.signalStrength = signalStrength;
-        SignalData signalData = new SignalData(this, signalStrength, tm);
+        SignalData signalData = new SignalData(signalStrength, tm);
+        SettingsHelpers.getSharedPreferences(this).edit().remove(OLD_FUCKING_DEVICE).commit();
+        if (SettingsHelpers.getPreference(this, SignalConstants.OLD_FUCKING_DEVICE, -1) == -1) {
+
+            // set if this is some old device or not for sanity purposes later
+            SettingsHelpers.addSharedPreference(this, SignalConstants.OLD_FUCKING_DEVICE, signalData.legacyDevice());
+        }
 
         if (signalData.hasData()) {
             displaySignalInfo(signalData);

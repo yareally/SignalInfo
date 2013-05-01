@@ -90,4 +90,29 @@ public interface ISignal
      * @return device type as a string
      */
     String getDeviceTypeString();
+
+    /**
+     * Add signal value.
+     *
+     * @param type the type
+     * @param value the value
+     * @return the value of any previous signal value with the
+     *         specified type or null if there was no signal already added.
+     */
+    String addSignalValue(Signal type, String value);
+
+    /**
+     * Does the current network type (gsm, cdma, etc)
+     * contain the given type of signal?
+     *
+     * @return true if network type contains this type of signal
+     */
+    boolean containsSignalType(Signal type);
+
+    /**
+     * Number of signal readings contained in the class collection
+     *
+     * @return # of signal readings
+     */
+    int size();
 }

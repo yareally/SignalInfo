@@ -25,11 +25,22 @@ http://www.opensource.org/licenses/mit-license.php
 
 package com.cc.signalinfo.tests;
 
-import android.test.AndroidTestCase;
+import android.app.Activity;
+import android.content.Context;
+import android.telephony.PhoneStateListener;
+import android.telephony.SignalStrength;
+import android.telephony.TelephonyManager;
+import android.test.ActivityInstrumentationTestCase2;
+import com.cc.signalinfo.activities.MainActivity;
+import com.cc.signalinfo.config.SignalConstants;
+import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.libs.SignalData;
-import com.cc.signalinfo.config.SignalConstants;
+import com.cc.signalinfo.listeners.ActivityListener;
+import com.cc.signalinfo.listeners.SignalListener;
+import com.cc.signalinfo.signals.ISignal;
 
+import java.util.EnumMap;
 import java.util.Map;
 
 /**
@@ -42,9 +53,19 @@ import java.util.Map;
  * -e class com.cc.signalinfo.SignalInfoTest \
  * com.cc.signalinfo.tests/android.test.InstrumentationTestRunner
  */
-public class SignalInfoTest extends AndroidTestCase
+public class SignalInfoTest extends ActivityInstrumentationTestCase2<MainActivity> implements ActivityListener
 {
+    private TelephonyManager tm;
     private String[] signalInfo = null;
+    private Map<NetworkType, ISignal> networkMap;
+    private SignalStrength            signalStrength;
+    private SignalData                signalData;
+    private Activity                  activity;
+
+    public SignalInfoTest()
+    {
+        super(MainActivity.class);
+    }
 
     @Override
     public void setUp() throws Exception
@@ -65,6 +86,11 @@ public class SignalInfoTest extends AndroidTestCase
             "-75",
             "gsm|lte"
         };
+        activity = getActivity();
+        SignalListener listener = new SignalListener(this);
+        tm = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
+        tm.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+        networkMap = new EnumMap<NetworkType, ISignal>(NetworkType.class);
     }
 
     public void testGetInstance() throws Exception
@@ -77,22 +103,34 @@ public class SignalInfoTest extends AndroidTestCase
      */
     public void testFilterSignalData()
     {
-        Map<Signal, String> filteredSigInfo = SignalData.filterSignalData(signalInfo);
+        signalData = signalStrength == null
+            ? new SignalData(signalInfo, tm)
+            : new SignalData(signalStrength, tm);
+
+        networkMap = signalData.getNetworkMap();
         Signal[] values = Signal.values();
 
-        for (int i = 0; i < filteredSigInfo.size(); ++i) {
-            if (i > 0 && i < 4) {
-                assertEquals(
-                    String.format("Value should be %s", SignalConstants.DEFAULT_TXT),
-                    SignalConstants.DEFAULT_TXT,
-                    filteredSigInfo.get(values[i]));
-            }
-            else {
-                assertEquals(
-                    String.format("Value should be %s", signalInfo[i]),
-                    signalInfo[i],
-                    filteredSigInfo.get(values[i]));
+        for (Map.Entry<NetworkType, ISignal> networkType : networkMap.entrySet()) {
+            for (int i = 1; i < signalInfo.length; ++i) {
+                if (i > 0 && i < 4) {
+                    assertEquals(
+                        String.format("Value should be %s", SignalConstants.DEFAULT_TXT),
+                        SignalConstants.DEFAULT_TXT,
+                        networkType.getValue().getSignalString(values[i]));
+                }
+                else {
+                    assertEquals(
+                        String.format("Value should be %s", signalInfo[i]),
+                        signalInfo[i],
+                        networkType.getValue().getSignalString(values[i]));
+                }
             }
         }
+    }
+
+    @Override
+    public void setData(SignalStrength signalStrength)
+    {
+        this.signalStrength = signalStrength;
     }
 }

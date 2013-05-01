@@ -25,18 +25,14 @@ http://www.opensource.org/licenses/mit-license.php
 
 package com.cc.signalinfo.util;
 
-import android.app.Activity;
 import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
 import com.cc.signalinfo.config.SignalConstants;
-
-import java.util.Set;
 
 /**
  * The type Signal helpers.
+ *
  * @author Wes Lanning
  * @version 2012 -12-21
  */
@@ -48,6 +44,7 @@ public final class SignalHelpers
      * Get the intent that launches the additional radio settings screen
      *
      * @return the intent for the settings area
+     *
      * @throws SecurityException the security exception
      */
     public static Intent getAdditionalSettings() throws SecurityException

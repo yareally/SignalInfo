@@ -30,14 +30,13 @@ package com.cc.signalinfo.listeners;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.util.Log;
-import com.cc.signalinfo.activities.MainActivity;
 
 /**
  * Private helper class to listener for network signal changes.
  */
 public class SignalListener extends PhoneStateListener
 {
-    private final String       TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getSimpleName();
     private ActivityListener listener;
 
     public SignalListener(ActivityListener listener)

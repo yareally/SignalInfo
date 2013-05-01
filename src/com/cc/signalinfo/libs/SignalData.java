@@ -27,19 +27,16 @@
 
 package com.cc.signalinfo.libs;
 
-import android.app.Activity;
-import android.content.Context;
-import android.content.res.TypedArray;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import android.widget.TextView;
 import com.cc.signalinfo.config.SignalConstants;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
+import com.cc.signalinfo.signals.CdmaInfo;
+import com.cc.signalinfo.signals.GsmInfo;
 import com.cc.signalinfo.signals.ISignal;
-import com.cc.signalinfo.util.SettingsHelpers;
-import com.cc.signalinfo.util.StringUtils;
+import com.cc.signalinfo.signals.LteInfo;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -54,21 +51,22 @@ import java.util.regex.Pattern;
 public class SignalData
 {
     // TODO: use the stuff in the signals package now that it's implemented.
-
     private static final Pattern SPACE_STR     = Pattern.compile(" ");
     private static final Pattern FILTER_SIGNAL = Pattern.compile("-1|-?99|-?[1-9][0-9]{3,}");
+    private              boolean oldDevice     = true; // assume this is some 2.3 or before device until otherwise
 
-    private Map<Signal, String> signalData = new EnumMap<Signal, String>(Signal.class);
-    private       Context          context;
-    private final TelephonyManager tm;
-    private Map<Signal, TextView>     signalTextViewMap = new EnumMap<Signal, TextView>(Signal.class);
-    private Map<NetworkType, ISignal> networkMap        = new EnumMap<NetworkType, ISignal>(NetworkType.class);
+    private Map<NetworkType, ISignal> networkMap;
 
-    public SignalData(Context context, SignalStrength signalStrength, TelephonyManager tm)
+    public SignalData(SignalStrength signalStrength, TelephonyManager tm)
     {
-        this.context = context;
-        this.tm = tm;
-        this.signalData = processSignalInfo(signalStrength);
+        String[] rawSignalData = processSignalInfo(signalStrength);
+        networkMap = createSignalDataMap(tm, rawSignalData);
+    }
+
+    public SignalData(String[] signalStrength, TelephonyManager tm)
+    {
+        String[] rawSignalData = processSignalInfo(signalStrength);
+        networkMap = createSignalDataMap(tm, rawSignalData);
     }
 
     /**
@@ -76,118 +74,83 @@ public class SignalData
      * some reading or avoids causing an exception by removing it.
      *
      * @param data - data to filter
+     * @param tm - dependency for the network map
      * @return filtered data with "n/a" instead of the bad value
      */
-    public static Map<Signal, String> filterSignalData(String[] data)
+    public static Map<NetworkType, ISignal> createSignalDataMap(TelephonyManager tm, String[] data)
     {
         // TODO: shitty old devices without lte in their api, I should account for by skipping over lte values (because network type gets set to lte_sig_strength for them)
         // use a switch or something for it with the enum I made
         // example of suckage: (on 2.3 gsm phone): {GSM_SIG_STRENGTH=7, GSM_BIT_ERROR=N/A, CDMA_RSSI=N/A, CDMA_ECIO=N/A, EVDO_RSSI=N/A, EVDO_ECIO=N/A, EVDO_SNR=N/A, LTE_SIG_STRENGTH=gsm}
-        Map<Signal, String> signalData = new EnumMap<Signal, String>(Signal.class);
+        Map<NetworkType, ISignal> networkMap = initNetworkMap(tm);
         Signal[] values = Signal.values();
 
-        for (int i = 0; i < data.length; ++i) {
-            String signalValue = data[i] == null || FILTER_SIGNAL.matcher(data[i]).matches()
+        for (int i = 0; i < values.length; ++i) {
+            String signalValue = i >= data.length || data[i] == null || FILTER_SIGNAL.matcher(data[i]).matches()
                 ? SignalConstants.DEFAULT_TXT
                 : data[i];
-            signalData.put(values[i], signalValue);
-        }
-        String lteRssi = SignalConstants.DEFAULT_TXT;
+            NetworkType signalNetwork = getNetworkType(networkMap, values[i]);
 
-        if (hasLteRssi(signalData.get(Signal.LTE_RSRP), signalData.get(Signal.LTE_RSRQ))) {
-            lteRssi = String.valueOf(
-                computeRssi(
-                    signalData.get(Signal.LTE_RSRP),
-                    signalData.get(Signal.LTE_RSRQ)));
+            if (signalNetwork != NetworkType.UNKNOWN) {
+                networkMap.get(signalNetwork).addSignalValue(values[i], signalValue);
+            }
         }
-        signalData.put(Signal.LTE_RSSI, String.valueOf(lteRssi));
-        return signalData;
+        Log.d("Signal Map CDMA: ", networkMap.get(NetworkType.CDMA).getSignals().toString());
+        Log.d("Signal Map GSM: ", networkMap.get(NetworkType.GSM).getSignals().toString());
+        Log.d("Signal Map LTE: ", networkMap.get(NetworkType.LTE).getSignals().toString());
+        return networkMap;
+    }
+
+    public static NetworkType getNetworkType(Map<NetworkType, ISignal> networkMap, Signal value)
+    {
+        for (Map.Entry<NetworkType, ISignal> networkType : networkMap.entrySet()) {
+            if (networkType.getValue().containsSignalType(value)) {
+                return networkType.getKey();
+            }
+        }
+        return NetworkType.UNKNOWN;
     }
 
     /**
      * Set the signal info the user sees.
      *
-     * @param signalStrength - contains all the signal info
+     * @param signalArray - contains all the signal info
      * @see android.telephony.SignalStrength for more info.
      */
-    private Map<Signal, String> processSignalInfo(SignalStrength signalStrength)
+    public final String[] processSignalInfo(String[] signalArray)
     {
-        String[] signalArray = SPACE_STR.split(signalStrength.toString());
-        signalArray = Arrays.copyOfRange(signalArray, 1, signalArray.length);
+        //String[] signalArray = SPACE_STR.split(signalStrength.toString());
+        // ditch the text at the beginning and is_gsm at the end (because is_gsm is redundant with getNetworkType())
+        signalArray = Arrays.copyOfRange(signalArray, 1, signalArray.length - 1);
 
-        if (signalArray.length < 14) {
-            // deal with moving is_gsm to the end of the new array to be compatible.
-            signalArray = legacyWorkArounds(signalArray);
+        if (signalArray.length < 13) {
+            signalArray = legacyWorkarounds(signalArray); // 2.2 or 2.3 device >:(
         }
-        Map<Signal, String> sigInfo = filterSignalData(signalArray);
-        Log.d("Signal Array", sigInfo.toString());
-        return sigInfo;
-    }
-
-    /**
-     * Checks to see if we have an rsrp and rsrq signal. If either
-     * is the DEFAULT_TXT set for the rsrp/rsrq or null, then we assume
-     * we can't calculate an estimated RSSI signal.
-     *
-     * @param rsrp - the RSRP LTE signal
-     * @param rsrq - the RSRQ LTE signal
-     * @return true if RSSI possible, false if not
-     */
-    public static boolean hasLteRssi(String rsrp, String rsrq)
-    {
-        return !StringUtils.isNullOrEmpty(rsrp)
-            && !StringUtils.isNullOrEmpty(rsrq)
-            && !SignalConstants.DEFAULT_TXT.equals(rsrp)
-            && !SignalConstants.DEFAULT_TXT.equals(rsrq);
-    }
-
-    /**
-     * Computes the LTE RSSI by what is most likely the default number of
-     * channels on the LTE device (at least for Verizon).
-     *
-     * @param rsrp - the RSRP LTE signal
-     * @param rsrq - the RSRQ LTE signal
-     * @return the RSSI signal
-     */
-    public static int computeRssi(String rsrp, String rsrq)
-    {
-        return -(-17 - Integer.parseInt(rsrp) - Integer.parseInt(rsrq));
-    }
-
-    /**
-     * Gets the TextViews that map to the signal info data in the code for binding.
-     *
-     * @param sigInfoIds - the array containing the IDs to the TextView resources
-     * @param refreshMap - should we recreate the map or reuse it? (in case we some reason added some, somehow)
-     * @return map of the Signal data enumeration types (keys) and corresponding TextViews (values)
-     */
-    public Map<Signal, TextView> getSignalTextViewMap(TypedArray sigInfoIds, boolean refreshMap)
-    {
-        // no reason to do this over and over if it's already filled (we keep the same text stuff
-        if (signalTextViewMap.isEmpty() || refreshMap) {
-            Signal[] values = Signal.values();
-
-            for (int i = 1; i <= sigInfoIds.length(); ++i) {
-                int id = sigInfoIds.getResourceId(i, -1);
-
-                if (id != -1) {
-                    TextView currentView = (TextView) ((Activity) context).findViewById(id);
-                    signalTextViewMap.put(values[i], currentView);
-                }
-            }
+        else {
+            oldDevice = false; // ICS+ device, yay
         }
-        return Collections.unmodifiableMap(signalTextViewMap);
+        Log.d("Signal Array", Arrays.toString(signalArray));
+        return signalArray;
+    }
+
+    public final String[] processSignalInfo(SignalStrength signalStrength)
+    {
+        return processSignalInfo(SPACE_STR.split(signalStrength.toString()));
     }
 
     /**
-     * Gets the TextViews that map to the signal info data in the code for binding.
+     * Initialize the network map that will hold all the various signal readings
      *
-     * @param sigInfoIds - the array containing the IDs to the TextView resources
-     * @return map of the Signal data enumeration types (keys) and corresponding TextViews (values)
+     * @param tm - dependency for the network map
+     * @return the created map, empty other than the signal container maps (for gsm, lte, etc)
      */
-    public Map<Signal, TextView> getSignalTextViewMap(TypedArray sigInfoIds)
+    public static Map<NetworkType, ISignal> initNetworkMap(TelephonyManager tm)
     {
-        return getSignalTextViewMap(sigInfoIds, false);
+        Map<NetworkType, ISignal> networkMap = new EnumMap<NetworkType, ISignal>(NetworkType.class);
+        networkMap.put(NetworkType.GSM, new GsmInfo(tm));
+        networkMap.put(NetworkType.CDMA, new CdmaInfo(tm));
+        networkMap.put(NetworkType.LTE, new LteInfo(tm));
+        return networkMap;
     }
 
     /**
@@ -197,17 +160,17 @@ public class SignalData
      */
     public boolean hasData()
     {
-        return !signalData.isEmpty();
+        return !networkMap.isEmpty();
     }
 
-    /**
-     * Gets the last recorded instance of the signal data map
-     *
-     * @return signal data as a map
-     */
-    public Map<Signal, String> getData()
+    public Map<NetworkType, ISignal> getNetworkMap()
     {
-        return Collections.unmodifiableMap(signalData);
+        return Collections.unmodifiableMap(networkMap);
+    }
+
+    public boolean legacyDevice()
+    {
+        return oldDevice;
     }
 
     /**
@@ -226,17 +189,10 @@ public class SignalData
      * @param signalArray - they signal data pulled from the device.
      * @return a slightly larger, but more sane array that looks like one from ICS or greater
      */
-    private String[] legacyWorkArounds(String[] signalArray)
+    private static String[] legacyWorkarounds(String[] signalArray)
     {
-        String isGsm = signalArray[signalArray.length - 1];
-        signalArray[signalArray.length - 1] = null;
-
         // will give nulls (on new array buckets), so have to deal with that later
         signalArray = Arrays.copyOf(signalArray, 13);
-
-        // move is_gsm back to the end of the array
-        signalArray[signalArray.length - 1] = isGsm;
-        SettingsHelpers.addSharedPreference((Activity) context, SignalConstants.OLD_FUCKING_DEVICE, true);
         return signalArray;
     }
 }

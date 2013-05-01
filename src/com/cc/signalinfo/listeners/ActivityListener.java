@@ -35,5 +35,10 @@ import android.telephony.SignalStrength;
  */
 public interface ActivityListener
 {
+    /**
+     * Set the data to return to the caller here
+     *
+     * @param signalStrength - data to return
+     */
     void setData(SignalStrength signalStrength);
 }

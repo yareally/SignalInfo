@@ -5,6 +5,7 @@ import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.util.StringUtils;
 
+import java.util.EnumSet;
 import java.util.Map;
 
 /**
@@ -13,14 +14,15 @@ import java.util.Map;
  */
 public class CdmaInfo extends SignalInfo
 {
-    protected CdmaInfo(TelephonyManager tm, Map<Signal, String> signals)
+    public CdmaInfo(TelephonyManager tm, Map<Signal, String> signals)
     {
         super(NetworkType.CDMA, tm, signals);
+        possibleValues = EnumSet.range(Signal.CDMA_RSSI, Signal.EVDO_SNR);
     }
 
-    protected CdmaInfo(TelephonyManager tm)
+    public CdmaInfo(TelephonyManager tm)
     {
-        super(NetworkType.CDMA, tm);
+        this(tm, null);
     }
 
     @Override

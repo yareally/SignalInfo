@@ -16,6 +16,7 @@ public abstract class SignalInfo implements ISignal
     protected TelephonyManager    tm;
     protected Map<Signal, String> signals;
     protected NetworkType         type;
+    protected EnumSet<Signal> possibleValues = EnumSet.noneOf(Signal.class);
 
     protected SignalInfo(NetworkType type, TelephonyManager tm, Map<Signal, String> signals)
     {
@@ -56,6 +57,17 @@ public abstract class SignalInfo implements ISignal
     }
 
     /**
+     * Does the current network type (gsm, cdma, etc)
+     * contain the given type of signal?
+     *
+     * @return true if network type contains this type of signal
+     */
+    public boolean containsSignalType(Signal type)
+    {
+        return possibleValues.contains(type);
+    }
+
+    /**
      * Gets the numerical value representing the specific type of
      * currently connected network (e.g. LTE, eHRPD, EV-DO, RTT, EDGE, etc)
      *
@@ -75,8 +87,7 @@ public abstract class SignalInfo implements ISignal
      *
      * @return the given name for the network type the device is using currently for data
      */
-    @Override
-    public String getConnectedNetworkString()
+    public static String getConnectedNetworkString(TelephonyManager tm)
     {
         switch (tm.getNetworkType()) {
             case TelephonyManager.NETWORK_TYPE_UNKNOWN:
@@ -113,6 +124,20 @@ public abstract class SignalInfo implements ISignal
                 return "HSPA+";
         }
         return "Unknown";
+    }
+
+    /**
+     * Gets the textual name for the type specific type of
+     * currently connected network (e.g. LTE, eHRPD, EV-DO, RTT, EDGE, etc)
+     *
+     * Newer supported network types are near the bottom to avoid any issues with shitty old devices.
+     *
+     * @return the given name for the network type the device is using currently for data
+     */
+    @Override
+    public String getConnectedNetworkString()
+    {
+        return getConnectedNetworkString(tm);
     }
 
     /**
@@ -157,6 +182,31 @@ public abstract class SignalInfo implements ISignal
     public NetworkType getNetworkType()
     {
         return type;
+    }
+
+    /**
+     * Add signal value.
+     *
+     * @param type the type
+     * @param value the value
+     * @return the value of any previous signal value with the
+     *         specified type or null if there was no signal already added.
+     */
+    @Override
+    public String addSignalValue(Signal type, String value)
+    {
+        return signals.put(type, value);
+    }
+
+    /**
+     * Number of signal readings contained in the class collection
+     *
+     * @return # of signal readings
+     */
+    @Override
+    public int size()
+    {
+        return signals.size();
     }
 
 /*    @Override

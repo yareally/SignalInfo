@@ -5,6 +5,7 @@ import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.util.StringUtils;
 
+import java.util.EnumSet;
 import java.util.Map;
 
 /**
@@ -13,14 +14,16 @@ import java.util.Map;
  */
 public class GsmInfo extends SignalInfo
 {
-    protected GsmInfo(TelephonyManager tm, Map<Signal, String> signals)
+    public GsmInfo(TelephonyManager tm, Map<Signal, String> signals)
     {
         super(NetworkType.GSM, tm, signals);
+        possibleValues =
+            EnumSet.of(Signal.GSM_SIG_STRENGTH, Signal.GSM_RSSI, Signal.GSM_ASU, Signal.GSM_BIT_ERROR);
     }
 
-    protected GsmInfo(TelephonyManager tm)
+    public GsmInfo(TelephonyManager tm)
     {
-        super(NetworkType.GSM, tm);
+        this(tm, null);
     }
 
     @Override
@@ -28,5 +31,4 @@ public class GsmInfo extends SignalInfo
     {
         return !StringUtils.isNullOrEmpty(signals.get(Signal.GSM_SIG_STRENGTH));
     }
-
 }
