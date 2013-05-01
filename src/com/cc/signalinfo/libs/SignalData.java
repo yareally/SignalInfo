@@ -30,15 +30,14 @@ package com.cc.signalinfo.libs;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.TypedArray;
-import android.os.Build;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
+import com.cc.signalinfo.config.SignalConstants;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.signals.ISignal;
-import com.cc.signalinfo.config.SignalConstants;
 import com.cc.signalinfo.util.SettingsHelpers;
 import com.cc.signalinfo.util.StringUtils;
 
@@ -60,7 +59,7 @@ public class SignalData
     private static final Pattern FILTER_SIGNAL = Pattern.compile("-1|-?99|-?[1-9][0-9]{3,}");
 
     private Map<Signal, String> signalData = new EnumMap<Signal, String>(Signal.class);
-    private Context context;
+    private       Context          context;
     private final TelephonyManager tm;
     private Map<Signal, TextView>     signalTextViewMap = new EnumMap<Signal, TextView>(Signal.class);
     private Map<NetworkType, ISignal> networkMap        = new EnumMap<NetworkType, ISignal>(NetworkType.class);
@@ -116,18 +115,9 @@ public class SignalData
         String[] signalArray = SPACE_STR.split(signalStrength.toString());
         signalArray = Arrays.copyOfRange(signalArray, 1, signalArray.length);
 
-        // deal with shitty old devices that don't have all the LTE API stuff
         if (signalArray.length < 14) {
             // deal with moving is_gsm to the end of the new array to be compatible.
-            String isGsm = signalArray[signalArray.length - 1];
-            signalArray[signalArray.length - 1] = null;
-
-            // will give nulls (on new array buckets), so have to deal with that later
-            signalArray = Arrays.copyOf(signalArray, 13);
-
-            // move is_gsm back to the end of the array
-            signalArray[signalArray.length - 1] = isGsm;
-            SettingsHelpers.addSharedPreference((Activity) context, SignalConstants.OLD_FUCKING_DEVICE, true);
+            signalArray = legacyWorkArounds(signalArray);
         }
         Map<Signal, String> sigInfo = filterSignalData(signalArray);
         Log.d("Signal Array", sigInfo.toString());
@@ -218,5 +208,35 @@ public class SignalData
     public Map<Signal, String> getData()
     {
         return Collections.unmodifiableMap(signalData);
+    }
+
+    /**
+     * Deal with shitty old devices that don't have all the LTE API stuff.
+     * Yes, it's not optimal to pretend they could have LTE by adding the values,
+     * but fuck these devices. Especially since it's possible for 2.3 and 2.2 devices to have LTE,
+     * which complicates things more. I prefer my sanity and letting them eat up a little more memory
+     * on their craptastic device than running more checks later on.
+     *
+     * If you own one of these devices and are reading this, forgive the rage, but
+     * things like this on Android frustrate the hell out of me and as a reader,
+     * I assume you are developmentally inclined and can commiserate.
+     *
+     * Also, a happy developer is a good a good developer :)
+     *
+     * @param signalArray - they signal data pulled from the device.
+     * @return a slightly larger, but more sane array that looks like one from ICS or greater
+     */
+    private String[] legacyWorkArounds(String[] signalArray)
+    {
+        String isGsm = signalArray[signalArray.length - 1];
+        signalArray[signalArray.length - 1] = null;
+
+        // will give nulls (on new array buckets), so have to deal with that later
+        signalArray = Arrays.copyOf(signalArray, 13);
+
+        // move is_gsm back to the end of the array
+        signalArray[signalArray.length - 1] = isGsm;
+        SettingsHelpers.addSharedPreference((Activity) context, SignalConstants.OLD_FUCKING_DEVICE, true);
+        return signalArray;
     }
 }
