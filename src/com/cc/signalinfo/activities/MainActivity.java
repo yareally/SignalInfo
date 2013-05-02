@@ -236,7 +236,7 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         if (signalTextViewMap.isEmpty() || refreshMap) {
             Signal[] values = Signal.values();
 
-            for (int i = 1; i <= sigInfoIds.length(); ++i) {
+            for (int i = 0; i <= sigInfoIds.length(); ++i) {
                 int id = sigInfoIds.getResourceId(i, -1);
 
                 if (id != -1) {
