@@ -212,14 +212,10 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
             // TODO: maybe use an adapter of some sort instead of this (ListAdapter maybe?)
             TextView currentTextView = data.getValue();
             try {
-                NetworkType signalNetwork = SignalData.getNetworkType(networkTypes, data.getKey());
+                String sigValue = networkTypes.get(data.getKey().type()).getSignalString(data.getKey());
 
-                if (signalNetwork != NetworkType.UNKNOWN) {
-                    String sigValue = networkTypes.get(signalNetwork).getSignalString(data.getKey());
-
-                    if (!StringUtils.isNullOrEmpty(sigValue) && !DEFAULT_TXT.equals(sigValue)) {
-                        currentTextView.setText(String.format("%s %s", sigValue, unit));
-                    }
+                if (!StringUtils.isNullOrEmpty(sigValue) && !DEFAULT_TXT.equals(sigValue)) {
+                    currentTextView.setText(String.format("%s %s", sigValue, unit));
                 }
             } catch (Resources.NotFoundException ignored) {
                 currentTextView.setText(DEFAULT_TXT);

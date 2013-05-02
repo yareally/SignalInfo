@@ -196,7 +196,7 @@ public final class SignalConstants
 
     /**
      * The current reference signal signal-to-noise ratio in 0.1 dB units.
-     * Range: -200 (best) to +300 (-200 = -20.0 dB, +300 = 30dB). 2147483647 denotes invalid value.
+     * Range: -200 to +300 (best) (-200 = -20.0 dB, +300 = 30dB). 2147483647 denotes invalid value.
      * Reference: 3GPP TS 36.101 8.1.1
      */
     public static final int LTE_SNR = 11;

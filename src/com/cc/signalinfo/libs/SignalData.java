@@ -89,26 +89,13 @@ public class SignalData
             String signalValue = i >= data.length || data[i] == null || FILTER_SIGNAL.matcher(data[i]).matches()
                 ? SignalConstants.DEFAULT_TXT
                 : data[i];
-            NetworkType signalNetwork = getNetworkType(networkMap, values[i]);
 
-            if (signalNetwork != NetworkType.UNKNOWN) {
-                networkMap.get(signalNetwork).addSignalValue(values[i], signalValue);
-            }
+            networkMap.get(values[i].type()).addSignalValue(values[i], signalValue);
         }
         Log.d("Signal Map CDMA: ", networkMap.get(NetworkType.CDMA).getSignals().toString());
         Log.d("Signal Map GSM: ", networkMap.get(NetworkType.GSM).getSignals().toString());
         Log.d("Signal Map LTE: ", networkMap.get(NetworkType.LTE).getSignals().toString());
         return networkMap;
-    }
-
-    public static NetworkType getNetworkType(Map<NetworkType, ISignal> networkMap, Signal value)
-    {
-        for (Map.Entry<NetworkType, ISignal> networkType : networkMap.entrySet()) {
-            if (networkType.getValue().containsSignalType(value)) {
-                return networkType.getKey();
-            }
-        }
-        return NetworkType.UNKNOWN;
     }
 
     /**
