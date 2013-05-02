@@ -30,7 +30,7 @@ package com.cc.signalinfo.libs;
 import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-import com.cc.signalinfo.config.SignalConstants;
+import com.cc.signalinfo.config.AppSetup;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.signals.CdmaInfo;
@@ -38,10 +38,7 @@ import com.cc.signalinfo.signals.GsmInfo;
 import com.cc.signalinfo.signals.ISignal;
 import com.cc.signalinfo.signals.LteInfo;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.EnumMap;
-import java.util.Map;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -53,7 +50,8 @@ public class SignalData
     // TODO: use the stuff in the signals package now that it's implemented.
     private static final Pattern SPACE_STR     = Pattern.compile(" ");
     private static final Pattern FILTER_SIGNAL = Pattern.compile("-1|-?99|-?[1-9][0-9]{3,}");
-    private              boolean oldDevice     = true; // assume this is some 2.3 or before device until otherwise
+    private              int     oldDevice     = 1; // assume this is some 2.3 or before device until otherwise
+    private              int     gsmPos        = -1; // where in the signal string array is_gsm appears to remove it
 
     private Map<NetworkType, ISignal> networkMap;
 
@@ -77,7 +75,7 @@ public class SignalData
      * @param tm - dependency for the network map
      * @return filtered data with "n/a" instead of the bad value
      */
-    public static Map<NetworkType, ISignal> createSignalDataMap(TelephonyManager tm, String[] data)
+    public Map<NetworkType, ISignal> createSignalDataMap(TelephonyManager tm, String[] data)
     {
         // TODO: shitty old devices without lte in their api, I should account for by skipping over lte values (because network type gets set to lte_sig_strength for them)
         // use a switch or something for it with the enum I made
@@ -87,9 +85,13 @@ public class SignalData
 
         for (int i = 0; i < values.length; ++i) {
             String signalValue = i >= data.length || data[i] == null || FILTER_SIGNAL.matcher(data[i]).matches()
-                ? SignalConstants.DEFAULT_TXT
+                ? AppSetup.DEFAULT_TXT
                 : data[i];
 
+            if (signalValue.toLowerCase(Locale.ENGLISH).contains("gsm")
+                || signalValue.toLowerCase(Locale.ENGLISH).contains("cdma")) {
+                gsmPos = i;
+            }
             networkMap.get(values[i].type()).addSignalValue(values[i], signalValue);
         }
         Log.d("Signal Map CDMA: ", networkMap.get(NetworkType.CDMA).getSignals().toString());
@@ -106,18 +108,39 @@ public class SignalData
      */
     public final String[] processSignalInfo(String[] signalArray)
     {
-        //String[] signalArray = SPACE_STR.split(signalStrength.toString());
         // ditch the text at the beginning and is_gsm at the end (because is_gsm is redundant with getNetworkType())
-        signalArray = Arrays.copyOfRange(signalArray, 1, signalArray.length - 1);
+        int endPos = findIsGsmPos(signalArray);
+        signalArray = Arrays.copyOfRange(signalArray, 1, endPos);
 
         if (signalArray.length < 13) {
             signalArray = legacyWorkarounds(signalArray); // 2.2 or 2.3 device >:(
         }
         else {
-            oldDevice = false; // ICS+ device, yay
+            oldDevice = 0; // ICS+ device, yay
         }
         Log.d("Signal Array", Arrays.toString(signalArray));
         return signalArray;
+    }
+
+    /**
+     * Finds the position of the gsm|lte or cdma string in the array
+     * @param signalArray - the array to search
+     * @return the position or -1 (not really possible) if not found
+     */
+    private int findIsGsmPos(String[] signalArray)
+    {
+        // if we haven't already found it before, find it now
+        if (gsmPos == -1) {
+            for (int i = signalArray.length - 1; i >= 0; --i) {
+                if (signalArray[i].toLowerCase(Locale.ENGLISH).contains("gsm")
+                    || signalArray[i].toLowerCase(Locale.ENGLISH).contains("cdma")) {
+                    gsmPos = i;
+                    // return early to avoid going through all of the loop
+                    return i;
+                }
+            }
+        }
+        return gsmPos;
     }
 
     public final String[] processSignalInfo(SignalStrength signalStrength)
@@ -155,7 +178,7 @@ public class SignalData
         return Collections.unmodifiableMap(networkMap);
     }
 
-    public boolean legacyDevice()
+    public int legacyDevice()
     {
         return oldDevice;
     }

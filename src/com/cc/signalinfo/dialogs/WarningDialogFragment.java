@@ -36,7 +36,7 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import com.cc.signalinfo.R;
-import com.cc.signalinfo.config.SignalConstants;
+import com.cc.signalinfo.config.AppSetup;
 import com.cc.signalinfo.util.SignalHelpers;
 
 /**
@@ -101,6 +101,6 @@ public class WarningDialogFragment extends DialogFragment
         ((AlertDialog) this.getDialog()).getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(checkState);
         SharedPreferences settings = getActivity().getPreferences(Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = settings.edit();
-        editor.putBoolean(SignalConstants.PROMPT_SETTING, checkState).commit();
+        editor.putBoolean(AppSetup.PROMPT_SETTING, checkState).commit();
     }
 }

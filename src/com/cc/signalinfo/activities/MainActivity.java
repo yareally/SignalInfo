@@ -45,6 +45,7 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.cc.signalinfo.R;
 import com.cc.signalinfo.R.id;
 import com.cc.signalinfo.R.layout;
+import com.cc.signalinfo.config.AppSetup;
 import com.cc.signalinfo.dialogs.WarningDialogFragment;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
@@ -56,16 +57,14 @@ import com.cc.signalinfo.signals.SignalInfo;
 import com.cc.signalinfo.util.SettingsHelpers;
 import com.cc.signalinfo.util.SignalHelpers;
 import com.cc.signalinfo.util.StringUtils;
-import com.google.ads.AdRequest;
-import com.google.ads.AdView;
 
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.Map;
 
-import static com.cc.signalinfo.config.SignalConstants.DEFAULT_TXT;
-import static com.cc.signalinfo.config.SignalConstants.OLD_FUCKING_DEVICE;
+import static com.cc.signalinfo.config.AppSetup.DEFAULT_TXT;
+import static com.cc.signalinfo.config.AppSetup.OLD_FUCKING_DEVICE;
 // ↑ Because the over verbosity on the constants will probably give me brain damage...
 
 /**
@@ -262,17 +261,36 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
             return;
         }
         SignalData signalData = new SignalData(signalStrength, tm);
-        // SettingsHelpers.getSharedPreferences(this).edit().remove(OLD_FUCKING_DEVICE).commit();
+        SettingsHelpers.getSharedPreferences(this).edit().remove(OLD_FUCKING_DEVICE).commit();
+
         if (SettingsHelpers.getPreference(this, OLD_FUCKING_DEVICE, -1) == -1) {
             // set if this is some old device or not for sanity purposes later
             SettingsHelpers.addSharedPreference(this, OLD_FUCKING_DEVICE, signalData.legacyDevice());
         }
 
         if (signalData.hasData()) {
+            displayDebugInfo(signalStrength.toString());
             displaySignalInfo(signalData);
         }
         else {
             Toast.makeText(this, getString(R.string.deviceNotSupported), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    private void displayDebugInfo(CharSequence debugInfo)
+    {
+        if (AppSetup.DEBUG) {
+            View view = findViewById(id.debugInfo);
+
+            if (!view.isEnabled()) {
+                view.setEnabled(true);
+                view.setVisibility(View.VISIBLE);
+                view = findViewById(id.debugTbl);
+                view.setEnabled(true);
+                view.setVisibility(View.VISIBLE);
+            }
+            TextView t = (TextView) findViewById(id.debugArray);
+            t.setText(debugInfo);
         }
     }
 }

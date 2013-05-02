@@ -1,7 +1,7 @@
 package com.cc.signalinfo.signals;
 
 import android.telephony.TelephonyManager;
-import com.cc.signalinfo.config.SignalConstants;
+import com.cc.signalinfo.config.AppSetup;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.util.StringUtils;
@@ -50,8 +50,8 @@ public class LteInfo extends SignalInfo
     {
         return !StringUtils.isNullOrEmpty(signals.get(Signal.LTE_RSRP))
             && !StringUtils.isNullOrEmpty(signals.get(Signal.LTE_RSRQ))
-            && !SignalConstants.DEFAULT_TXT.equals(signals.get(Signal.LTE_RSRP))
-            && !SignalConstants.DEFAULT_TXT.equals(signals.get(Signal.LTE_RSRQ));
+            && !AppSetup.DEFAULT_TXT.equals(signals.get(Signal.LTE_RSRP))
+            && !AppSetup.DEFAULT_TXT.equals(signals.get(Signal.LTE_RSRQ));
     }
 
     /**

@@ -29,7 +29,7 @@ package com.cc.signalinfo.config;
  * @author Wes Lanning
  * @version 2012-12-21
  */
-public final class SignalConstants
+public final class AppSetup
 {
     // TODO: add GSM_DB and GSM_ASU
 
@@ -225,6 +225,7 @@ public final class SignalConstants
      */
     public static final String DEFAULT_TXT = "N/A";
 
+    public static final boolean DEBUG = true;
 
     /**
      * GSM RSSI = Level index of CPICH Received Signal Code Power in UMTS
@@ -241,5 +242,5 @@ public final class SignalConstants
      */
     public static final String OLD_FUCKING_DEVICE = "hasNoLteApiSettings";
 
-    private SignalConstants() {}
+    private AppSetup() {}
 }

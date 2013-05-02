@@ -52,4 +52,5 @@
         either did not include access to this feature in the OS version used or
         restricts access to it (Permission denial)
     </string>
+    <string name="debugInfo">Debug Info</string>
 </resources>

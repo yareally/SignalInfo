@@ -36,29 +36,31 @@ import static com.cc.signalinfo.enums.NetworkType.*;
 public enum Signal
 {
     /*    NONE(0),*/
-    GSM_SIG_STRENGTH(1, GSM),
-    GSM_BIT_ERROR(2, GSM),
-    CDMA_RSSI(3, CDMA),
-    CDMA_ECIO(4, CDMA),
-    EVDO_RSSI(5, CDMA),
-    EVDO_ECIO(6, CDMA),
-    EVDO_SNR(7, CDMA),
-    LTE_SIG_STRENGTH(8, LTE),
-    LTE_RSRP(9, LTE),
-    LTE_RSRQ(10, LTE),
-    LTE_SNR(11, LTE),
-    LTE_CQI(12, LTE),
-    LTE_RSSI(13, LTE),
-    GSM_RSSI(14, GSM),
-    GSM_ASU(15, GSM);
+    GSM_SIG_STRENGTH(1, GSM, 32),
+    GSM_BIT_ERROR(2, GSM, 8),
+    CDMA_RSSI(3, CDMA, 81),
+    CDMA_ECIO(4, CDMA, 161),
+    EVDO_RSSI(5, CDMA, 81),
+    EVDO_ECIO(6, CDMA, 161),
+    EVDO_SNR(7, CDMA, 9),
+    LTE_SIG_STRENGTH(8, LTE, 32),
+    LTE_RSRP(9, LTE, 76),
+    LTE_RSRQ(10, LTE, 18),
+    LTE_SNR(11, LTE, 501),
+    LTE_CQI(12, LTE, 16),
+    LTE_RSSI(13, LTE, 117),
+    GSM_RSSI(14, GSM, 63),
+    GSM_ASU(15, GSM, 32);
 
-    private int value;
+    private int         value;
     private NetworkType networkType;
+    private int range;
 
-    Signal(int value, NetworkType networkType)
+    Signal(int value, NetworkType networkType, int range)
     {
         this.value = value;
         this.networkType = networkType;
+        this.range = range;
     }
 
     public NetworkType type()

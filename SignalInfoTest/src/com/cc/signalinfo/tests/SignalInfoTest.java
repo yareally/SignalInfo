@@ -32,7 +32,7 @@ import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.test.ActivityInstrumentationTestCase2;
 import com.cc.signalinfo.activities.MainActivity;
-import com.cc.signalinfo.config.SignalConstants;
+import com.cc.signalinfo.config.AppSetup;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 import com.cc.signalinfo.libs.SignalData;
@@ -114,8 +114,8 @@ public class SignalInfoTest extends ActivityInstrumentationTestCase2<MainActivit
             for (int i = 1; i < signalInfo.length; ++i) {
                 if (i > 0 && i < 4) {
                     assertEquals(
-                        String.format("Value should be %s", SignalConstants.DEFAULT_TXT),
-                        SignalConstants.DEFAULT_TXT,
+                        String.format("Value should be %s", AppSetup.DEFAULT_TXT),
+                        AppSetup.DEFAULT_TXT,
                         networkType.getValue().getSignalString(values[i]));
                 }
                 else {

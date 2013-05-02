@@ -28,7 +28,7 @@ package com.cc.signalinfo.util;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import com.cc.signalinfo.config.SignalConstants;
+import com.cc.signalinfo.config.AppSetup;
 
 /**
  * The type Signal helpers.
@@ -64,8 +64,8 @@ public final class SignalHelpers
      */
     public static boolean userConsent(SharedPreferences settings)
     {
-        return !(!settings.contains(SignalConstants.PROMPT_SETTING)
-            || !settings.getBoolean(SignalConstants.PROMPT_SETTING, false));
+        return !(!settings.contains(AppSetup.PROMPT_SETTING)
+            || !settings.getBoolean(AppSetup.PROMPT_SETTING, false));
     }
 
     /**
@@ -76,8 +76,8 @@ public final class SignalHelpers
      */
     public static boolean hasLteApi(SharedPreferences settings)
     {
-        return !(!settings.contains(SignalConstants.OLD_FUCKING_DEVICE)
-            || !settings.getBoolean(SignalConstants.OLD_FUCKING_DEVICE, false));
+        return !(!settings.contains(AppSetup.OLD_FUCKING_DEVICE)
+            || !settings.getBoolean(AppSetup.OLD_FUCKING_DEVICE, false));
     }
 
     private SignalHelpers() {}
