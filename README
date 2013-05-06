@@ -9,3 +9,7 @@ version of the device.
 I do accept pull requests if you ask nicely. Also translations to other languages
 are welcomed if you want to commit the files to me replacing the strings. All
 strings for the user interface are abstracted out of the design, so easy to change.
+
+You can find the pre-compiled apk on the Android market: 
+  
+  https://play.google.com/store/apps/details?id=com.cc.signalinfo
