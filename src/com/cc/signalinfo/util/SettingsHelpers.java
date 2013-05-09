@@ -42,6 +42,8 @@ public final class SettingsHelpers
 {
     private static final String TAG = SignalHelpers.class.getSimpleName();
 
+    private SettingsHelpers() {}
+
     /**
      * Gets shared preferences.
      *
@@ -89,6 +91,11 @@ public final class SettingsHelpers
             Log.e(TAG, String.format("Cannot convert %s", settingValue.toString()), e);
         }
         return false;
+    }
+
+    public static boolean addSharedPreference(Activity activity, int settingName, Object settingValue)
+    {
+        return addSharedPreference(activity, String.valueOf(settingName), settingValue);
     }
 
     /**
@@ -168,6 +175,4 @@ public final class SettingsHelpers
     {
         return getSharedPreferences(activity).getStringSet(preferenceName, defaultReturnValue);
     }
-
-    private SettingsHelpers() {}
 }

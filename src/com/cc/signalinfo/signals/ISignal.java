@@ -110,6 +110,21 @@ public interface ISignal
     boolean containsSignalType(Signal type);
 
     /**
+     * The percent from 0 (worst) 100 (best)
+     * of how great the current signal measurement is.
+     *
+     * May be imprecise due to carrier differences for
+     * certain measures (like RSSI), but this is more
+     * user friendly for those not interested in what
+     * the measures actually mean and their measurement range.
+     *
+     * @param name - the name of the reading to compute
+     * @param fudgeReading - set to true, fudge the reading to make the user feel better while ignoring standards
+     * @return the relative efficiency as a percent
+     */
+    String getRelativeEfficiency(Signal name, boolean fudgeReading);
+
+    /**
      * Number of signal readings contained in the class collection
      *
      * @return # of signal readings

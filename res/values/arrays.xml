@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!-- === Main activity arrays === -->
+
+    <!-- not currently used, but holds the titles for each signal reading -->
     <string-array name="sigInfoTitles">
 <!--        <item>@string/na</item>-->
         <item>@string/gsmSigStrength</item>
@@ -17,6 +21,7 @@
         <item>@string/lteRSSI</item>
     </string-array>
 
+    <!-- Holds the related ids for the signal textviews, since I can't use tags on < Android 3.0 -_- -->
     <array name="sigInfoIds">
         <item>@id/gsmSigStrength</item>
         <item>@id/gsmBitError</item>
@@ -32,4 +37,20 @@
         <item>@id/lteCQI</item>
         <item>@id/lteRSSI</item>
     </array>
+
+    <!-- === Settings related arrays === -->
+
+    <!-- used to define what kind of signal reading to display -->
+    <string-array name="signalTypes">
+        <item>@string/dbReadingOnly</item>
+        <item>@string/signalStrictPercentage</item>
+        <item>@string/signalAdjustPercentage</item>
+    </string-array>
+
+    <!-- values that go with the signalType array -->
+    <string-array name="signalTypeValues">
+        <item>@string/dBm</item>
+        <item>@string/strictReading</item>
+        <item>@string/relativeReading</item>
+    </string-array>
 </resources>

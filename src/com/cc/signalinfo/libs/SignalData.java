@@ -47,12 +47,13 @@ import java.util.regex.Pattern;
  */
 public class SignalData
 {
-    // TODO: use the stuff in the signals package now that it's implemented.
     private static final Pattern SPACE_STR     = Pattern.compile(" ");
-    private static final Pattern FILTER_SIGNAL = Pattern.compile("-1|-?99|-?[1-9][0-9]{3,}");
-    private              int     oldDevice     = 1; // assume this is some 2.3 or before device until otherwise
-    private              int     gsmPos        = -1; // where in the signal string array is_gsm appears to remove it
-
+    // filter out any readings matching this regex as they're invalid
+    private static final Pattern FILTER_SIGNAL = Pattern.compile("0|-1|-?99|-?[1-9][0-9]{3,}");
+    // assume this is some 2.3 or before device until otherwise
+    private              int     oldDevice     = 1;
+    // where in the signal string array is_gsm appears to remove it
+    private              int     gsmPos        = -1;
     private Map<NetworkType, ISignal> networkMap;
 
     public SignalData(SignalStrength signalStrength, TelephonyManager tm)
@@ -68,6 +69,44 @@ public class SignalData
     }
 
     /**
+     * Initialize the network map that will hold all the various signal readings
+     *
+     * @param tm - dependency for the network map
+     * @return the created map, empty other than the signal container maps (for gsm, lte, etc)
+     */
+    public static Map<NetworkType, ISignal> initNetworkMap(TelephonyManager tm)
+    {
+        Map<NetworkType, ISignal> networkMap = new EnumMap<>(NetworkType.class);
+        networkMap.put(NetworkType.GSM, new GsmInfo(tm));
+        networkMap.put(NetworkType.CDMA, new CdmaInfo(tm));
+        networkMap.put(NetworkType.LTE, new LteInfo(tm));
+        return networkMap;
+    }
+
+    /**
+     * Deal with shitty old devices that don't have all the LTE API stuff.
+     * Yes, it's not optimal to pretend they could have LTE by adding the values,
+     * but fuck these devices. Especially since it's possible for 2.3 and 2.2 devices to have LTE,
+     * which complicates things more. I prefer my sanity and letting them eat up a little more memory
+     * on their craptastic device than running more checks later on.
+     *
+     * If you own one of these devices and are reading this, forgive the rage, but
+     * things like this on Android frustrate the hell out of me and as a reader,
+     * I assume you are developmentally inclined and can commiserate.
+     *
+     * Also, a happy developer is a good a good developer :)
+     *
+     * @param signalArray - they signal data pulled from the device.
+     * @return a slightly larger, but more sane array that looks like one from ICS or greater
+     */
+    private static String[] legacyWorkarounds(String[] signalArray)
+    {
+        // will give nulls (on new array buckets), so have to deal with that later in return method
+        signalArray = Arrays.copyOf(signalArray, 13);
+        return signalArray;
+    }
+
+    /**
      * Removes any crap that might show weird numbers because the phone does not support
      * some reading or avoids causing an exception by removing it.
      *
@@ -75,11 +114,8 @@ public class SignalData
      * @param tm - dependency for the network map
      * @return filtered data with "n/a" instead of the bad value
      */
-    public Map<NetworkType, ISignal> createSignalDataMap(TelephonyManager tm, String[] data)
+    public final Map<NetworkType, ISignal> createSignalDataMap(TelephonyManager tm, String[] data)
     {
-        // TODO: shitty old devices without lte in their api, I should account for by skipping over lte values (because network type gets set to lte_sig_strength for them)
-        // use a switch or something for it with the enum I made
-        // example of suckage: (on 2.3 gsm phone): {GSM_SIG_STRENGTH=7, GSM_BIT_ERROR=N/A, CDMA_RSSI=N/A, CDMA_ECIO=N/A, EVDO_RSSI=N/A, EVDO_ECIO=N/A, EVDO_SNR=N/A, LTE_SIG_STRENGTH=gsm}
         Map<NetworkType, ISignal> networkMap = initNetworkMap(tm);
         Signal[] values = Signal.values();
 
@@ -122,45 +158,9 @@ public class SignalData
         return signalArray;
     }
 
-    /**
-     * Finds the position of the gsm|lte or cdma string in the array
-     * @param signalArray - the array to search
-     * @return the position or -1 (not really possible) if not found
-     */
-    private int findIsGsmPos(String[] signalArray)
-    {
-        // if we haven't already found it before, find it now
-        if (gsmPos == -1) {
-            for (int i = signalArray.length - 1; i >= 0; --i) {
-                if (signalArray[i].toLowerCase(Locale.ENGLISH).contains("gsm")
-                    || signalArray[i].toLowerCase(Locale.ENGLISH).contains("cdma")) {
-                    gsmPos = i;
-                    // return early to avoid going through all of the loop
-                    return i;
-                }
-            }
-        }
-        return gsmPos;
-    }
-
     public final String[] processSignalInfo(SignalStrength signalStrength)
     {
         return processSignalInfo(SPACE_STR.split(signalStrength.toString()));
-    }
-
-    /**
-     * Initialize the network map that will hold all the various signal readings
-     *
-     * @param tm - dependency for the network map
-     * @return the created map, empty other than the signal container maps (for gsm, lte, etc)
-     */
-    public static Map<NetworkType, ISignal> initNetworkMap(TelephonyManager tm)
-    {
-        Map<NetworkType, ISignal> networkMap = new EnumMap<NetworkType, ISignal>(NetworkType.class);
-        networkMap.put(NetworkType.GSM, new GsmInfo(tm));
-        networkMap.put(NetworkType.CDMA, new CdmaInfo(tm));
-        networkMap.put(NetworkType.LTE, new LteInfo(tm));
-        return networkMap;
     }
 
     /**
@@ -178,31 +178,35 @@ public class SignalData
         return Collections.unmodifiableMap(networkMap);
     }
 
+    /**
+     * Super old devices (2.3 and before), yay
+     *
+     * @return true if this is an old device that requires workarounds
+     */
     public int legacyDevice()
     {
         return oldDevice;
     }
 
     /**
-     * Deal with shitty old devices that don't have all the LTE API stuff.
-     * Yes, it's not optimal to pretend they could have LTE by adding the values,
-     * but fuck these devices. Especially since it's possible for 2.3 and 2.2 devices to have LTE,
-     * which complicates things more. I prefer my sanity and letting them eat up a little more memory
-     * on their craptastic device than running more checks later on.
+     * Finds the position of the gsm|lte or cdma string in the array
      *
-     * If you own one of these devices and are reading this, forgive the rage, but
-     * things like this on Android frustrate the hell out of me and as a reader,
-     * I assume you are developmentally inclined and can commiserate.
-     *
-     * Also, a happy developer is a good a good developer :)
-     *
-     * @param signalArray - they signal data pulled from the device.
-     * @return a slightly larger, but more sane array that looks like one from ICS or greater
+     * @param signalArray - the array to search
+     * @return the position or -1 (not really possible) if not found
      */
-    private static String[] legacyWorkarounds(String[] signalArray)
+    private int findIsGsmPos(String[] signalArray)
     {
-        // will give nulls (on new array buckets), so have to deal with that later
-        signalArray = Arrays.copyOf(signalArray, 13);
-        return signalArray;
+        // if we haven't already found it before, find it now
+        if (gsmPos == -1) {
+            for (int i = signalArray.length - 1; i >= 0; --i) {
+                if (signalArray[i].toLowerCase(Locale.ENGLISH).contains("gsm")
+                    || signalArray[i].toLowerCase(Locale.ENGLISH).contains("cdma")) {
+                    gsmPos = i;
+                    // return early to avoid going through all of the loop
+                    return i;
+                }
+            }
+        }
+        return gsmPos;
     }
 }

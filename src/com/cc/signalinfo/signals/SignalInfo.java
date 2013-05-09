@@ -1,6 +1,7 @@
 package com.cc.signalinfo.signals;
 
 import android.telephony.TelephonyManager;
+import com.cc.signalinfo.config.AppSetup;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 
@@ -45,7 +46,7 @@ public abstract class SignalInfo implements ISignal
         this.tm = tm;
         this.signals = signals == null
             ? new EnumMap<Signal, String>(Signal.class)
-            : new EnumMap<Signal, String>(signals);
+            : new EnumMap<>(signals);
     }
 
     /**
@@ -69,6 +70,40 @@ public abstract class SignalInfo implements ISignal
     public String getSignalString(Signal signalType)
     {
         return signals.get(signalType);
+    }
+
+    /**
+     * The percent from 0 (worst) 100 (best)
+     * of how great the current signal measurement is.
+     *
+     * May be imprecise due to carrier differences for
+     * certain measures (like RSSI), but this is more
+     * user friendly for those not interested in what
+     * the measures actually mean and their measurement range.
+     *
+     * @param name - the name of the reading to compute
+     * @param fudgeReading - set to true, fudge the reading to make the user feel better while ignoring standards
+     * @return the relative efficiency as a percent
+     */
+    @Override
+    public String getRelativeEfficiency(Signal name, boolean fudgeReading)
+    {
+        int signalValue =
+            AppSetup.DEFAULT_TXT.equals(signals.get(name))
+            ? -1
+            : Math.abs(Integer.parseInt(signals.get(name)));
+
+        if (signalValue == -1) {
+            return ""; // no value set
+        }
+        int fudged = fudgeReading ? name.best() + name.fudged() : name.best();
+        signalValue = Math.abs(signalValue);
+
+        float result = name.best() > name.worst()
+            ? (float)signalValue / fudged
+            : 1 - (float)signalValue / name.worst();
+
+        return String.format("%s%%", Math.round(result * 100));
     }
 
     /**
@@ -114,6 +149,7 @@ public abstract class SignalInfo implements ISignal
      * @param type the type
      * @return true if network type contains this type of signal
      */
+    @Override
     public boolean containsSignalType(Signal type)
     {
         return possibleValues.contains(type);
