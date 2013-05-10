@@ -227,7 +227,7 @@ public final class AppSetup
      * Since it's a pain to use the xml string representation in a static context, redefining
      * n/a here. see strings.xml#na
      */
-    public static final String DEFAULT_TXT = "-";
+    public static final String DEFAULT_TXT = "n/a";
 
     /**
      * GSM RSSI = Level index of CPICH Received Signal Code Power in UMTS

@@ -29,16 +29,22 @@
     <string name="µW">µW</string>
 
     <!-- shown if there is no reading for a signal -->
-    <string name="na">-</string>
+    <string name="na">n/a</string>
 
     <!-- Device related info strings -->
-    <string name="deviceName">Device Name:</string>
-    <string name="networkType">Network Type:</string>
-    <string name="buildHost">Build Host:</string>
-    <string name="carrierName">Carrier:</string>
-    <string name="androidVersion">Android Version:</string>
-    <string name="deviceInfo">Device Info</string>
-    <string name="deviceModel">Device Model:</string>
+
+    <!-- Device info section Title -->
+    <string name="deviceInfoTitle">Device Info</string>
+    <!-- string shown for the system android version under the device info section -->
+    <string name="androidVersion" formatted="false">%s (API version %d)</string>
+
+    <!-- device info section labels -->
+    <string name="deviceNameLabel">Device Name:</string>
+    <string name="networkTypeLabel">Network Type:</string>
+    <string name="buildHostLabel">Build Host:</string>
+    <string name="carrierNameLabel">Carrier:</string>
+    <string name="androidVersionLabel">Android Version:</string>
+    <string name="deviceModelLabel">Device Model:</string>
 
     <!-- Footer area -->
     <string name="copyright" formatted="false">©%s codingcreation.com | v. %s</string>
@@ -77,12 +83,9 @@
 
     <!-- ====== Messages shown if the user cannot access the additional setting area ====== -->
 
-    <string name="noAdditionalSettingSupport">Your device manufacturer did not
-        add support for these settings, sorry :(
-    </string>
-    <string name="additionalSettingPermDenied">The manufacturer of your device
+    <string name="noAdditionalSettingSupport">The manufacturer of your device
         either did not include access to this feature in the OS version used or
-        restricts access to it (Permission denial)
+        restricts access to it (Permission denial) :(
     </string>
 
     <!-- ====== Preferences related strings ====== -->
@@ -97,8 +100,7 @@
     <string name="screenOnSummary">Keep screen on while app is focused</string>
 
     <!-- Summary of what each displayed signal type does under preferences -->
-    <string name="signalTypeSummary">Strict % is based on ranges defined by the 3GPP. Relative is adjusted for
-        carrier usage. 100% = best, 0% = no signal
+    <string formatted="false" name="signalTypeSummary">Strict % is based on ranges defined by the 3GPP. Relative is adjusted for carrier usage. 100% = best, 0% = no signal
     </string>
 
     <!-- === Drop down text strings for what signal type to display === -->
@@ -123,6 +125,8 @@
 
     <!-- settings button -->
     <string name="settings">Settings</string>
+    <!-- abbreviated title for settings -->
+    <string name="settingsCondensed">prefs</string>
 
 
     <!-- ====== Accessibility info for screen readers such as TalkBack ====== -->
@@ -153,5 +157,4 @@
     <string name="debugArrayDescription">Selected debugging signal readings</string>
     <string name="additionalInfoDescription">Additional device and radio info</string>
     <string name="copyrightDescription">App Version #: %s</string>
-
 </resources>

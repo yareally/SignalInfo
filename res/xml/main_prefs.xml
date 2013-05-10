@@ -37,7 +37,7 @@
 
         <ListPreference
             android:key="signal_type"
-            android:defaultValue="@string/dbReadingOnly"
+            android:defaultValue="@string/dBm"
             android:title="@string/signalTypeTitle"
             android:entries="@array/signalTypes"
             android:entryValues="@array/signalTypeValues"
@@ -45,7 +45,8 @@
             android:dialogTitle="@string/signalTypeDialogTitle" />
 
         <CheckBoxPreference
-            android:defaultValue="false"
+            android:defaultValue="true"
+            android:checked="true"
             android:key="keep_screen_on"
             android:title="@string/screenOnTitle"
             android:summary="@string/screenOnSummary" />

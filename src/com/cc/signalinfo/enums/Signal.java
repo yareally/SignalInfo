@@ -38,18 +38,18 @@ public enum Signal
     /*    NONE(0),*/
     GSM_SIG_STRENGTH(1, GSM, 31, 0, 0, 0),
     GSM_BIT_ERROR(2, GSM, 0, 7, 0, 0),
-    CDMA_RSSI(3, CDMA, 0, 80, 40, 20),
+    CDMA_RSSI(3, CDMA, 0, 80, -40, 20),
     CDMA_ECIO(4, CDMA, 0, 160, 0, 0),
-    EVDO_RSSI(5, CDMA, 0, 80, 40, 20),
+    EVDO_RSSI(5, CDMA, 0, 80, -40, 20),
     EVDO_ECIO(6, CDMA, 0, 160, 0, 0),
     EVDO_SNR(7, CDMA, 8, 0, 0, 0),
     LTE_SIG_STRENGTH(8, LTE, 31, 0, 0, 0),
-    LTE_RSRP(9, LTE, 0, 76, 44, 22),
-    LTE_RSRQ(10, LTE, 0, 17, 3, 0),
+    LTE_RSRP(9, LTE, 0, 76, -44, 22),
+    LTE_RSRQ(10, LTE, 0, 17, -3, 0),
     LTE_SNR(11, LTE, 500, 0, 200, 0),
     LTE_CQI(12, LTE, 0, 15, 0, 0),
-    LTE_RSSI(13, LTE, 0, 116, 27, 13),
-    GSM_RSSI(14, GSM, 0, 62, 51, 25),
+    LTE_RSSI(13, LTE, 0, 116, -27, 13),
+    GSM_RSSI(14, GSM, 0, 62, -51, 25),
     GSM_ASU(15, GSM, 31, 0, 0, 0);
 
     private       int         value;

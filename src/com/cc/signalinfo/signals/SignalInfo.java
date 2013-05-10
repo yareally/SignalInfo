@@ -97,13 +97,17 @@ public abstract class SignalInfo implements ISignal
             return ""; // no value set
         }
         int fudged = fudgeReading ? name.best() + name.fudged() : name.best();
-        signalValue = Math.abs(signalValue);
+        signalValue += name.norm(); // normalize the reading to align to zero
 
         float result = name.best() > name.worst()
             ? (float)signalValue / fudged
             : 1 - (float)signalValue / name.worst();
+        // LTE_RSRQ(10, LTE, 0, 17, 3, 0), // -20db is coming out as 16%, should be 0
 
-        return String.format("%s%%", Math.round(result * 100));
+        int percentSignal = Math.round(result * 100);
+        percentSignal = percentSignal < 0 ? 0 : Math.abs(percentSignal);
+
+        return String.format("%s%%", percentSignal);
     }
 
     /**

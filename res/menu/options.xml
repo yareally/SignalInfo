@@ -39,7 +39,8 @@
         android:id="@+id/preferences"
         android:icon="@android:drawable/ic_menu_preferences"
         android:title="@string/settings"
-        android:showAsAction="never" />
+        android:titleCondensed="@string/settingsCondensed"
+        android:showAsAction="always" />
 
     <!--        </menu>
         </item>-->

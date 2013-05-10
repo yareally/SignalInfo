@@ -44,7 +44,7 @@ import java.util.List;
  * @version 2013-05-09
  */
 @SuppressWarnings("deprecation")
-public class EditPreferences extends SherlockPreferenceActivity
+public class EditSettings extends SherlockPreferenceActivity
 {
     @Override
     public void onCreate(Bundle savedInstanceState)

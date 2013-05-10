@@ -29,7 +29,7 @@
             android:name="com.google.ads.AdActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize" />
         <activity
-            android:name=".activities.EditPreferences"
+            android:name=".activities.EditSettings"
             android:label="@string/mainPreferenceHeaderTitle" />
     </application>
 </manifest>

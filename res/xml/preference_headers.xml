@@ -34,6 +34,6 @@
         android:summary="@string/mainPreferenceHeaderSummary">
         <extra
             android:name="resource"
-            android:value="signal_preferences" />
+            android:value="main_prefs" />
     </header>
 </preference-headers>
