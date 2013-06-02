@@ -51,7 +51,6 @@ public class SettingsFragment extends PreferenceFragment
             getArguments().getString("resource"),
             "xml",
             getActivity().getPackageName());
-
         addPreferencesFromResource(resourceId);
     }
 }

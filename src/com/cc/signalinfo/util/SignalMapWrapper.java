@@ -48,8 +48,6 @@ import java.util.regex.Pattern;
  */
 public class SignalMapWrapper
 {
-    // filter out any readings matching this regex as they're invalid
-    private static final Pattern FILTER_SIGNAL = Pattern.compile("0|-1|-?99|-?[1-9][0-9]{3,}");
     private Map<NetworkType, ISignal> networkMap;
 
     /**
@@ -62,6 +60,15 @@ public class SignalMapWrapper
     }
 
     /**
+     *
+     * @param networkMap - network map for the wrapper
+     */
+    public SignalMapWrapper(Map<NetworkType, ISignal> networkMap)
+    {
+        this.networkMap = new EnumMap<>(networkMap);
+    }
+
+    /**
      * Initialize the network map that will hold all the various signal readings
      *
      * @param tm - dependency for the network map
@@ -70,9 +77,9 @@ public class SignalMapWrapper
     private static Map<NetworkType, ISignal> initNetworkMap(TelephonyManager tm)
     {
         Map<NetworkType, ISignal> networkMap = new EnumMap<>(NetworkType.class);
-        networkMap.put(NetworkType.GSM, new GsmInfo(tm));
-        networkMap.put(NetworkType.CDMA, new CdmaInfo(tm));
-        networkMap.put(NetworkType.LTE, new LteInfo(tm));
+        networkMap[NetworkType.GSM] = new GsmInfo(tm);
+        networkMap[NetworkType.CDMA] = new CdmaInfo(tm);
+        networkMap[NetworkType.LTE] = new LteInfo(tm);
         return networkMap;
     }
 
@@ -97,10 +104,10 @@ public class SignalMapWrapper
     }
 
     /**
-     * Removes any crap that might show weird numbers because the phone does not support
-     * some reading or avoids causing an exception by removing it.
+     * Maps the radio signal readings to corresponding network type.
+     * Then returns the created map.
      *
-     * @param data - data to filter
+     * @param data - signal data to add to a map of network (key), signal reading (value) pairs
      * @param tm - dependency for the network map
      * @return filtered data with "n/a" instead of the bad value
      */
@@ -113,11 +120,11 @@ public class SignalMapWrapper
             String signalValue = i < data.length
                 ? data[i] :
                 AppSetup.DEFAULT_TXT;
-            networkMap.get(values[i].type()).addSignalValue(values[i], signalValue);
+            networkMap[values[i].type()].addSignalValue(values[i], signalValue);
         }
-        Log.d("Signal Map CDMA: ", networkMap.get(NetworkType.CDMA).getSignals().toString());
-        Log.d("Signal Map GSM: ", networkMap.get(NetworkType.GSM).getSignals().toString());
-        Log.d("Signal Map LTE: ", networkMap.get(NetworkType.LTE).getSignals().toString());
+        Log.d("Signal Map CDMA: ", networkMap[NetworkType.CDMA].getSignals().toString());
+        Log.d("Signal Map GSM: ", networkMap[NetworkType.GSM].getSignals().toString());
+        Log.d("Signal Map LTE: ", networkMap[NetworkType.LTE].getSignals().toString());
         return networkMap;
     }
 }

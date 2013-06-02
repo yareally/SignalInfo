@@ -27,9 +27,12 @@
 
 package com.cc.signalinfo.activities;
 
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
+import com.actionbarsherlock.view.MenuItem;
 import com.cc.signalinfo.R;
 
 import java.util.List;
@@ -50,6 +53,8 @@ public class EditSettings extends SherlockPreferenceActivity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         // for crappy old devices, load them without headers
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
@@ -66,5 +71,24 @@ public class EditSettings extends SherlockPreferenceActivity
     public void onBuildHeaders(List<Header> target)
     {
         loadHeadersFromResource(R.xml.preference_headers, target);
+    }
+
+    /**
+     * Called to populate the ActionBar.
+     *
+     * @param item - item to populate
+     * @return true on create
+     */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                Intent intent = new Intent(this, MainActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

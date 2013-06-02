@@ -22,7 +22,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  *
  * http://www.opensource.org/licenses/mit-license.php
- * /
  */
 
 package com.cc.signalinfo.enums;
@@ -47,7 +46,7 @@ public enum Signal
     LTE_RSRP(9, LTE, 0, 76, -44, 22),
     LTE_RSRQ(10, LTE, 0, 17, -3, 0),
     LTE_SNR(11, LTE, 500, 0, 200, 0),
-    LTE_CQI(12, LTE, 0, 15, 0, 0),
+    LTE_CQI(12, LTE, 15, 0, 0, 0),
     LTE_RSSI(13, LTE, 0, 116, -27, 13),
     GSM_RSSI(14, GSM, 0, 62, -51, 25),
     GSM_ASU(15, GSM, 31, 0, 0, 0);

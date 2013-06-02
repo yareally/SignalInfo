@@ -64,25 +64,26 @@ import java.util.*;
 import static com.cc.signalinfo.config.AppSetup.DEFAULT_TXT;
 
 /**
+ * Not currently used because it's not really necessary (yet)
  * @author Wes Lanning
  * @version 2013-05-10
  */
 @SuppressWarnings("ReuseOfLocalVariable")
 public class SignalFragment extends SherlockFragment implements View.OnClickListener, SignalListener.UpdateSignal
 {
-    private final String                TAG               = getClass().getSimpleName();
-    private       FragmentActivity      activity          = null;
-    private       SignalListener        listener          = null;
-    private       View                  rootView          = null;
+    private final String                    TAG               = getClass().getSimpleName();
+    private       FragmentActivity          activity          = null;
+    private       SignalListener            listener          = null;
+    private       View                      rootView          = null;
     //private       String[]         sigInfoTitles  = null;
-    private       TypedArray            sigInfoIds        = null;
-    private       Map<Signal, TextView> signalTextViewMap = new EnumMap<>(Signal.class);
-    private       TelephonyManager      tm                = null;
+    private       TypedArray                sigInfoIds        = null;
+    private       EnumMap<Signal, TextView> signalTextViewMap = new EnumMap<>(Signal.class);
+    private       TelephonyManager          tm                = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState)
     {
-        //setRetainInstance(true);
+        setRetainInstance(true);
         activity = getActivity();
         rootView = inflater.inflate(R.layout.main, parent, false);
         rootView.findViewById(R.id.additionalInfo).setOnClickListener(this);
@@ -115,6 +116,20 @@ public class SignalFragment extends SherlockFragment implements View.OnClickList
         super.onPause();
         tm.listen(listener, PhoneStateListener.LISTEN_NONE);
     }
+
+/*    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+
+        if (rootView != null) {
+            outState.putInt("rootView", rootView.getId());
+        }
+
+        if (signalTextViewMap != null) {
+            outState.putSerializable("signalTextViewMap", signalTextViewMap);
+        }
+    }*/
 
     /**
      * Shows additional radio settings contained in the Android OS.

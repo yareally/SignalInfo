@@ -49,7 +49,7 @@
 
     <!-- values that go with the signalType array -->
     <string-array name="signalTypeValues">
-        <item>@string/dBm</item>
+        <item>@string/dB</item>
         <item>@string/strictReading</item>
         <item>@string/relativeReading</item>
     </string-array>

@@ -28,4 +28,6 @@
 
 <resources>
     <bool name="suppressHeader">true</bool>
+    <bool name="enableDebugDefault">false</bool>
+    <bool name="keepScreenOnDefault">true</bool>
 </resources>

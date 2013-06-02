@@ -244,12 +244,14 @@ public final class AppSetup
      */
     public static final String OLD_FUCKING_DEVICE = "hasNoLteApiSettings";
 
+    public static final String FILTERED_SIGNAL_ARRAY_KEY = "signalArrayKey";
+    public static final String FILTERED_SIGNAL_ARRAY_SIZE_KEY = "signalArraySize";
     /**
      * Enable strict mode for the activity
      */
     public static void enableStrictMode()
     {
-        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 11) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll()
                 .penaltyLog()
                 .build());

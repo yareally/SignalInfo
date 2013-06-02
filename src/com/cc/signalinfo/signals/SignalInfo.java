@@ -7,8 +7,10 @@ import com.cc.signalinfo.enums.Signal;
 
 import java.util.*;
 
+import static android.telephony.TelephonyManager.*;
+
 /**
- * The type Signal info.
+ * The parent class for each specific type of signal readings.
  *
  * @author Wes Lanning
  * @version 2013 -04-29
@@ -69,7 +71,7 @@ public abstract class SignalInfo implements ISignal
     @Override
     public String getSignalString(Signal signalType)
     {
-        return signals.get(signalType);
+        return signals[signalType];
     }
 
     /**
@@ -89,9 +91,9 @@ public abstract class SignalInfo implements ISignal
     public String getRelativeEfficiency(Signal name, boolean fudgeReading)
     {
         int signalValue =
-            AppSetup.DEFAULT_TXT.equals(signals.get(name))
+            AppSetup.DEFAULT_TXT.equals(signals[name])
             ? -1
-            : Math.abs(Integer.parseInt(signals.get(name)));
+            : Math.abs(Integer.parseInt(signals[name]));
 
         if (signalValue == -1) {
             return ""; // no value set
@@ -117,7 +119,7 @@ public abstract class SignalInfo implements ISignal
      * @return the signal reading (you better make sure it exists before getting it)
      */
     @Override
-    public int getSignal(Signal name)
+    public int get(Signal name)
     {
         return Integer.parseInt(signals.get(name));
     }
@@ -183,37 +185,37 @@ public abstract class SignalInfo implements ISignal
     public static String getConnectedNetworkString(TelephonyManager tm)
     {
         switch (tm.getNetworkType()) {
-            case TelephonyManager.NETWORK_TYPE_UNKNOWN:
+            case NETWORK_TYPE_UNKNOWN:
                 return "Unknown";
-            case TelephonyManager.NETWORK_TYPE_CDMA:
+            case NETWORK_TYPE_CDMA:
                 return "CDMA";
-            case TelephonyManager.NETWORK_TYPE_EDGE:
+            case NETWORK_TYPE_EDGE:
                 return "EDGE";
-            case TelephonyManager.NETWORK_TYPE_EVDO_0:
+            case NETWORK_TYPE_EVDO_0:
                 return "Ev-DO rev. 0";
-            case TelephonyManager.NETWORK_TYPE_EVDO_A:
+            case NETWORK_TYPE_EVDO_A:
                 return "Ev-DO rev. A";
-            case TelephonyManager.NETWORK_TYPE_GPRS:
+            case NETWORK_TYPE_GPRS:
                 return "GPRS";
-            case TelephonyManager.NETWORK_TYPE_HSDPA:
+            case NETWORK_TYPE_HSDPA:
                 return "HSDPA";
-            case TelephonyManager.NETWORK_TYPE_HSUPA:
+            case NETWORK_TYPE_HSUPA:
                 return "HSUPA";
-            case TelephonyManager.NETWORK_TYPE_HSPA:
+            case NETWORK_TYPE_HSPA:
                 return "HSPA";
-            case TelephonyManager.NETWORK_TYPE_1xRTT:
+            case NETWORK_TYPE_1xRTT:
                 return "1xRTT";
-            case TelephonyManager.NETWORK_TYPE_UMTS:
+            case NETWORK_TYPE_UMTS:
                 return "UMTS";
-            case TelephonyManager.NETWORK_TYPE_IDEN:
+            case NETWORK_TYPE_IDEN:
                 return "iDen";
-            case TelephonyManager.NETWORK_TYPE_EVDO_B:
+            case NETWORK_TYPE_EVDO_B:
                 return "Ev-DO rev. B";
-            case TelephonyManager.NETWORK_TYPE_LTE:
+            case NETWORK_TYPE_LTE:
                 return "LTE";
-            case TelephonyManager.NETWORK_TYPE_EHRPD:
+            case NETWORK_TYPE_EHRPD:
                 return "eHRPD";
-            case TelephonyManager.NETWORK_TYPE_HSPAP:
+            case NETWORK_TYPE_HSPAP:
                 return "HSPA+";
         }
         return "Unknown";
@@ -254,13 +256,13 @@ public abstract class SignalInfo implements ISignal
     public String getDeviceTypeString()
     {
         switch (tm.getPhoneType()) {
-            case TelephonyManager.PHONE_TYPE_GSM:
+            case PHONE_TYPE_GSM:
                 return "GSM Device";
-            case TelephonyManager.PHONE_TYPE_CDMA:
+            case PHONE_TYPE_CDMA:
                 return "GSM Device";
-            case TelephonyManager.PHONE_TYPE_NONE:
+            case PHONE_TYPE_NONE:
                 return "No Cellular Radio";
-            case TelephonyManager.PHONE_TYPE_SIP:
+            case PHONE_TYPE_SIP:
                 return "Voice over IP (VoIP)";
         }
         return "No Cellular Radio";
@@ -277,6 +279,22 @@ public abstract class SignalInfo implements ISignal
         return type;
     }
 
+    @Override
+    public List<LinkedHashSet<String>> getStringSets()
+    {
+        List<LinkedHashSet<String>> signalSet = new ArrayList<>();
+        LinkedHashSet<String> signalNames = new LinkedHashSet<>();
+        LinkedHashSet<String> signalValues = new LinkedHashSet<>();
+
+        for (Map.Entry<Signal, String> signal : signals.entrySet()) {
+            signalNames.add(signal.getKey().name());
+            signalValues.add(signal.getValue());
+        }
+        signalSet[0] = signalNames;
+        signalSet[1] = signalValues;
+        return signalSet;
+    }
+
     /**
      * Add a signal value to the current network type collection.
      *
@@ -288,7 +306,7 @@ public abstract class SignalInfo implements ISignal
     @Override
     public String addSignalValue(Signal type, String value)
     {
-        return signals.put(type, value);
+        return signals[type] = value;
     }
 
     /**

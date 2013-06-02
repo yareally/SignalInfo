@@ -43,6 +43,7 @@ import com.actionbarsherlock.view.ActionMode;
 /**
  * @hide
  */
+@SuppressWarnings("deprecation")
 public class ActionBarContextView extends AbsActionBarView implements AnimatorListener {
     //UNUSED private static final String TAG = "ActionBarContextView";
 
@@ -74,12 +75,14 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
         this(context, attrs, R.attr.actionModeStyle);
     }
 
+
     public ActionBarContextView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SherlockActionMode, defStyle, 0);
+
         setBackgroundDrawable(a.getDrawable(
-                R.styleable.SherlockActionMode_background));
+            R.styleable.SherlockActionMode_background));
         mTitleStyleRes = a.getResourceId(
                 R.styleable.SherlockActionMode_titleTextStyle, 0);
         mSubtitleStyleRes = a.getResourceId(

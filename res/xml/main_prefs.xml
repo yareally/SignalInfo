@@ -36,8 +36,8 @@
         android:key="signal_settings">
 
         <ListPreference
-            android:key="signal_type"
-            android:defaultValue="@string/dBm"
+            android:defaultValue="@string/relativeReading"
+            android:key="@string/signalFormatKey"
             android:title="@string/signalTypeTitle"
             android:entries="@array/signalTypes"
             android:entryValues="@array/signalTypeValues"
@@ -45,21 +45,20 @@
             android:dialogTitle="@string/signalTypeDialogTitle" />
 
         <CheckBoxPreference
-            android:defaultValue="true"
-            android:checked="true"
-            android:key="keep_screen_on"
+            android:defaultValue="@bool/keepScreenOnDefault"
+            android:key="@string/keepScreenOnKey"
             android:title="@string/screenOnTitle"
             android:summary="@string/screenOnSummary" />
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Debugging Settings"
+        android:title="@string/debugPrefsTitle"
         android:key="debug_settings">
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="enable_debug"
+            android:key="@string/enableDebugKey"
             android:title="@string/enableDebugTitle"
             android:summary="@string/enableDebugSummary" />
 

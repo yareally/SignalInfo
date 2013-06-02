@@ -1,50 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Strings that really have no specific use and may be used anywhere in the app should be put here -->
+
     <string name="app_name">Advanced Signal Status</string>
 
-    <!-- === labels for the signal readings === -->
-    <string name="cdmaTitle">CDMA (3g) Signal Info</string>
-    <string name="cdmaRSSI">CDMA (voice) RSSI Signal:</string>
-    <string name="cdmaECIO">CDMA ECIO:</string>
-    <string name="evdoRSSI">EVDO (data) RSSI Signal:</string>
-    <string name="evdoECIO">EVDO ECIO:</string>
-    <string name="evdoSNR">EVDO SNR:</string>
-    <string name="lteTitle">LTE (4g) Signal Info</string>
-    <string name="lteRSRP">LTE RSRP Signal:</string>
-    <string name="lteRSSI">LTE RSSI Signal:</string>
-    <string name="lteRSRQ">LTE RSRQ:</string>
-    <string name="lteSNR">LTE SNR:</string>
-    <string name="lteCQI">LTE CQI:</string>
-    <string name="lteSigStrength">LTE Signal Strength:</string>
-    <string name="gsmSigStrength">GSM Signal Strength:</string>
-    <string name="gsmBitError">GSM Bit Error Rate:</string>
-
-    <!-- === signal reading unit measurements === -->
-
-    <!-- decibel-milliwatts -->
-    <string name="dBm">db</string>
-    <!-- milliwatts -->
-    <string name="mW">mW</string>
-    <!-- microWatts -->
-    <string name="µW">µW</string>
-
-    <!-- shown if there is no reading for a signal -->
+    <!-- shown if there is no reading for a signal or if some other dynamic information is not available -->
     <string name="na">n/a</string>
-
-    <!-- Device related info strings -->
-
-    <!-- Device info section Title -->
-    <string name="deviceInfoTitle">Device Info</string>
-    <!-- string shown for the system android version under the device info section -->
-    <string name="androidVersion" formatted="false">%s (API version %d)</string>
-
-    <!-- device info section labels -->
-    <string name="deviceNameLabel">Device Name:</string>
-    <string name="networkTypeLabel">Network Type:</string>
-    <string name="buildHostLabel">Build Host:</string>
-    <string name="carrierNameLabel">Carrier:</string>
-    <string name="androidVersionLabel">Android Version:</string>
-    <string name="deviceModelLabel">Device Model:</string>
 
     <!-- Footer area -->
     <string name="copyright" formatted="false">©%s codingcreation.com | v. %s</string>
@@ -56,105 +17,5 @@
         displayed.
     </string>
 
-    <!-- Title above the debugging info area -->
-    <string name="debugInfo">Debug Info</string>
 
-    <!-- ====== Strings related to showing the additional info area ====== -->
-
-    <!-- describes what the additional area is for (above the button to go to it) -->
-    <string name="additionalInfoLbl">Access and configure additional radio info
-        hidden in the system:
-    </string>
-
-    <!-- additional info button text -->
-    <string name="additionalInfoBtnTxt">Additional Info</string>
-
-    <!-- ====== Strings related to showing the additional info area warning dialog ====== -->
-
-    <string name="warningDialogTitle">Proceed with Caution!</string>
-    <string name="warningDialogText">The settings found on the next screen are
-        normally hidden from users. Misconfiguration of these settings may disrupt
-        your network connection.
-    </string>
-    <string name="dialogNoPromptTxt">I promise I will not blame the developer,
-        give him a bad review or make him my personal tech support
-        if I screw up these settings since I was warned ☺
-    </string>
-
-    <!-- ====== Messages shown if the user cannot access the additional setting area ====== -->
-
-    <string name="noAdditionalSettingSupport">The manufacturer of your device
-        either did not include access to this feature in the OS version used or
-        restricts access to it (Permission denial) :(
-    </string>
-
-    <!-- ====== Preferences related strings ====== -->
-
-    <!-- preference header screen strings -->
-    <string name="mainPreferenceHeaderTitle">Signal Preferences</string>
-    <string name="mainPreferenceHeaderSummary">Settings related to how signals are displayed.</string>
-
-    <!-- Display related preferences -->
-    <string name="displayPreferencesTitle">Display Settings</string>
-    <string name="screenOnTitle">Keep Screen On</string>
-    <string name="screenOnSummary">Keep screen on while app is focused</string>
-
-    <!-- Summary of what each displayed signal type does under preferences -->
-    <string formatted="false" name="signalTypeSummary">Strict % is based on ranges defined by the 3GPP. Relative is adjusted for carrier usage. 100% = best, 0% = no signal
-    </string>
-
-    <!-- === Drop down text strings for what signal type to display === -->
-
-    <!-- Used for the text in the drop down list for selecting signal type to display -->
-    <string name="signalTypeTitle">Displayed Signal Readings</string>
-    <string name="dbReadingOnly">Decibels (dBm) Only</string>
-    <string name="signalStrictPercentage">Decibels + Strict Percentage</string>
-    <string name="signalAdjustPercentage">Decibels + Adjusted Percentage</string>
-
-    <!-- used for signal type value array -->
-    <string name="signalTypeDialogTitle">Select a Signal Type</string>
-    <string name="strictReading">strict</string>
-    <string name="relativeReading">relative</string>
-
-    <!-- for enable debugging preference -->
-    <string name="enableDebugTitle">Enable debugging output</string>
-    <string name="enableDebugSummary">
-        <![CDATA[Useful if you ever need to give the developer some extra info. Dumps extra info to screen and logcat. I <3 people that give me extra info when requested.]]></string>
-
-    <!-- ====== Action bar text ====== -->
-
-    <!-- settings button -->
-    <string name="settings">Settings</string>
-    <!-- abbreviated title for settings -->
-    <string name="settingsCondensed">prefs</string>
-
-
-    <!-- ====== Accessibility info for screen readers such as TalkBack ====== -->
-
-    <string name="deviceInfoDescription">General device information area</string>
-    <string name="networkTypeDescription">Current radio network type</string>
-    <string name="buildHostDescription">Server name where your current Android OS was built</string>
-    <string name="carrierNameDescription">Your phone and or data service provider</string>
-    <string name="androidVersionDescription">Android OS version number</string>
-    <string name="deviceModelDescription">Device model name</string>
-    <string name="deviceNameDescription">Official device name</string>
-    <string name="cdmaTitleDescription">CDMA signal readings area</string>
-    <string name="cdmaRssiDescription">Current CDMA RSSI signal</string>
-    <string name="evdoRssiDescription">Current EVDO RSSI Signal</string>
-    <string name="cdmaEcioDescription">Current CDMA EC/IO Reading</string>
-    <string name="evdoEcioDescription">Current EVDO EC/IO reading</string>
-    <string name="evdoSnrDescription">Current EVDO SNR reading</string>
-    <string name="lteTitleDescription">LTE signal readings area</string>
-    <string name="lteRsrpDescription">Current LTE RSRP reading</string>
-    <string name="lteRssiDescription">Current LTE RSSI reading</string>
-    <string name="lteRsrqDescription">Current LTE RSRQ reading</string>
-    <string name="lteSnrDescription">Current LTE SNR reading</string>
-    <string name="lteCqiDescription">Current LTE CQI reading</string>
-    <string name="lteSigStrengthDescription">Current LTE signal strength reading</string>
-    <string name="gsmSigStrengthDescription">Current GSM signal strength reading</string>
-    <string name="gsmBitErrorDescription">Current GSM bit error reading</string>
-    <string name="debugInfoDescription">Debugging info area for development</string>
-    <string name="debugArrayDescription">Selected debugging signal readings</string>
-    <string name="additionalInfoDescription">Additional device and radio info</string>
-    <string name="copyrightDescription">App Version #: %s</string>
 </resources>

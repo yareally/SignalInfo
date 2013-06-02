@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /*
+  ~ Copyright (c) 2013 Wes Lanning, http://codingcreation.com
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining
+  ~ a copy of this software and associated documentation files (the
+  ~ "Software"), to deal in the Software without restriction, including
+  ~ without limitation the rights to use, copy, modify, merge, publish,
+  ~ distribute, sublicense, and/or sell copies of the Software, and to
+  ~ permit persons to whom the Software is furnished to do so, subject to
+  ~ the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be
+  ~ included in all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  ~ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  ~ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  ~ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+  ~ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+  ~ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+  ~ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  ~
+  ~ http://www.opensource.org/licenses/mit-license.php
+  ~ */
+  -->
+
+<resources>
+
+
+    <!-- **************** Accessibility info for screen readers such as TalkBack **************** -->
+
+
+    <string name="deviceInfoDescription">General device information area</string>
+    <string name="networkTypeDescription">Current radio network type</string>
+    <string name="buildHostDescription">Server name where your current Android OS was built</string>
+    <string name="carrierNameDescription">Your phone and or data service provider</string>
+    <string name="androidVersionDescription">Android OS version number</string>
+    <string name="deviceModelDescription">Device model name</string>
+    <string name="deviceNameDescription">Official device name</string>
+    <string name="cdmaTitleDescription">CDMA signal readings area</string>
+    <string name="cdmaRssiDescription">Current CDMA RSSI signal</string>
+    <string name="evdoRssiDescription">Current EVDO RSSI Signal</string>
+    <string name="cdmaEcioDescription">Current CDMA EC/IO Reading</string>
+    <string name="evdoEcioDescription">Current EVDO EC/IO reading</string>
+    <string name="evdoSnrDescription">Current EVDO SNR reading</string>
+    <string name="lteTitleDescription">LTE signal readings area</string>
+    <string name="lteRsrpDescription">Current LTE RSRP reading</string>
+    <string name="lteRssiDescription">Current LTE RSSI reading</string>
+    <string name="lteRsrqDescription">Current LTE RSRQ reading</string>
+    <string name="lteSnrDescription">Current LTE SNR reading</string>
+    <string name="lteCqiDescription">Current LTE CQI reading</string>
+    <string name="lteSigStrengthDescription">Current LTE signal strength reading</string>
+    <string name="gsmSigStrengthDescription">Current GSM signal strength reading</string>
+    <string name="gsmBitErrorDescription">Current GSM bit error reading</string>
+    <string name="debugInfoDescription">Debugging info area for development</string>
+    <string name="debugArrayDescription">Selected debugging signal readings</string>
+    <string name="additionalInfoDescription">Additional device and radio info</string>
+    <string name="copyrightDescription">App Version #: %s</string>
+
+    <!-- **************** /End Accessibility info for screen readers such as TalkBack **************** -->
+</resources>

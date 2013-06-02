@@ -29,10 +29,8 @@ package com.cc.signalinfo.util;
 import android.telephony.SignalStrength;
 import android.util.Log;
 import com.cc.signalinfo.config.AppSetup;
-import exceptions.InvalidSignalDataException;
 
 import java.util.Arrays;
-import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -140,15 +138,6 @@ public class SignalArrayWrapper
         // just assuming that some stupid OEM made the signalArray variable length -_-
         // really stupid if they did, but who knows with some of that crap I see in Android
         if (gsmPos == -1 || gsmPos > signalArray.length - 1) {
-            // if we haven't already found it before, find it now (use the below regex instead if it works)
-/*            for (int i = signalArray.length - 1; i >= 0; --i) {
-                if (signalArray[i].toLowerCase(Locale.ENGLISH).contains("gsm")
-                    || signalArray[i].toLowerCase(Locale.ENGLISH).contains("cdma")) {
-                    gsmPos = i;
-                    // return early to avoid going through all of the loop
-                    return i;
-                }
-            }*/
             // assume this device sucks so bad, it couldn't find the gsm position and try to compensate
             // by looking for anything not a number and assuming that's the value to stop on
             for (int i = signalArray.length - 1; i >= 0; --i) {

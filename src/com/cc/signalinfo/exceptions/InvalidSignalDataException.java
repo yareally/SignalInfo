@@ -25,7 +25,7 @@
  * /
  */
 
-package exceptions;
+package com.cc.signalinfo.exceptions;
 
 /**
  * @author Wes Lanning
