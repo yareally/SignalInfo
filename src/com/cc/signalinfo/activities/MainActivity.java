@@ -223,7 +223,10 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         super.onResume();
         if (preferences != null) {
             setPreferences(preferences);
-            displaySignalInfo(filteredSignals);
+
+            if (filteredSignals != null) {
+                displaySignalInfo(filteredSignals);
+            }
         }
         tm.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
     }
@@ -317,12 +320,7 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         }
         else {
             // adjust the signal for realistic readings if not set to strictReadings (3GPP values)
-            if (signalMeasure.equals(getString(R.string.relativeReading))) {
-                fudgeSignal = true;
-            }
-            else {
-                fudgeSignal = false;
-            }
+            fudgeSignal = signalMeasure.equals(getString(R.string.relativeReading));
             dbOnly = false;
         }
     }
@@ -416,6 +414,11 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         setNetworkTypeText(); // update the network connection type
     }
 
+    /**
+     * For my own usage and if a user wants to see it or give me feedback.
+     *
+     * @param debugInfo - the signal data to dump
+     */
     private void displayDebugInfo(SignalArrayWrapper debugInfo)
     {
         if (enableDebug) {
@@ -428,10 +431,18 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
                 view.setEnabled(true);
                 view.setVisibility(View.VISIBLE);
             }
+            Map<String, String> debugMapRelative =
+                new SignalMapWrapper(debugInfo.getFilteredArray(), tm).getPercentSignalMap(true);
+
+            Map<String, String> debugMapStrict =
+                new SignalMapWrapper(debugInfo.getFilteredArray(), tm).getPercentSignalMap(false);
+
             setTextViewText(R.id.debugArray,
-                String.format("%s | %s",
+                String.format("%s \n\n %s \n\n %s \n\n %s",
                     debugInfo.getRawData(),
-                    Arrays.toString(debugInfo.getFilteredArray())));
+                    Arrays.toString(debugInfo.getFilteredArray()),
+                    debugMapRelative.toString(),
+                    debugMapStrict.toString()));
         }
     }
 

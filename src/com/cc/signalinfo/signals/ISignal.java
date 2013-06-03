@@ -144,6 +144,20 @@ public interface ISignal
     String getRelativeEfficiency(Signal name, boolean fudgeReading);
 
     /**
+     * The percent from 0 (worst) 100 (best)
+     * of how great each measurement for the current network is
+     *
+     * May be imprecise due to carrier differences for
+     * certain measures (like RSSI), but this is more
+     * user friendly for those not interested in what
+     * the measures actually mean and their measurement range.
+     *
+     * @param fudgeReading - set to true, fudge the reading to make the user feel better while ignoring standards
+     * @return the % of all readings as a map of name of the reading as the key and the value as the value
+     */
+    public Map<String, String> getRelativeEfficiency(boolean fudgeReading);
+
+    /**
      * Number of signal readings contained in the class collection
      *
      * @return # of signal readings

@@ -19,21 +19,21 @@ import static android.telephony.TelephonyManager.*;
 public abstract class SignalInfo implements ISignal
 {
     /**
-     * The TelephonyManager for accessing some network stuff
+     * The Possible values for the current network type
      */
-    protected TelephonyManager    tm;
+    protected EnumSet<Signal> possibleValues = EnumSet.noneOf(Signal.class);
     /**
      * Holds all the signal values and key mappings for them
      */
     protected Map<Signal, String> signals;
     /**
+     * The TelephonyManager for accessing some network stuff
+     */
+    protected TelephonyManager    tm;
+    /**
      * The network type for the current SignalInfo instantiation
      */
     protected NetworkType         type;
-    /**
-     * The Possible values for the current network type
-     */
-    protected EnumSet<Signal> possibleValues = EnumSet.noneOf(Signal.class);
 
     /**
      * Instantiates a new Signal info.
@@ -60,6 +60,54 @@ public abstract class SignalInfo implements ISignal
     protected SignalInfo(NetworkType type, TelephonyManager tm)
     {
         this(type, tm, null);
+    }
+
+    /**
+     * Gets the textual name for the type specific type of
+     * currently connected network (e.g. LTE, eHRPD, EV-DO, RTT, EDGE, etc)
+     *
+     * Newer supported network types are near the bottom to avoid any issues with shitty old devices.
+     *
+     * @param tm the tm
+     * @return the given name for the network type the device is using currently for data
+     */
+    public static String getConnectedNetworkString(TelephonyManager tm)
+    {
+        switch (tm.getNetworkType()) {
+            case NETWORK_TYPE_UNKNOWN:
+                return "Unknown";
+            case NETWORK_TYPE_CDMA:
+                return "CDMA";
+            case NETWORK_TYPE_EDGE:
+                return "EDGE";
+            case NETWORK_TYPE_EVDO_0:
+                return "Ev-DO rev. 0";
+            case NETWORK_TYPE_EVDO_A:
+                return "Ev-DO rev. A";
+            case NETWORK_TYPE_GPRS:
+                return "GPRS";
+            case NETWORK_TYPE_HSDPA:
+                return "HSDPA";
+            case NETWORK_TYPE_HSUPA:
+                return "HSUPA";
+            case NETWORK_TYPE_HSPA:
+                return "HSPA";
+            case NETWORK_TYPE_1xRTT:
+                return "1xRTT";
+            case NETWORK_TYPE_UMTS:
+                return "UMTS";
+            case NETWORK_TYPE_IDEN:
+                return "iDen";
+            case NETWORK_TYPE_EVDO_B:
+                return "Ev-DO rev. B";
+            case NETWORK_TYPE_LTE:
+                return "LTE";
+            case NETWORK_TYPE_EHRPD:
+                return "eHRPD";
+            case NETWORK_TYPE_HSPAP:
+                return "HSPA+";
+        }
+        return "Unknown";
     }
 
     /**
@@ -92,24 +140,59 @@ public abstract class SignalInfo implements ISignal
     {
         int signalValue =
             AppSetup.DEFAULT_TXT.equals(signals[name])
-            ? -1
-            : Math.abs(Integer.parseInt(signals[name]));
+                ? -1
+                : Math.abs(Integer.parseInt(signals[name]));
 
         if (signalValue == -1) {
             return ""; // no value set
         }
-        int fudged = fudgeReading ? name.best() + name.fudged() : name.best();
         signalValue += name.norm(); // normalize the reading to align to zero
+        float fudgeValue = 0;
 
+        if (fudgeReading && name.fudged() > 0) {
+            // since we normalize, one extrema has to be 0 and the other non-zero (like 80 or whatever)
+            fudgeValue = name.best() > name.worst()
+                ? 0 // for now, no need to fudge positive stuff like SNR
+                : (name.worst() - signalValue) / 100.00f;
+        }
         float result = name.best() > name.worst()
-            ? (float)signalValue / fudged
-            : 1 - (float)signalValue / name.worst();
-        // LTE_RSRQ(10, LTE, 0, 17, 3, 0), // -20db is coming out as 16%, should be 0
+            ? signalValue / (float)name.best() + fudgeValue
+            : (name.worst() - signalValue) / (float)name.worst() + fudgeValue;
 
         int percentSignal = Math.round(result * 100);
         percentSignal = percentSignal < 0 ? 0 : Math.abs(percentSignal);
+        percentSignal = percentSignal > 100 ? 100 : percentSignal;
+
+/*        float result = name.best() > name.worst()
+            ? ((float) signalValue + fudged) / name.best()
+            : ((float) name.worst() - signalValue + fudged) / name.worst();*/
+
+        // LTE_RSRQ(10, LTE, 0, 17, 3, 0), // -20db is coming out as 16%, should be 0
 
         return String.format("%s%%", percentSignal);
+    }
+
+    /**
+     * The percent from 0 (worst) 100 (best)
+     * of how great each measurement for the current network is
+     *
+     * May be imprecise due to carrier differences for
+     * certain measures (like RSSI), but this is more
+     * user friendly for those not interested in what
+     * the measures actually mean and their measurement range.
+     *
+     * @param fudgeReading - set to true, fudge the reading to make the user feel better while ignoring standards
+     * @return the % of all readings as a map of name of the reading as the key and the value as the value
+     */
+    @Override
+    public Map<String, String> getRelativeEfficiency(boolean fudgeReading)
+    {
+        Map<String, String> readings = new LinkedHashMap<>();
+
+        for (Map.Entry<Signal, String> signalReading : signals.entrySet()) {
+            readings[signalReading.getKey().name()] = getRelativeEfficiency(signalReading.getKey(), fudgeReading);
+        }
+        return readings;
     }
 
     /**
@@ -171,54 +254,6 @@ public abstract class SignalInfo implements ISignal
     public int getConnectedNetworkValue()
     {
         return tm.getNetworkType();
-    }
-
-    /**
-     * Gets the textual name for the type specific type of
-     * currently connected network (e.g. LTE, eHRPD, EV-DO, RTT, EDGE, etc)
-     *
-     * Newer supported network types are near the bottom to avoid any issues with shitty old devices.
-     *
-     * @param tm the tm
-     * @return the given name for the network type the device is using currently for data
-     */
-    public static String getConnectedNetworkString(TelephonyManager tm)
-    {
-        switch (tm.getNetworkType()) {
-            case NETWORK_TYPE_UNKNOWN:
-                return "Unknown";
-            case NETWORK_TYPE_CDMA:
-                return "CDMA";
-            case NETWORK_TYPE_EDGE:
-                return "EDGE";
-            case NETWORK_TYPE_EVDO_0:
-                return "Ev-DO rev. 0";
-            case NETWORK_TYPE_EVDO_A:
-                return "Ev-DO rev. A";
-            case NETWORK_TYPE_GPRS:
-                return "GPRS";
-            case NETWORK_TYPE_HSDPA:
-                return "HSDPA";
-            case NETWORK_TYPE_HSUPA:
-                return "HSUPA";
-            case NETWORK_TYPE_HSPA:
-                return "HSPA";
-            case NETWORK_TYPE_1xRTT:
-                return "1xRTT";
-            case NETWORK_TYPE_UMTS:
-                return "UMTS";
-            case NETWORK_TYPE_IDEN:
-                return "iDen";
-            case NETWORK_TYPE_EVDO_B:
-                return "Ev-DO rev. B";
-            case NETWORK_TYPE_LTE:
-                return "LTE";
-            case NETWORK_TYPE_EHRPD:
-                return "eHRPD";
-            case NETWORK_TYPE_HSPAP:
-                return "HSPA+";
-        }
-        return "Unknown";
     }
 
     /**

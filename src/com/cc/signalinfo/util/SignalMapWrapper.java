@@ -39,6 +39,7 @@ import com.cc.signalinfo.signals.LteInfo;
 
 import java.util.Collections;
 import java.util.EnumMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -101,6 +102,23 @@ public class SignalMapWrapper
     public Map<NetworkType, ISignal> getNetworkMap()
     {
         return Collections.unmodifiableMap(networkMap);
+    }
+
+    /**
+     * Returns an unmodifiable copy of the network signal info map
+     * with the % quality of each signal instead of decibels.
+     *
+     * @param adjustReadings - use strict % readings or adjust for carriers/android?
+     * @return network signal info organized by gsm, cdma, lte, etc
+     */
+    public Map<String, String> getPercentSignalMap(boolean adjustReadings)
+    {
+        Map<String, String> percentSignalMap = new LinkedHashMap<>();
+
+        for (Map.Entry<NetworkType, ISignal> network : networkMap.entrySet()) {
+            percentSignalMap.putAll(network.getValue().getRelativeEfficiency(adjustReadings));
+        }
+        return percentSignalMap;
     }
 
     /**
