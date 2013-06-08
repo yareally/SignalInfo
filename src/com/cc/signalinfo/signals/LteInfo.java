@@ -48,10 +48,10 @@ public class LteInfo extends SignalInfo
      */
     private boolean hasLteRssi()
     {
-        return !StringUtils.isNullOrEmpty(signals.get(Signal.LTE_RSRP))
-            && !StringUtils.isNullOrEmpty(signals.get(Signal.LTE_RSRQ))
-            && !AppSetup.DEFAULT_TXT.equals(signals.get(Signal.LTE_RSRP))
-            && !AppSetup.DEFAULT_TXT.equals(signals.get(Signal.LTE_RSRQ));
+        return !StringUtils.isNullOrEmpty(signals[Signal.LTE_RSRP])
+            && !StringUtils.isNullOrEmpty(signals[Signal.LTE_RSRQ])
+            && !AppSetup.DEFAULT_TXT.equals(signals[Signal.LTE_RSRP])
+            && !AppSetup.DEFAULT_TXT.equals(signals[Signal.LTE_RSRQ]);
     }
 
     /**
@@ -62,7 +62,7 @@ public class LteInfo extends SignalInfo
      */
     private int computeRssi()
     {
-        return -(-17 - Integer.parseInt(signals.get(Signal.LTE_RSRP)) - Integer.parseInt(signals.get(Signal.LTE_RSRQ)));
+        return -(-17 - Integer.parseInt(signals[Signal.LTE_RSRP]) - Integer.parseInt(signals[Signal.LTE_RSRQ]));
     }
 
     /**
@@ -75,7 +75,7 @@ public class LteInfo extends SignalInfo
     @Override
     public boolean enabled()
     {
-        return !StringUtils.isNullOrEmpty(signals.get(Signal.LTE_RSRP));
+        return !StringUtils.isNullOrEmpty(signals[Signal.LTE_RSRP]);
     }
 
     /**

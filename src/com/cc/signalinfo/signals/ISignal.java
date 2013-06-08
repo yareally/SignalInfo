@@ -3,14 +3,21 @@ package com.cc.signalinfo.signals;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
 
+import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 /**
- * The interface I signal.
+ * The interface ISignal. Why is it called ISignal? Because I couldn't
+ * come up with a better name without screwing up proper naming of the
+ * enum of similar name.
+ *
+ * This just serves as an interface to access the LTE/GSM/CDMA signals
+ * through polymorphism.
  *
  * @author Wes Lanning
- * @version 2013 -04-29
+ * @version 2013-04-29
  */
 public interface ISignal
 {
@@ -28,10 +35,10 @@ public interface ISignal
      * @param name the name
      * @return the signal
      */
-    int getSignal(Signal name);
+    int get(Signal name);
 
     /**
-     * Gets signals.
+     * Gets the all the signal readings as a map.
      *
      * @return the signals
      */
@@ -52,6 +59,18 @@ public interface ISignal
      * @return the network type
      */
     NetworkType getNetworkType();
+
+    /**
+     * Returns two arrays of linked hash sets. Values are
+     * in order for each array and align so name1 = value1, etc
+     *
+     * array 1: the names of the signals
+     *
+     * array 2: the values of the signals
+     *
+     * @return the set mainly used so these can be stored in sharedPreferences.
+     */
+    List<LinkedHashSet<String>> getStringSets();
 
     /**
      * Gets signal names.
@@ -108,6 +127,35 @@ public interface ISignal
      * @return true if network type contains this type of signal
      */
     boolean containsSignalType(Signal type);
+
+    /**
+     * The percent from 0 (worst) 100 (best)
+     * of how great the current signal measurement is.
+     *
+     * May be imprecise due to carrier differences for
+     * certain measures (like RSSI), but this is more
+     * user friendly for those not interested in what
+     * the measures actually mean and their measurement range.
+     *
+     * @param name - the name of the reading to compute
+     * @param fudgeReading - set to true, fudge the reading to make the user feel better while ignoring standards
+     * @return the relative efficiency as a percent
+     */
+    String getRelativeEfficiency(Signal name, boolean fudgeReading);
+
+    /**
+     * The percent from 0 (worst) 100 (best)
+     * of how great each measurement for the current network is
+     *
+     * May be imprecise due to carrier differences for
+     * certain measures (like RSSI), but this is more
+     * user friendly for those not interested in what
+     * the measures actually mean and their measurement range.
+     *
+     * @param fudgeReading - set to true, fudge the reading to make the user feel better while ignoring standards
+     * @return the % of all readings as a map of name of the reading as the key and the value as the value
+     */
+    public Map<String, String> getRelativeEfficiencyMap(boolean fudgeReading);
 
     /**
      * Number of signal readings contained in the class collection

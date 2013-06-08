@@ -35,6 +35,7 @@ import android.widget.TextView;
 /**
  * The item view for each item in the ListView-based MenuViews.
  */
+@SuppressWarnings("deprecation")
 public class ListMenuItemView extends LinearLayout implements MenuView.ItemView {
     private MenuItemImpl mItemData;
 

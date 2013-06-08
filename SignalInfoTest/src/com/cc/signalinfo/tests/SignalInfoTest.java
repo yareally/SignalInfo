@@ -28,17 +28,16 @@ package com.cc.signalinfo.tests;
 import android.app.Activity;
 import android.content.Context;
 import android.telephony.PhoneStateListener;
-import android.telephony.SignalStrength;
 import android.telephony.TelephonyManager;
 import android.test.ActivityInstrumentationTestCase2;
 import com.cc.signalinfo.activities.MainActivity;
 import com.cc.signalinfo.config.AppSetup;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
-import com.cc.signalinfo.libs.SignalData;
-import com.cc.signalinfo.listeners.ActivityListener;
+import com.cc.signalinfo.util.SignalMapWrapper;
 import com.cc.signalinfo.listeners.SignalListener;
 import com.cc.signalinfo.signals.ISignal;
+import com.cc.signalinfo.util.SignalArrayWrapper;
 
 import java.util.EnumMap;
 import java.util.Map;
@@ -53,14 +52,14 @@ import java.util.Map;
  * -e class com.cc.signalinfo.SignalInfoTest \
  * com.cc.signalinfo.tests/android.test.InstrumentationTestRunner
  */
-public class SignalInfoTest extends ActivityInstrumentationTestCase2<MainActivity> implements ActivityListener
+public class SignalInfoTest extends ActivityInstrumentationTestCase2<MainActivity> implements SignalListener.UpdateSignal
 {
-    private TelephonyManager tm;
-    private String[] signalInfo = null;
-    private Map<NetworkType, ISignal> networkMap;
-    private SignalStrength            signalStrength;
-    private SignalData                signalData;
     private Activity                  activity;
+    private Map<NetworkType, ISignal> networkMap;
+    private SignalMapWrapper          signalMapWrapper;
+    private String[] signalInfo = null;
+    private TelephonyManager   tm;
+    private SignalArrayWrapper signalArrayWrapper;
 
     public SignalInfoTest()
     {
@@ -86,11 +85,12 @@ public class SignalInfoTest extends ActivityInstrumentationTestCase2<MainActivit
             "-75",
             "gsm|lte"
         };
+
         activity = getActivity();
         SignalListener listener = new SignalListener(this);
         tm = (TelephonyManager) activity.getSystemService(Context.TELEPHONY_SERVICE);
         tm.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
-        networkMap = new EnumMap<NetworkType, ISignal>(NetworkType.class);
+        networkMap = new EnumMap<>(NetworkType.class);
     }
 
     public void testGetInstance() throws Exception
@@ -103,11 +103,11 @@ public class SignalInfoTest extends ActivityInstrumentationTestCase2<MainActivit
      */
     public void testFilterSignalData()
     {
-        signalData = signalStrength == null
-            ? new SignalData(signalInfo, tm)
-            : new SignalData(signalStrength, tm);
+        signalMapWrapper = signalArrayWrapper == null
+            ? new SignalMapWrapper(signalInfo, tm)
+            : new SignalMapWrapper(signalArrayWrapper.getFilteredArray(), tm);
 
-        networkMap = signalData.getNetworkMap();
+        networkMap = signalMapWrapper.getNetworkMap();
         Signal[] values = Signal.values();
 
         for (Map.Entry<NetworkType, ISignal> networkType : networkMap.entrySet()) {
@@ -129,8 +129,8 @@ public class SignalInfoTest extends ActivityInstrumentationTestCase2<MainActivit
     }
 
     @Override
-    public void setData(SignalStrength signalStrength)
+    public void setData(SignalArrayWrapper signalArrayWrapper)
     {
-        this.signalStrength = signalStrength;
+        this.signalArrayWrapper = signalArrayWrapper;
     }
 }

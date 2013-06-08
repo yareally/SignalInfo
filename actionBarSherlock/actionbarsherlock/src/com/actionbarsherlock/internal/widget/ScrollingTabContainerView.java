@@ -42,6 +42,7 @@ import com.actionbarsherlock.internal.nineoldandroids.widget.NineHorizontalScrol
  * This widget implements the dynamic action bar tab behavior that can change
  * across different configurations or circumstances.
  */
+@SuppressWarnings("deprecation")
 public class ScrollingTabContainerView extends NineHorizontalScrollView
         implements IcsAdapterView.OnItemSelectedListener {
     //UNUSED private static final String TAG = "ScrollingTabContainerView";

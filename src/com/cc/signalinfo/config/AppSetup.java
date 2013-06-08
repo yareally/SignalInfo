@@ -25,6 +25,10 @@ http://www.opensource.org/licenses/mit-license.php
 
 package com.cc.signalinfo.config;
 
+import android.os.Build;
+import android.os.StrictMode;
+import com.cc.signalinfo.BuildConfig;
+
 /**
  * @author Wes Lanning
  * @version 2012-12-21
@@ -131,13 +135,13 @@ public final class AppSetup
     public static final int GSM_ASU = 16;
 
     /**
-     * 0dB (lowest) to 31dB (highest) or 99dB (n/a).
+     * 0dB (best) to 31dB (highest) or 99dB (n/a).
      * Reference: TS 27.007 8.5
      */
     public static final int GSM_SIG_STRENGTH = 1;
 
     /**
-     * 0 (lowest) to 7 (highest) or 99 (n/a) likelihood that a given
+     * 0 (lowest) to 7 (highest [worst]) or 99 (n/a) likelihood that a given
      * bit will be erroneous but will not be detected as such
      * Reference: TS 27.007 8.5
      *
@@ -170,12 +174,12 @@ public final class AppSetup
     public static final int EVDO_ECIO = 6;
 
     /**
-     * EVDO_SNR: 0dB (best) to 8dB (worst)
+     * EVDO_SNR: 0dB (worst) to 8dB (best)
      */
     public static final int EVDO_SNR = 7;
 
     /**
-     * 0 (lowest) to 31dB (highest) or 99dB (n/a).
+     * 0 (lowest) to 31dB (highest/best) or 99dB (n/a).
      * Reference: TS 27.007 8.5
      */
     public static final int LTE_SIG_STRENGTH = 8;
@@ -223,9 +227,7 @@ public final class AppSetup
      * Since it's a pain to use the xml string representation in a static context, redefining
      * n/a here. see strings.xml#na
      */
-    public static final String DEFAULT_TXT = "N/A";
-
-    public static final boolean DEBUG = true;
+    public static final String DEFAULT_TXT = "n/a";
 
     /**
      * GSM RSSI = Level index of CPICH Received Signal Code Power in UMTS
@@ -241,6 +243,25 @@ public final class AppSetup
      * Making me have to work around your super old device with unneeded settings and code >:(
      */
     public static final String OLD_FUCKING_DEVICE = "hasNoLteApiSettings";
+
+    public static final String FILTERED_SIGNAL_ARRAY_KEY = "signalArrayKey";
+    public static final String FILTERED_SIGNAL_ARRAY_SIZE_KEY = "signalArraySize";
+    /**
+     * Enable strict mode for the activity
+     */
+    public static void enableStrictMode()
+    {
+        if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 11) {
+            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll()
+                .penaltyLog()
+                .build());
+            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects()
+                .detectLeakedClosableObjects()
+                .penaltyLog()
+                .penaltyDeath()
+                .build());
+        }
+    }
 
     private AppSetup() {}
 }
