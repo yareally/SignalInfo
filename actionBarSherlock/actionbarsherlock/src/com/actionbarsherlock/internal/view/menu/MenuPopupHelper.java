@@ -42,6 +42,7 @@ import com.actionbarsherlock.view.MenuItem;
  * Presents a menu as a small, simple popup anchored to another view.
  * @hide
  */
+@SuppressWarnings("deprecation")
 public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.OnKeyListener,
         ViewTreeObserver.OnGlobalLayoutListener, PopupWindow.OnDismissListener,
         View_OnAttachStateChangeListener, MenuPresenter {

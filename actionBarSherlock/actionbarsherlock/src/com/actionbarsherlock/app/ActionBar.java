@@ -895,6 +895,7 @@ public abstract class ActionBar {
      *
      * @attr ref android.R.styleable#ActionBar_LayoutParams_layout_gravity
      */
+    @SuppressWarnings("deprecation")
     public static class LayoutParams extends MarginLayoutParams {
         private static final int[] ATTRS = new int[] {
                 android.R.attr.layout_gravity

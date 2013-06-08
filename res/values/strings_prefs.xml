@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /*
+  ~ Copyright (c) 2013 Wes Lanning, http://codingcreation.com
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining
+  ~ a copy of this software and associated documentation files (the
+  ~ "Software"), to deal in the Software without restriction, including
+  ~ without limitation the rights to use, copy, modify, merge, publish,
+  ~ distribute, sublicense, and/or sell copies of the Software, and to
+  ~ permit persons to whom the Software is furnished to do so, subject to
+  ~ the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be
+  ~ included in all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  ~ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  ~ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  ~ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+  ~ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+  ~ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+  ~ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  ~
+  ~ http://www.opensource.org/licenses/mit-license.php
+  ~ */
+  -->
+
+<resources>
+
+
+    <!-- **************** Preferences related strings **************** -->
+
+    <!-- preference header screen strings -->
+    <string name="mainPreferenceHeaderTitle">Signal Preferences</string>
+    <string name="mainPreferenceHeaderSummary">Settings related to how signals are displayed.</string>
+
+    <!-- === signal reading unit measurements === -->
+
+    <!-- decibel-milliwatts (also the default signal measurement) -->
+    <string name="dBm">db</string>
+    <!-- milliwatts -->
+    <string name="mW">mW</string>
+    <!-- microWatts -->
+    <string name="µW">µW</string>
+
+    <!-- Display related preferences -->
+    <string name="displayPreferencesTitle">Display Settings</string>
+    <string name="screenOnTitle">Keep Screen On</string>
+    <string name="keepScreenOnKey">keep_screen_on</string>
+    <string name="screenOnSummary">Keep screen on while app is focused</string>
+
+    <!-- Summary of what each displayed signal type does under preferences -->
+    <string formatted="false" name="signalTypeSummary">Strict % is based on ranges defined by the 3GPP. Relative
+        % is adjusted for your carrier. 100% = best, 0% = no signal
+    </string>
+
+    <!-- === Drop down text strings for what signal type to display === -->
+    <string name="signalFormatKey">signal_type</string>
+
+    <!-- Used for the text in the drop down list for selecting signal type to display -->
+    <string name="signalTypeTitle">Choose Displayed Signal Format</string>
+    <string name="dbReadingOnly">Decibels (dBm) Only (default)</string>
+    <string name="signalStrictPercentage">Decibels + Strict Percentage</string>
+    <string name="signalAdjustPercentage">Decibels + Adjusted Percentage</string>
+
+    <!-- used for signal type value array -->
+    <string name="signalTypeDialogTitle">Select a Signal Type</string>
+    <string name="dB">db</string>
+    <string name="strictReading">strict</string>
+    <string name="relativeReading">relative</string>
+
+    <!-- for enable debugging preference -->
+    <string name="debugPrefsTitle">Debugging Settings</string>
+    <string name="enableDebugTitle">Enable debugging output</string>
+    <string name="enableDebugKey">enable_debug</string>
+    <string name="enableDebugSummary">
+        <![CDATA[Useful if you ever need to give the developer some extra info. Dumps extra info to screen and logcat. I <3 people that give me extra info.]]></string>
+
+    <!-- **************** /End Preferences related strings **************** -->
+</resources>

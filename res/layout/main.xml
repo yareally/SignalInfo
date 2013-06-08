@@ -29,7 +29,8 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/phoneInfo"
+            android:text="@string/deviceInfoTitle"
+            android:contentDescription="@string/deviceInfoDescription"
             android:textSize="20sp" />
 
         <TableLayout
@@ -47,12 +48,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/phoneName" />
+                    android:text="@string/deviceNameLabel" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/phoneName"
+                    android:id="@+id/deviceName"
+                    android:contentDescription="@string/deviceNameDescription"
                     android:text="@string/na" />
             </TableRow>
 
@@ -62,12 +64,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/phoneModel" />
+                    android:text="@string/deviceModelLabel" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:id="@+id/phoneModel"
+                    android:id="@+id/deviceModel"
+                    android:contentDescription="@string/deviceModelDescription"
                     android:text="@string/na" />
             </TableRow>
 
@@ -77,13 +80,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/androidVersion" />
+                    android:text="@string/androidVersionLabel" />
 
                 <TextView
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/androidVersion"
+                    android:contentDescription="@string/androidVersionDescription"
                     android:text="@string/na" />
             </TableRow>
 
@@ -93,12 +96,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/carrierName" />
+                    android:text="@string/carrierNameLabel" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/carrierName"
+                    android:contentDescription="@string/carrierNameDescription"
                     android:text="@string/na" />
             </TableRow>
 
@@ -108,11 +112,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/buildHost" />
+                    android:text="@string/buildHostLabel" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/buildHostDescription"
                     android:id="@+id/buildHost"
                     android:text="@string/na" />
             </TableRow>
@@ -123,13 +128,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingRight="5dp"
-                    android:text="@string/networkType" />
+                    android:text="@string/networkTypeLabel" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/networkType"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/networkTypeDescription"
                     android:text="@string/na"
                     android:tag="13" />
             </TableRow>
@@ -139,6 +144,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/cdmaTitle"
+            android:contentDescription="@string/cdmaTitleDescription"
             android:paddingTop="10dp"
             android:textSize="20sp" />
 
@@ -163,7 +169,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/cdmaRSSI"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/cdmaRssiDescription"
                     android:text="@string/na"
                     android:tag="3" />
             </TableRow>
@@ -180,7 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/evdoRSSI"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/evdoRssiDescription"
                     android:text="@string/na"
                     android:tag="5" />
             </TableRow>
@@ -197,7 +203,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/cdmaECIO"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/cdmaEcioDescription"
                     android:text="@string/na"
                     android:tag="4" />
             </TableRow>
@@ -214,7 +220,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/evdoECIO"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/evdoEcioDescription"
                     android:text="@string/na"
                     android:tag="6" />
             </TableRow>
@@ -232,7 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/evdoSNR"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/evdoSnrDescription"
                     android:text="@string/na"
                     android:tag="7" />
             </TableRow>
@@ -243,6 +249,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/lteTitle"
+            android:contentDescription="@string/lteTitleDescription"
             android:paddingTop="10dp"
             android:textSize="20sp" />
 
@@ -268,7 +275,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lteRSRP"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/lteRsrpDescription"
                     android:text="@string/na"
                     android:tag="9" />
             </TableRow>
@@ -285,7 +292,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lteRSSI"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/lteRssiDescription"
                     android:text="@string/na"
                     android:tag="14" />
             </TableRow>
@@ -302,7 +309,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lteRSRQ"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/lteRsrqDescription"
                     android:text="@string/na"
                     android:tag="10" />
             </TableRow>
@@ -319,7 +326,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lteSNR"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/lteSnrDescription"
                     android:text="@string/na"
                     android:tag="11" />
             </TableRow>
@@ -336,7 +343,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lteCQI"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/lteCqiDescription"
                     android:text="@string/na"
                     android:tag="12" />
             </TableRow>
@@ -353,7 +360,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/lteSigStrength"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/lteSigStrengthDescription"
                     android:text="@string/na"
                     android:tag="8" />
             </TableRow>
@@ -370,7 +377,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/gsmSigStrength"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/gsmSigStrengthDescription"
                     android:text="@string/na"
                     android:tag="1" />
             </TableRow>
@@ -387,7 +394,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:id="@+id/gsmBitError"
-                    android:contentDescription="@string/contentDescTag"
+                    android:contentDescription="@string/gsmBitErrorDescription"
                     android:text="@string/na"
                     android:tag="2" />
             </TableRow>
@@ -401,6 +408,7 @@
             android:textSize="20sp"
             android:visibility="gone"
             android:id="@+id/debugInfo"
+            android:contentDescription="@string/debugInfoDescription"
             android:enabled="false" />
 
         <TableLayout
@@ -420,6 +428,7 @@
                 android:id="@+id/debugArray"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/debugArrayDescription"
                 android:paddingRight="5dp" />
         </TableLayout>
 
@@ -439,11 +448,11 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp">
 
-
             <Button
                 android:id="@+id/additionalInfo"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
+                android:contentDescription="@string/additionalInfoDescription"
                 android:text="@string/additionalInfoBtnTxt" />
 
 
@@ -454,6 +463,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal|bottom"
+            android:contentDescription="@string/copyrightDescription"
             android:text="@string/copyright" />
     </LinearLayout>
 </ScrollView>

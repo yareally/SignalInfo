@@ -25,20 +25,32 @@
  * /
  */
 
-package com.cc.signalinfo.listeners;
+package com.cc.signalinfo.fragments;
 
-import android.telephony.SignalStrength;
+import android.annotation.TargetApi;
+import android.os.Build;
+import android.os.Bundle;
+import android.preference.PreferenceFragment;
 
 /**
+ * On Android 3.0+ this fragment will load the appropriate
+ * header resource based on what the user selected. The selected
+ * resource is found already stored in a bundle passed from the activity.
+ *
  * @author Wes Lanning
- * @version 2013-05-01
+ * @version 2013-05-09
  */
-public interface ActivityListener
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+public class SettingsFragment extends PreferenceFragment
 {
-    /**
-     * Set the data to return to the caller here
-     *
-     * @param signalStrength - data to return
-     */
-    void setData(SignalStrength signalStrength);
+    @Override
+    public void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        int resourceId = getActivity().getResources().getIdentifier(
+            getArguments().getString("resource"),
+            "xml",
+            getActivity().getPackageName());
+        addPreferencesFromResource(resourceId);
+    }
 }

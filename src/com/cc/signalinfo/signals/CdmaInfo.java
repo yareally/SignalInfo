@@ -48,7 +48,7 @@ public class CdmaInfo extends SignalInfo
     @Override
     public boolean enabled()
     {
-        return !StringUtils.isNullOrEmpty(signals.get(Signal.CDMA_RSSI))
-            || !StringUtils.isNullOrEmpty(signals.get(Signal.EVDO_RSSI));
+        return !StringUtils.isNullOrEmpty(signals[Signal.CDMA_RSSI])
+            || !StringUtils.isNullOrEmpty(signals[Signal.EVDO_RSSI]);
     }
 }

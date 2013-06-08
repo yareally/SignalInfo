@@ -41,9 +41,9 @@ public final class StringUtils
      * @param value - value to check for null or empty
      * @return true if null or empty
      */
-    public static boolean isNullOrEmpty(String value)
+    public static boolean isNullOrEmpty(CharSequence value)
     {
-        return value == null || value.isEmpty();
+        return value == null || isEmpty(value);
     }
 
     /**
@@ -63,5 +63,18 @@ public final class StringUtils
             }
         }
         return true;
+    }
+
+    /**
+     * Returns <tt>true</tt> if, and only if, {@link #length()} is <tt>0</tt>.
+     *
+     * @return <tt>true</tt> if {@link #length()} is <tt>0</tt>, otherwise
+     *         <tt>false</tt>
+     *
+     * @since 1.6
+     */
+    public static boolean isEmpty(CharSequence value)
+    {
+        return value.length() == 0;
     }
 }

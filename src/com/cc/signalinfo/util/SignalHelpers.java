@@ -34,7 +34,7 @@ import com.cc.signalinfo.config.AppSetup;
  * The type Signal helpers.
  *
  * @author Wes Lanning
- * @version 2012 -12-21
+ * @version 2012-12-21
  */
 public final class SignalHelpers
 {

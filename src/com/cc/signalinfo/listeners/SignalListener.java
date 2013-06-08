@@ -30,6 +30,7 @@ package com.cc.signalinfo.listeners;
 import android.telephony.PhoneStateListener;
 import android.telephony.SignalStrength;
 import android.util.Log;
+import com.cc.signalinfo.util.SignalArrayWrapper;
 
 /**
  * Private helper class to listener for network signal changes.
@@ -37,9 +38,9 @@ import android.util.Log;
 public class SignalListener extends PhoneStateListener
 {
     private final String TAG = getClass().getSimpleName();
-    private ActivityListener listener;
+    private UpdateSignal listener;
 
-    public SignalListener(ActivityListener listener)
+    public SignalListener(UpdateSignal listener)
     {
         this.listener = listener;
     }
@@ -58,9 +59,22 @@ public class SignalListener extends PhoneStateListener
         super.onSignalStrengthsChanged(signalStrength);
 
         if (signalStrength != null) {
-            listener.setData(signalStrength);
+            listener.setData(new SignalArrayWrapper(signalStrength));
             Log.d(TAG, "getting sig strength");
             Log.d(TAG, signalStrength.toString());
         }
+    }
+
+    /**
+     * Notifies activities and fragments of signal changes.
+     */
+    public interface UpdateSignal
+    {
+        /**
+         * Set the data to return to the caller here
+         *
+         * @param signalStrength - data to return
+         */
+        void setData(SignalArrayWrapper signalStrength);
     }
 }
