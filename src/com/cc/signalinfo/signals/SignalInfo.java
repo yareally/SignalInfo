@@ -38,9 +38,9 @@ public abstract class SignalInfo implements ISignal
     /**
      * Instantiates a new Signal info.
      *
-     * @param type the type
-     * @param tm the tm
-     * @param signals the signals
+     * @param type - the type of network
+     * @param tm - the tm
+     * @param signals - the signals to add
      */
     protected SignalInfo(NetworkType type, TelephonyManager tm, Map<Signal, String> signals)
     {
@@ -54,8 +54,8 @@ public abstract class SignalInfo implements ISignal
     /**
      * Instantiates a new Signal info.
      *
-     * @param type the type
-     * @param tm the tm
+     * @param type - the type of network
+     * @param tm - the tm
      */
     protected SignalInfo(NetworkType type, TelephonyManager tm)
     {
@@ -68,7 +68,7 @@ public abstract class SignalInfo implements ISignal
      *
      * Newer supported network types are near the bottom to avoid any issues with shitty old devices.
      *
-     * @param tm the tm
+     * @param tm - the tm
      * @return the given name for the network type the device is using currently for data
      */
     public static String getConnectedNetworkString(TelephonyManager tm)
@@ -113,7 +113,7 @@ public abstract class SignalInfo implements ISignal
     /**
      * Gets signal string given the SignalType
      *
-     * @param signalType the signalType
+     * @param signalType - the signalType
      * @return the signal string or null if doesn't exist
      */
     @Override
@@ -156,36 +156,26 @@ public abstract class SignalInfo implements ISignal
                 : (name.worst() - signalValue) / 100.00f;
         }
         float result = name.best() > name.worst()
-            ? signalValue / (float)name.best() + fudgeValue
-            : (name.worst() - signalValue) / (float)name.worst() + fudgeValue;
+            ? signalValue / (float) name.best() + fudgeValue
+            : (name.worst() - signalValue) / (float) name.worst() + fudgeValue;
 
         int percentSignal = Math.round(result * 100);
         percentSignal = percentSignal < 0 ? 0 : Math.abs(percentSignal);
         percentSignal = percentSignal > 100 ? 100 : percentSignal;
 
-/*        float result = name.best() > name.worst()
-            ? ((float) signalValue + fudged) / name.best()
-            : ((float) name.worst() - signalValue + fudged) / name.worst();*/
-
-        // LTE_RSRQ(10, LTE, 0, 17, 3, 0), // -20db is coming out as 16%, should be 0
-
         return String.format("%s%%", percentSignal);
     }
 
     /**
-     * The percent from 0 (worst) 100 (best)
-     * of how great each measurement for the current network is
-     *
-     * May be imprecise due to carrier differences for
-     * certain measures (like RSSI), but this is more
-     * user friendly for those not interested in what
-     * the measures actually mean and their measurement range.
+     * Gets all the percentages of relative efficiency for the current network instead of just one.
      *
      * @param fudgeReading - set to true, fudge the reading to make the user feel better while ignoring standards
      * @return the % of all readings as a map of name of the reading as the key and the value as the value
+     *
+     * @see SignalInfo#getRelativeEfficiency(com.cc.signalinfo.enums.Signal, boolean)
      */
     @Override
-    public Map<String, String> getRelativeEfficiency(boolean fudgeReading)
+    public Map<String, String> getRelativeEfficiencyMap(boolean fudgeReading)
     {
         Map<String, String> readings = new LinkedHashMap<>();
 

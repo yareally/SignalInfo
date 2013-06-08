@@ -155,7 +155,7 @@ public interface ISignal
      * @param fudgeReading - set to true, fudge the reading to make the user feel better while ignoring standards
      * @return the % of all readings as a map of name of the reading as the key and the value as the value
      */
-    public Map<String, String> getRelativeEfficiency(boolean fudgeReading);
+    public Map<String, String> getRelativeEfficiencyMap(boolean fudgeReading);
 
     /**
      * Number of signal readings contained in the class collection

@@ -27,6 +27,7 @@
 
 package com.cc.signalinfo.activities;
 
+import android.annotation.TargetApi;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -68,6 +69,7 @@ public class EditSettings extends SherlockPreferenceActivity
      * @param target - the headers to load
      */
     @Override
+    @TargetApi(11)
     public void onBuildHeaders(List<Header> target)
     {
         loadHeadersFromResource(R.xml.preference_headers, target);

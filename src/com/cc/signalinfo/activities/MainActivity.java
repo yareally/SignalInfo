@@ -69,7 +69,7 @@ import java.util.*;
 
 import static com.cc.signalinfo.config.AppSetup.DEFAULT_TXT;
 import static com.cc.signalinfo.config.AppSetup.enableStrictMode;
-// ? Because the over verbosity on the constants will probably give me brain damage...
+// ↑ Because the over verbosity on the constants will probably give me brain damage...
 
 /**
  * Make sure to add "android.permission.CHANGE_NETWORK_STATE"

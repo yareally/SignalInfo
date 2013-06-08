@@ -29,8 +29,6 @@ package com.cc.signalinfo.util;
 import android.telephony.SignalStrength;
 import android.util.Log;
 import com.cc.signalinfo.config.AppSetup;
-
-import java.util.Arrays;
 import java.util.regex.Pattern;
 
 /**
@@ -77,7 +75,7 @@ public class SignalArrayWrapper
      */
     public SignalArrayWrapper(String[] signalArray)
     {
-        rawData = Arrays.toString(signalArray);
+        rawData = java.util.Arrays.toString(signalArray);
         filteredArray = processSignalInfo(signalArray);
     }
 
@@ -98,8 +96,8 @@ public class SignalArrayWrapper
                 ? AppSetup.DEFAULT_TXT
                 : rawData[i];
         }
-        Log.d("Raw Signal Array", Arrays.toString(rawData));
-        Log.d("Filtered Signal Array", Arrays.toString(rawData));
+        Log.d("Raw Signal Array", java.util.Arrays.toString(rawData));
+        Log.d("Filtered Signal Array", java.util.Arrays.toString(rawData));
         return filteredData;
     }
 
@@ -111,7 +109,15 @@ public class SignalArrayWrapper
      */
     private static String[] processSignalInfo(SignalStrength signalStrength)
     {
-        return processSignalInfo(SPACE_STR.split(signalStrength.toString()));
+        String[] splitSignals = SPACE_STR.split(signalStrength.toString());
+
+        if (splitSignals.length < 3) { // meaning they don't use spaces like they should be using...
+            // I could do this above with the space regex, but it's like 1-2 devices that somehow fuck this up and don't
+            // want to punish everyone for their idiot developers.
+            // could go and find what the most occuring non alpha-numeric char is, but if it isn't one of these, then screw em.
+            splitSignals = signalStrength.toString().split("[ .,|:]+");
+        }
+        return processSignalInfo(splitSignals);
     }
 
     /**

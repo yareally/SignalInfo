@@ -41,7 +41,6 @@ import java.util.Collections;
 import java.util.EnumMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.regex.Pattern;
 
 /**
  * @author Wes Lanning
@@ -116,7 +115,7 @@ public class SignalMapWrapper
         Map<String, String> percentSignalMap = new LinkedHashMap<>();
 
         for (Map.Entry<NetworkType, ISignal> network : networkMap.entrySet()) {
-            percentSignalMap.putAll(network.getValue().getRelativeEfficiency(adjustReadings));
+            percentSignalMap.putAll(network.getValue().getRelativeEfficiencyMap(adjustReadings));
         }
         return percentSignalMap;
     }
