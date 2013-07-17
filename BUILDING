@@ -6,7 +6,7 @@ However, for anyone that does wish to build it, here are some tips:
 
 2) You must target Java 7, not Java 6 because I used a few Java 7 features that will work on Android. If you wish to use 6, then you would have to change those things. I personally do not like Java circa 2006, so I use whatever I can to make it a paletable language in personal projects.
 
-3) The following dependencies are needed:
+3) The following dependencies are needed (all jars are under library directory):
 
 android-support-v4.jar - For actionbarsherlock and other things. 
 
