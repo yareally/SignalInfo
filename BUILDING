@@ -1,0 +1,22 @@
+Although this is an opensource project, it's not a project I have gone out of my way to make easy to build for anyone and everyone (no maven, etc). I don't like much and don't use it unless other people working with me are using it. Eventually I will probably use Gradle though when Intellij IDEA 13 goes stable.
+
+However, for anyone that does wish to build it, here are some tips:
+
+1) If you are having troubles with your IDE of choice, use Intellij IDEA (the stable version). That is what I use and I cannot offer IDE specific help otherwise. 
+
+2) You must target Java 7, not Java 6 because I used a few Java 7 features that will work on Android. If you wish to use 6, then you would have to change those things. I personally do not like Java circa 2006, so I use whatever I can to make it a paletable language in personal projects.
+
+3) The following dependencies are needed:
+
+android-support-v4.jar - For actionbarsherlock and other things. 
+
+actionbarsherlock - https://github.com/JakeWharton/ActionBarSherlock. It's already included in the project itself as a seperate directory, you just have to import the directory as a module dependency in intellij idea (or whatever is equiviliant dependency in your IDE of choice)
+
+GoogleAdMobAdsSdk-6.4.1.jar - (unless you remove the xml bits for this in the MainActivities' XML)
+
+javac-oo-plugin-0.2.jar - (allows Operator Overloading in Java similar to C#). If you wish to not use this, then you would have to change all parts of my code where I use it. See: https://github.com/amelentev/java-oo for how to add this to your project as it takes more than adding just the jar file (need to enable annotation compiling).
+
+Following all that, it should build.
+
+
+
