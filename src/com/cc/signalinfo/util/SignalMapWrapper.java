@@ -104,7 +104,7 @@ public class SignalMapWrapper
     }
 
     /**
-     * Returns an unmodifiable copy of the network signal info map
+     * Returns a copy of the network signal info map
      * with the % quality of each signal instead of decibels.
      *
      * @param adjustReadings - use strict % readings or adjust for carriers/android?
@@ -139,6 +139,7 @@ public class SignalMapWrapper
                 AppSetup.DEFAULT_TXT;
             networkMap[values[i].type()].addSignalValue(values[i], signalValue);
         }
+
         Log.d("Signal Map CDMA: ", networkMap[NetworkType.CDMA].getSignals().toString());
         Log.d("Signal Map GSM: ", networkMap[NetworkType.GSM].getSignals().toString());
         Log.d("Signal Map LTE: ", networkMap[NetworkType.LTE].getSignals().toString());

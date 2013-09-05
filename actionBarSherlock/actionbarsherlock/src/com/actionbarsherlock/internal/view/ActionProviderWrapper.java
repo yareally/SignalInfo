@@ -4,7 +4,6 @@ import com.actionbarsherlock.internal.view.menu.SubMenuWrapper;
 import com.actionbarsherlock.view.ActionProvider;
 import android.view.View;
 
-@SuppressWarnings("deprecation")
 public class ActionProviderWrapper extends android.view.ActionProvider {
     private final ActionProvider mProvider;
 

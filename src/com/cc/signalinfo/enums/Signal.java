@@ -32,15 +32,15 @@ import static com.cc.signalinfo.enums.NetworkType.*;
  * @author Wes Lanning
  * @version 2013-04-29
  */
-public enum Signal
+public enum Signal implements SignalEnumMethods
 {
     /*    NONE(0),*/
     GSM_SIG_STRENGTH(1, GSM, 31, 0, 0, 0),
     GSM_BIT_ERROR(2, GSM, 0, 7, 0, 0),
     CDMA_RSSI(3, CDMA, 0, 80, -40, 20),
-    CDMA_ECIO(4, CDMA, 0, 160, 0, 40),
+    CDMA_ECIO(4, CDMA, 0, 160, 0, 20),
     EVDO_RSSI(5, CDMA, 0, 80, -40, 20),
-    EVDO_ECIO(6, CDMA, 0, 160, 0, 40),
+    EVDO_ECIO(6, CDMA, 0, 160, 0, 20),
     EVDO_SNR(7, CDMA, 8, 0, 0, 0),
     LTE_SIG_STRENGTH(8, LTE, 31, 0, 0, 0),
     LTE_RSRP(9, LTE, 0, 76, -44, 22),
@@ -78,31 +78,37 @@ public enum Signal
         this.fudged = fudged;
     }
 
+    @Override
     public NetworkType type()
     {
         return networkType;
     }
 
+    @Override
     public int best()
     {
         return best;
     }
 
+    @Override
     public int worst()
     {
         return worst;
     }
 
+    @Override
     public int norm()
     {
         return normalized;
     }
 
+    @Override
     public int value()
     {
         return value;
     }
 
+    @Override
     public int fudged()
     {
         return fudged;

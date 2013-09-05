@@ -35,7 +35,6 @@ import com.actionbarsherlock.internal.nineoldandroids.widget.NineFrameLayout;
  * It applies special styles as needed to help handle animated transitions between them.
  * @hide
  */
-@SuppressWarnings("deprecation")
 public class ActionBarContainer extends NineFrameLayout {
     private boolean mIsTransitioning;
     private View mTabContainer;

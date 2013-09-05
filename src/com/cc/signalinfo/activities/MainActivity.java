@@ -78,11 +78,10 @@ import static com.cc.signalinfo.config.AppSetup.enableStrictMode;
  * @author Wes Lanning
  * @version 1.0
  */
-@SuppressWarnings({"RedundantFieldInitialization", "ReuseOfLocalVariable", "LawOfDemeter"})
-public class MainActivity extends SherlockFragmentActivity implements View.OnClickListener, SignalListener.UpdateSignal, LoaderManager.LoaderCallbacks<SharedPreferences>
+@SuppressWarnings({"RedundantFieldInitialization", "ReuseOfLocalVariable", "LawOfDemeter", "ClassTooDeepInInheritanceTree"})
+public class MainActivity extends BaseActivity implements View.OnClickListener, SignalListener.UpdateSignal, LoaderManager.LoaderCallbacks<SharedPreferences>
 {
     private static final String                TAG               = MainActivity.class.getSimpleName();
-    private              ActionBar             actionBar         = null;
     private              boolean               dbOnly            = false;
     private              boolean               enableDebug       = false;
     private              String[]              filteredSignals   = null;
@@ -101,48 +100,15 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
-        super.onCreate(savedInstanceState);
-        enableStrictMode();
-        actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(true);
-
+        onCreate(R.layout.main, savedInstanceState);
         SignalListener listener = new SignalListener(this);
         sigInfoIds = getResources().obtainTypedArray(R.array.sigInfoIds);
         tm = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
         tm.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
         getSupportLoaderManager().initLoader(0, null, this);
 
-        setContentView(R.layout.main);
         findViewById(R.id.additionalInfo).setOnClickListener(this);
         setPhoneInfo();
-        formatFooter();
-
-        if (!BuildConfig.DEBUG) {
-            AdView ad = (AdView) findViewById(R.id.adView);
-            ad.loadAd(new AdRequest());
-        }
-    }
-
-    /**
-     * Shows additional radio settings contained in the Android OS.
-     *
-     * @param view - button that shows the settings.
-     */
-    @Override
-    public void onClick(View view)
-    {
-        if (SignalHelpers.userConsent(getPreferences(Context.MODE_PRIVATE))) {
-            try {
-                startActivity(SignalHelpers.getAdditionalSettings());
-            } catch (SecurityException | ActivityNotFoundException ignored) {
-                Toast.makeText(this,
-                    getString(R.string.noAdditionalSettingSupport),
-                    Toast.LENGTH_LONG).show();
-            }
-        }
-        else {
-            new WarningDialogFragment().show(getSupportFragmentManager(), "Warning");
-        }
     }
 
     /**
@@ -187,36 +153,6 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         displaySignalInfo(filteredSignals);
     }
 
-    /**
-     * Called to populate the ActionBar.
-     *
-     * @param menu - the action bar menu
-     * @return true on created
-     */
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
-        getSupportMenuInflater().inflate(R.menu.options, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    /**
-     * Called to populate the ActionBar.
-     *
-     * @param item - item to populate
-     * @return true on create
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId()) {
-            case R.id.preferences:
-                loadPrefsScreen();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
     @Override
     public void onResume()
     {
@@ -229,6 +165,28 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
             }
         }
         tm.listen(listener, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS);
+    }
+
+    /**
+     * Shows additional radio settings contained in the Android OS.
+     *
+     * @param view - button that shows the settings.
+     */
+    @Override
+    public void onClick(View view)
+    {
+        if (SignalHelpers.userConsent(getPreferences(Context.MODE_PRIVATE))) {
+            try {
+                startActivity(SignalHelpers.getAdditionalSettings());
+            } catch (SecurityException | ActivityNotFoundException ignored) {
+                Toast.makeText(this,
+                    getString(R.string.noAdditionalSettingSupport),
+                    Toast.LENGTH_LONG).show();
+            }
+        }
+        else {
+            new WarningDialogFragment().show(getSupportFragmentManager(), "Warning");
+        }
     }
 
     @Override
@@ -343,38 +301,9 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
         setNetworkTypeText();
     }
 
-    private void setTextViewText(int txtViewId, CharSequence text)
-    {
-        ((TextView) findViewById(txtViewId)).setText(text);
-    }
-
     private void setNetworkTypeText()
     {
         setTextViewText(R.id.networkType, SignalInfo.getConnectedNetworkString(tm));
-    }
-
-    /**
-     * Formats the page footer with in the following format:
-     * ©YEAR codingcreation.com | v. x.xx
-     */
-    private void formatFooter()
-    {
-        try {
-            String appVersion = getPackageManager()
-                .getPackageInfo(getPackageName(), 0).versionName;
-
-            setTextViewText(R.id.copyright,
-                String.format(
-                    getString(R.string.copyright),
-                    Calendar.getInstance().get(Calendar.YEAR),
-                    appVersion));
-
-            findViewById(R.id.copyright).setContentDescription(
-                String.format(getString(R.string.copyrightDescription),
-                    appVersion));
-        } catch (PackageManager.NameNotFoundException ignored) {
-            Log.wtf(TAG, "Could not display app version number!");
-        }
     }
 
     /**
@@ -444,28 +373,5 @@ public class MainActivity extends SherlockFragmentActivity implements View.OnCli
                     debugMapRelative.toString(),
                     debugMapStrict.toString()));
         }
-    }
-
-    /**
-     * Loads up the preferences screen in the action bar.
-     */
-    private void loadPrefsScreen()
-    {
-        Intent intent = new Intent(this, EditSettings.class);
-
-        // if using Android 3.0+ and only using one preference screen, default load it
-        // instead of using the big ass selection header area for preferences.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB
-            && getResources().getBoolean(R.bool.suppressHeader)) {
-
-            intent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true);
-            intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT,
-                SettingsFragment.class.getName());
-
-            Bundle bundle = new Bundle();
-            bundle.putString("resource", "main_prefs");
-            intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, bundle);
-        }
-        startActivity(intent);
     }
 }

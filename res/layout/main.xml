@@ -244,6 +244,73 @@
             </TableRow>
         </TableLayout>
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/gsmTitle"
+            android:contentDescription="@string/gsmTitleDescription"
+            android:paddingTop="10dp"
+            android:textSize="20sp" />
+
+        <TableLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="1"
+            android:paddingTop="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp">
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:text="@string/gsmRSSI" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gsmRSSI"
+                    android:contentDescription="@string/gsmRssiDescription"
+                    android:text="@string/na"
+                    android:tag="15" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:text="@string/gsmSigStrength" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gsmSigStrength"
+                    android:contentDescription="@string/gsmSigStrengthDescription"
+                    android:text="@string/na"
+                    android:tag="1" />
+            </TableRow>
+
+            <TableRow>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingRight="5dp"
+                    android:text="@string/gsmBitError" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/gsmBitError"
+                    android:contentDescription="@string/gsmBitErrorDescription"
+                    android:text="@string/na"
+                    android:tag="2" />
+            </TableRow>
+        </TableLayout>
 
         <TextView
             android:layout_width="fill_parent"
@@ -363,40 +430,6 @@
                     android:contentDescription="@string/lteSigStrengthDescription"
                     android:text="@string/na"
                     android:tag="8" />
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/gsmSigStrength" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/gsmSigStrength"
-                    android:contentDescription="@string/gsmSigStrengthDescription"
-                    android:text="@string/na"
-                    android:tag="1" />
-            </TableRow>
-
-            <TableRow>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingRight="5dp"
-                    android:text="@string/gsmBitError" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/gsmBitError"
-                    android:contentDescription="@string/gsmBitErrorDescription"
-                    android:text="@string/na"
-                    android:tag="2" />
             </TableRow>
         </TableLayout>
 

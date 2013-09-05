@@ -37,8 +37,11 @@ import java.lang.reflect.Array;
  * @author Wes Lanning
  * @version 2013-06-04
  */
+@SuppressWarnings({"UtilityClass", "unchecked", "SuspiciousArrayCast"})
 public class Arrays
 {
+    private Arrays() {}
+
     /**
      * Copies the specified array, truncating or padding with nulls (if necessary)
      * so the copy has the specified length.  For all indices that are
@@ -86,6 +89,7 @@ public class Arrays
      * an array of class <tt>newType</tt>
      * @since 1.6
      */
+    @SuppressWarnings({"RedundantCast", "ObjectEquality", "SuspiciousSystemArraycopy"})
     public static <T, U> T[] copyOf(U[] original, int newLength, Class<? extends T[]> newType)
     {
         T[] copy = ((Object) newType == (Object) Object[].class)

@@ -111,7 +111,7 @@ public class SignalArrayWrapper
     {
         String[] splitSignals = SPACE_STR.split(signalStrength.toString());
 
-        if (splitSignals.length < 3) { // meaning they don't use spaces like they should be using...
+        if (splitSignals.length < 5) { // meaning they don't use spaces like they should be using...
             // I could do this above with the space regex, but it's like 1-2 devices that somehow fuck this up and don't
             // want to punish everyone for their idiot developers.
             // could go and find what the most occuring non alpha-numeric char is, but if it isn't one of these, then screw em.

@@ -19,6 +19,7 @@
         <item>@string/lteSNR</item>
         <item>@string/lteCQI</item>
         <item>@string/lteRSSI</item>
+        <item>@string/gsmRSSI</item>
     </string-array>
 
     <!-- Holds the related ids for the signal textviews, since I can't use tags on < Android 3.0 -_- -->
@@ -36,6 +37,7 @@
         <item>@id/lteSNR</item>
         <item>@id/lteCQI</item>
         <item>@id/lteRSSI</item>
+        <item>@id/gsmRSSI</item>
     </array>
 
     <!-- === Settings related arrays === -->

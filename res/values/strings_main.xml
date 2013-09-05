@@ -36,6 +36,7 @@
     <string name="evdoRSSI">EVDO (data) RSSI Signal:</string>
     <string name="evdoECIO">EVDO ECIO:</string>
     <string name="evdoSNR">EVDO SNR:</string>
+    <string name="gsmTitle">GSM (2G/3G) Signal Info</string>
     <string name="lteTitle">LTE (4g) Signal Info</string>
     <string name="lteRSRP">LTE RSRP Signal:</string>
     <string name="lteRSSI">LTE RSSI Signal:</string>
@@ -43,6 +44,7 @@
     <string name="lteSNR">LTE SNR:</string>
     <string name="lteCQI">LTE CQI:</string>
     <string name="lteSigStrength">LTE Signal Strength:</string>
+    <string name="gsmRSSI">GSM RSSI:</string>
     <string name="gsmSigStrength">GSM Signal Strength:</string>
     <string name="gsmBitError">GSM Bit Error Rate:</string>
 

@@ -27,6 +27,8 @@
 
 package com.cc.signalinfo.util;
 
+import com.cc.signalinfo.config.AppSetup;
+
 /**
  * @author Wes Lanning
  * @version 2013-04-28
@@ -76,5 +78,18 @@ public final class StringUtils
     public static boolean isEmpty(CharSequence value)
     {
         return value.length() == 0;
+    }
+
+    /**
+     * Compares two strings to determine if each is not
+     * null or empty as well as the same value (via equals())
+     *
+     * @param value - first value
+     * @param value2 - second value
+     * @return true if the strings are not null/empty and the same value
+     */
+    public static boolean safeEquals(CharSequence value, CharSequence value2)
+    {
+        return (!isNullOrEmpty(value) && !isNullOrEmpty(value2)) && value.equals(value2);
     }
 }

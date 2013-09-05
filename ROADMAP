@@ -1,5 +1,5 @@
 Replace table layout with grid layout
-Replace Actionbar sherlock with Android support actionbar
+Replace ActionBar sherlock with Android support actionbar
 Add some more HSPA info
 Add wifi info
 Convert to code to Scala so I don't have to deal with Java anymore.

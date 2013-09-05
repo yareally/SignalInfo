@@ -111,10 +111,10 @@ public interface ISignal
     String getDeviceTypeString();
 
     /**
-     * Add signal value.
+     * Add a signal value to the current network type collection.
      *
-     * @param type the type
-     * @param value the value
+     * @param type the type (like RSSI, RSRP, SNR, etc)
+     * @param value the value (the current reading from the tower for the signal)
      * @return the value of any previous signal value with the
      *         specified type or null if there was no signal already added.
      */

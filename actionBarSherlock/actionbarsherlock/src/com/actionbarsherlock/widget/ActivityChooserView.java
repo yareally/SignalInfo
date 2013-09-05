@@ -66,7 +66,6 @@ import android.widget.TextView;
  *
  * @hide
  */
-@SuppressWarnings("deprecation")
 class ActivityChooserView extends ViewGroup implements ActivityChooserModelClient {
 
     /**

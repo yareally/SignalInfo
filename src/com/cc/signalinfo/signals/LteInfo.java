@@ -9,8 +9,10 @@ import com.cc.signalinfo.util.StringUtils;
 import java.util.EnumSet;
 import java.util.Map;
 
+import static com.cc.signalinfo.config.AppSetup.*;
+
 /**
- * The type Lte info.
+ * Stores all the signal info related to LTE
  *
  * @author Wes Lanning
  * @version 2013 -04-29
@@ -20,7 +22,7 @@ public class LteInfo extends SignalInfo
     /**
      * Instantiates a new Lte info.
      *
-     * @param tm the tm
+     * @param tm - instance of telephonyManager
      * @param signals the signals
      */
     public LteInfo(TelephonyManager tm, Map<Signal, String> signals)
@@ -32,7 +34,20 @@ public class LteInfo extends SignalInfo
     /**
      * Instantiates a new Lte info.
      *
-     * @param tm the tm
+     * @param tm - instance of telephonyManager
+     * @param signals the signals
+     * @param preferDb - if true, convert all non-decibel readings (centibels) to decibels
+     */
+    public LteInfo(TelephonyManager tm, Map<Signal, String> signals, boolean preferDb)
+    {
+        super(NetworkType.LTE, tm, signals, preferDb);
+        possibleValues = EnumSet.range(Signal.LTE_SIG_STRENGTH, Signal.LTE_RSSI);
+    }
+
+    /**
+     * Instantiates a new Lte info.
+     *
+     * @param tm - instance of telephonyManager
      */
     public LteInfo(TelephonyManager tm)
     {
@@ -50,8 +65,8 @@ public class LteInfo extends SignalInfo
     {
         return !StringUtils.isNullOrEmpty(signals[Signal.LTE_RSRP])
             && !StringUtils.isNullOrEmpty(signals[Signal.LTE_RSRQ])
-            && !AppSetup.DEFAULT_TXT.equals(signals[Signal.LTE_RSRP])
-            && !AppSetup.DEFAULT_TXT.equals(signals[Signal.LTE_RSRQ]);
+            && !DEFAULT_TXT.equals(signals[Signal.LTE_RSRP])
+            && !DEFAULT_TXT.equals(signals[Signal.LTE_RSRQ]);
     }
 
     /**
@@ -79,17 +94,27 @@ public class LteInfo extends SignalInfo
     }
 
     /**
-     * Add signal value.
+     * Add a signal value to the current network type collection.
      *
-     * @param type the type
-     * @param value the value
+     * @param type the type (like RSSI, RSRP, SNR, etc)
+     * @param value the value (the current reading from the tower for the signal)
      * @return the value of any previous signal value with the
      *         specified type or null if there was no signal already added.
      */
     @Override
     public String addSignalValue(Signal type, String value)
     {
+        if (type == Signal.LTE_RSRQ && !StringUtils.safeEquals(value, DEFAULT_TXT)) {
+            if (value.charAt(0) != '-') {
+                // RSRQ should always be negative, fuck you Qualcomm chipsets for typically ignoring this.
+                value = '-' + value;
+            }
+        }
+        else if (type == Signal.LTE_SNR && preferDb) {
+            value = cb2db(value);
+        }
         String oldValue = super.addSignalValue(type, value);
+
         // if we can now add RSSI, do. Have to manually calculate it though
         if (hasLteRssi()) {
             super.addSignalValue(Signal.LTE_RSSI, String.valueOf(computeRssi()));

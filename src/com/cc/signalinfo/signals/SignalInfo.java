@@ -4,6 +4,7 @@ import android.telephony.TelephonyManager;
 import com.cc.signalinfo.config.AppSetup;
 import com.cc.signalinfo.enums.NetworkType;
 import com.cc.signalinfo.enums.Signal;
+import com.cc.signalinfo.util.StringUtils;
 
 import java.util.*;
 
@@ -18,6 +19,14 @@ import static android.telephony.TelephonyManager.*;
 @SuppressWarnings({"MethodWithMultipleReturnPoints", "OverlyComplexMethod", "SwitchStatementWithTooManyBranches"})
 public abstract class SignalInfo implements ISignal
 {
+    /**
+     * Screw Android for using centibels when they should
+     * be using decibels for things like SNR.
+     *
+     * if true, convert all non-decibel readings (centibels) to decibels
+     */
+    protected boolean preferDb = true;
+
     /**
      * The Possible values for the current network type
      */
@@ -39,7 +48,7 @@ public abstract class SignalInfo implements ISignal
      * Instantiates a new Signal info.
      *
      * @param type - the type of network
-     * @param tm - the tm
+     * @param tm - instance of telephonyManager
      * @param signals - the signals to add
      */
     protected SignalInfo(NetworkType type, TelephonyManager tm, Map<Signal, String> signals)
@@ -55,7 +64,21 @@ public abstract class SignalInfo implements ISignal
      * Instantiates a new Signal info.
      *
      * @param type - the type of network
-     * @param tm - the tm
+     * @param tm - instance of telephonyManager
+     * @param signals - the signals to add
+     * @param preferDb - if true, convert all non-decibel readings (centibels) to decibels
+     */
+    protected SignalInfo(NetworkType type, TelephonyManager tm, Map<Signal, String> signals, boolean preferDb)
+    {
+        this(type, tm, signals);
+        this.preferDb = preferDb;
+    }
+
+    /**
+     * Instantiates a new Signal info.
+     *
+     * @param type - the type of network
+     * @param tm - instance of telephonyManager
      */
     protected SignalInfo(NetworkType type, TelephonyManager tm)
     {
@@ -68,7 +91,7 @@ public abstract class SignalInfo implements ISignal
      *
      * Newer supported network types are near the bottom to avoid any issues with shitty old devices.
      *
-     * @param tm - the tm
+     * @param tm - instance of telephonyManager
      * @return the given name for the network type the device is using currently for data
      */
     public static String getConnectedNetworkString(TelephonyManager tm)
@@ -138,10 +161,10 @@ public abstract class SignalInfo implements ISignal
     @Override
     public String getRelativeEfficiency(Signal name, boolean fudgeReading)
     {
-        int signalValue =
+        float signalValue =
             AppSetup.DEFAULT_TXT.equals(signals[name])
                 ? -1
-                : Math.abs(Integer.parseInt(signals[name]));
+                : Math.abs(Float.parseFloat(signals[name]));
 
         if (signalValue == -1) {
             return ""; // no value set
@@ -156,8 +179,8 @@ public abstract class SignalInfo implements ISignal
                 : (name.worst() - signalValue) / 100.00f;
         }
         float result = name.best() > name.worst()
-            ? signalValue / (float) name.best() + fudgeValue
-            : (name.worst() - signalValue) / (float) name.worst() + fudgeValue;
+            ? signalValue / name.best() + fudgeValue
+            : (name.worst() - signalValue) / name.worst() + fudgeValue;
 
         int percentSignal = Math.round(result * 100);
         percentSignal = percentSignal < 0 ? 0 : Math.abs(percentSignal);
@@ -345,6 +368,17 @@ public abstract class SignalInfo implements ISignal
         return signals.size();
     }
 
-/*    @Override
-    public abstract boolean enabled();*/
+    /**
+     * Converts a signal reading from centibels to decibels
+     *
+     * @param centibels - the signal reading in cB
+     * @return the signal reading in dB
+     */
+    public static String cb2db(String centibels)
+    {
+        if (!StringUtils.isNullOrEmpty(centibels) && !AppSetup.DEFAULT_TXT.equals(centibels)) {
+            centibels = String.valueOf((Integer.parseInt(centibels) / 10));
+        }
+        return centibels;
+    }
 }

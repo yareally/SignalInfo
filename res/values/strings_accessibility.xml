@@ -45,6 +45,7 @@
     <string name="cdmaEcioDescription">Current CDMA EC/IO Reading</string>
     <string name="evdoEcioDescription">Current EVDO EC/IO reading</string>
     <string name="evdoSnrDescription">Current EVDO SNR reading</string>
+    <string name="gsmTitleDescription">LTE signal readings area</string>
     <string name="lteTitleDescription">LTE signal readings area</string>
     <string name="lteRsrpDescription">Current LTE RSRP reading</string>
     <string name="lteRssiDescription">Current LTE RSSI reading</string>
@@ -53,6 +54,7 @@
     <string name="lteCqiDescription">Current LTE CQI reading</string>
     <string name="lteSigStrengthDescription">Current LTE signal strength reading</string>
     <string name="gsmSigStrengthDescription">Current GSM signal strength reading</string>
+    <string name="gsmRssiDescription">Current GSM RSSI reading</string>
     <string name="gsmBitErrorDescription">Current GSM bit error reading</string>
     <string name="debugInfoDescription">Debugging info area for development</string>
     <string name="debugArrayDescription">Selected debugging signal readings</string>
