@@ -18,6 +18,8 @@ javac-oo-plugin-0.2.jar - (allows Operator Overloading in Java similar to C#). I
 
 cwac-loaderex - Currently for SharedPreferencesLoader, but eventually for SQLite as well.
 
+Jetbrain's Annotations for Nullability and Internalization - makes these things easier to deal with.
+
 Following all that, it should build.
 
 
