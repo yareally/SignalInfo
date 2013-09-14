@@ -28,6 +28,7 @@ package com.cc.signalinfo.config;
 import android.os.Build;
 import android.os.StrictMode;
 import com.cc.signalinfo.BuildConfig;
+import org.jetbrains.annotations.NonNls;
 
 /**
  * @author Wes Lanning
@@ -227,6 +228,7 @@ public final class AppSetup
      * Since it's a pain to use the xml string representation in a static context, redefining
      * n/a here. see strings.xml#na
      */
+    @NonNls
     public static final String DEFAULT_TXT = "n/a";
 
     /**
@@ -244,8 +246,9 @@ public final class AppSetup
      */
     public static final String OLD_FUCKING_DEVICE = "hasNoLteApiSettings";
 
-    public static final String FILTERED_SIGNAL_ARRAY_KEY = "signalArrayKey";
+    public static final String FILTERED_SIGNAL_ARRAY_KEY      = "signalArrayKey";
     public static final String FILTERED_SIGNAL_ARRAY_SIZE_KEY = "signalArraySize";
+
     /**
      * Enable strict mode for the activity
      */

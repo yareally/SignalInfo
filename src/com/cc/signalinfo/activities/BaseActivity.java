@@ -1,13 +1,10 @@
 package com.cc.signalinfo.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.telephony.PhoneStateListener;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
 import com.actionbarsherlock.app.ActionBar;
@@ -17,7 +14,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.cc.signalinfo.BuildConfig;
 import com.cc.signalinfo.R;
 import com.cc.signalinfo.fragments.SettingsFragment;
-import com.cc.signalinfo.listeners.SignalListener;
 import com.google.ads.AdRequest;
 import com.google.ads.AdView;
 

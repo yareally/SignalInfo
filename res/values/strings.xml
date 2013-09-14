@@ -5,6 +5,7 @@
     <string name="app_name">Advanced Signal Status</string>
 
     <!-- shown if there is no reading for a signal or if some other dynamic information is not available -->
+    <!-- DO NOT CHANGE THIS VALUE IF TRANSLATING TO ANOTHER LANGUAGE UNLESS YOU CHANGE THE SAME VALUE IN AppSetup.java AS IT WILL CRASH THE APP (which is restated there as there is no easy way to pull it from this file for use in a static code context). Changing any other text in the String files is fine though. -->
     <string name="na">n/a</string>
 
     <!-- Footer area -->

@@ -164,7 +164,7 @@ public abstract class SignalInfo implements ISignal
         float signalValue =
             AppSetup.DEFAULT_TXT.equals(signals[name])
                 ? -1
-                : Math.abs(Float.parseFloat(signals[name]));
+                : Math.abs(Integer.parseInt(signals[name]));
 
         if (signalValue == -1) {
             return ""; // no value set
