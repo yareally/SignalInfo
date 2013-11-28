@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import android.util.Log;
 import com.actionbarsherlock.ActionBarSherlock;
 import com.actionbarsherlock.R;
+import org.jetbrains.annotations.NotNull;
 import org.xmlpull.v1.XmlPullParser;
 
 public final class ResourcesCompat {
@@ -29,7 +30,7 @@ public final class ResourcesCompat {
      * @return Associated boolean value as reflected by the current display
      * metrics.
      */
-    public static boolean getResources_getBoolean(Context context, int id) {
+    public static boolean getResources_getBoolean(@NotNull Context context, int id) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             return context.getResources().getBoolean(id);
         }
@@ -77,7 +78,7 @@ public final class ResourcesCompat {
      * @return Associated integer value as reflected by the current display
      * metrics.
      */
-    public static int getResources_getInteger(Context context, int id) {
+    public static int getResources_getInteger(@NotNull Context context, int id) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB_MR2) {
             return context.getResources().getInteger(id);
         }
@@ -109,7 +110,7 @@ public final class ResourcesCompat {
      * @param activity Activity instance.
      * @return Logo resource ID.
      */
-    public static int loadLogoFromManifest(Activity activity) {
+    public static int loadLogoFromManifest(@NotNull Activity activity) {
         int logo = 0;
         try {
             final String thisPackage = activity.getClass().getName();

@@ -37,6 +37,8 @@ import com.actionbarsherlock.internal.view.View_HasStateListenerSupport;
 import com.actionbarsherlock.internal.view.View_OnAttachStateChangeListener;
 import com.actionbarsherlock.internal.widget.IcsListPopupWindow;
 import com.actionbarsherlock.view.MenuItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Presents a menu as a small, simple popup anchored to another view.
@@ -49,14 +51,16 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
 
     static final int ITEM_LAYOUT = R.layout.abs__popup_menu_item_layout;
 
-    private Context mContext;
-    private LayoutInflater mInflater;
+    private Context            mContext;
+    private LayoutInflater     mInflater;
+    @Nullable
     private IcsListPopupWindow mPopup;
-    private MenuBuilder mMenu;
-    private int mPopupMaxWidth;
-    private View mAnchorView;
-    private boolean mOverflowOnly;
-    private ViewTreeObserver mTreeObserver;
+    private MenuBuilder        mMenu;
+    private int                mPopupMaxWidth;
+    private View               mAnchorView;
+    private boolean            mOverflowOnly;
+    @Nullable
+    private ViewTreeObserver   mTreeObserver;
 
     private MenuAdapter mAdapter;
 
@@ -66,16 +70,19 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
 
     private ViewGroup mMeasureParent;
 
-    public MenuPopupHelper(Context context, MenuBuilder menu) {
+    public MenuPopupHelper(@NotNull Context context, @NotNull MenuBuilder menu)
+    {
         this(context, menu, null, false);
     }
 
-    public MenuPopupHelper(Context context, MenuBuilder menu, View anchorView) {
+    public MenuPopupHelper(@NotNull Context context, @NotNull MenuBuilder menu, View anchorView)
+    {
         this(context, menu, anchorView, false);
     }
 
-    public MenuPopupHelper(Context context, MenuBuilder menu,
-            View anchorView, boolean overflowOnly) {
+    public MenuPopupHelper(@NotNull Context context, @NotNull MenuBuilder menu,
+                           View anchorView, boolean overflowOnly)
+    {
         mContext = context;
         mInflater = LayoutInflater.from(context);
         mMenu = menu;
@@ -83,28 +90,32 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
 
         final Resources res = context.getResources();
         mPopupMaxWidth = Math.max(res.getDisplayMetrics().widthPixels / 2,
-                res.getDimensionPixelSize(R.dimen.abs__config_prefDialogWidth));
+            res.getDimensionPixelSize(R.dimen.abs__config_prefDialogWidth));
 
         mAnchorView = anchorView;
 
         menu.addMenuPresenter(this);
     }
 
-    public void setAnchorView(View anchor) {
+    public void setAnchorView(View anchor)
+    {
         mAnchorView = anchor;
     }
 
-    public void setForceShowIcon(boolean forceShow) {
+    public void setForceShowIcon(boolean forceShow)
+    {
         mForceShowIcon = forceShow;
     }
 
-    public void show() {
+    public void show()
+    {
         if (!tryShow()) {
             throw new IllegalStateException("MenuPopupHelper cannot be used without an anchor");
         }
     }
 
-    public boolean tryShow() {
+    public boolean tryShow()
+    {
         mPopup = new IcsListPopupWindow(mContext, null, R.attr.popupMenuStyle);
         mPopup.setOnDismissListener(this);
         mPopup.setOnItemClickListener(this);
@@ -168,7 +179,7 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
         adapter.mAdapterMenu.performItemAction(adapter.getItem(position), 0);
     }
 
-    public boolean onKey(View v, int keyCode, KeyEvent event) {
+    public boolean onKey(View v, int keyCode, @NotNull KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_MENU) {
             dismiss();
             return true;
@@ -176,7 +187,7 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
         return false;
     }
 
-    private int measureContentWidth(ListAdapter adapter) {
+    private int measureContentWidth(@NotNull ListAdapter adapter) {
         // Menus don't tend to be long, so this is more sane than it looks.
         int width = 0;
         View itemView = null;
@@ -216,7 +227,7 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
     }
 
     @Override
-    public void onViewAttachedToWindow(View v) {
+    public void onViewAttachedToWindow(@NotNull View v) {
         ((View_HasStateListenerSupport) v).removeOnAttachStateChangeListener(this);
 
         // The anchor wasn't attached in tryShow(), attach to the ViewRoot VTO now.
@@ -234,6 +245,7 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
         // Don't need to do anything; we added as a presenter in the constructor.
     }
 
+    @NotNull
     @Override
     public MenuView getMenuView(ViewGroup root) {
         throw new UnsupportedOperationException("MenuPopupHelpers manage their own views");
@@ -250,7 +262,7 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
     }
 
     @Override
-    public boolean onSubMenuSelected(SubMenuBuilder subMenu) {
+    public boolean onSubMenuSelected(@NotNull SubMenuBuilder subMenu) {
         if (subMenu.hasVisibleItems()) {
             MenuPopupHelper subPopup = new MenuPopupHelper(mContext, subMenu, mAnchorView, false);
             subPopup.setCallback(mPresenterCallback);
@@ -305,6 +317,7 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
         return 0;
     }
 
+    @Nullable
     @Override
     public Parcelable onSaveInstanceState() {
         return null;
@@ -348,7 +361,7 @@ public class MenuPopupHelper implements AdapterView.OnItemClickListener, View.On
             return position;
         }
 
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, @Nullable View convertView, ViewGroup parent) {
             if (convertView == null) {
                 convertView = mInflater.inflate(ITEM_LAYOUT, parent, false);
             }

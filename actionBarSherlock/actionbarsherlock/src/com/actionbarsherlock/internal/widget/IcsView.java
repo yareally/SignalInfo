@@ -1,6 +1,7 @@
 package com.actionbarsherlock.internal.widget;
 
 import android.view.View;
+import org.jetbrains.annotations.NotNull;
 
 final class IcsView {
     //No instances
@@ -13,7 +14,7 @@ final class IcsView {
      * and the height component is at the shifted bits
      * {@link #MEASURED_HEIGHT_STATE_SHIFT}>>{@link #MEASURED_STATE_MASK}.
      */
-    public static int getMeasuredStateInt(View child) {
+    public static int getMeasuredStateInt(@NotNull View child) {
         return (child.getMeasuredWidth()&View.MEASURED_STATE_MASK)
                 | ((child.getMeasuredHeight()>>View.MEASURED_HEIGHT_STATE_SHIFT)
                         & (View.MEASURED_STATE_MASK>>View.MEASURED_HEIGHT_STATE_SHIFT));

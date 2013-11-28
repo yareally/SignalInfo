@@ -12,16 +12,23 @@ import android.view.View;
 import android.widget.SpinnerAdapter;
 
 import com.actionbarsherlock.app.ActionBar;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class ActionBarWrapper extends ActionBar implements android.app.ActionBar.OnNavigationListener, android.app.ActionBar.OnMenuVisibilityListener {
-    private final Activity mActivity;
-    private final android.app.ActionBar mActionBar;
-    private ActionBar.OnNavigationListener mNavigationListener;
+    @NotNull
+    private final Activity                       mActivity;
+    @Nullable
+    private final android.app.ActionBar          mActionBar;
+    @Nullable
+    private       ActionBar.OnNavigationListener mNavigationListener;
+    @NotNull
     private Set<OnMenuVisibilityListener> mMenuVisibilityListeners = new HashSet<OnMenuVisibilityListener>(1);
+    @Nullable
     private FragmentTransaction mFragmentTransaction;
 
-
-    public ActionBarWrapper(Activity activity) {
+    public ActionBarWrapper(@NotNull Activity activity)
+    {
         mActivity = activity;
         mActionBar = activity.getActionBar();
         if (mActionBar != null) {
@@ -33,14 +40,16 @@ public class ActionBarWrapper extends ActionBar implements android.app.ActionBar
         }
     }
 
-
     @Override
-    public void setHomeButtonEnabled(boolean enabled) {
+    public void setHomeButtonEnabled(boolean enabled)
+    {
         mActionBar.setHomeButtonEnabled(enabled);
     }
 
+    @Nullable
     @Override
-    public Context getThemedContext() {
+    public Context getThemedContext()
+    {
         return mActionBar.getThemedContext();
     }
 
@@ -50,7 +59,7 @@ public class ActionBarWrapper extends ActionBar implements android.app.ActionBar
     }
 
     @Override
-    public void setCustomView(View view, LayoutParams layoutParams) {
+    public void setCustomView(View view, @NotNull LayoutParams layoutParams) {
         android.app.ActionBar.LayoutParams lp = new android.app.ActionBar.LayoutParams(layoutParams);
         lp.gravity = layoutParams.gravity;
         lp.bottomMargin = layoutParams.bottomMargin;
@@ -86,7 +95,7 @@ public class ActionBarWrapper extends ActionBar implements android.app.ActionBar
     }
 
     @Override
-    public void setListNavigationCallbacks(SpinnerAdapter adapter, OnNavigationListener callback) {
+    public void setListNavigationCallbacks(SpinnerAdapter adapter, @Nullable OnNavigationListener callback) {
         mNavigationListener = callback;
         mActionBar.setListNavigationCallbacks(adapter, (callback != null) ? this : null);
     }
@@ -222,118 +231,148 @@ public class ActionBarWrapper extends ActionBar implements android.app.ActionBar
     }
 
     public class TabWrapper extends ActionBar.Tab implements android.app.ActionBar.TabListener {
-        final android.app.ActionBar.Tab mNativeTab;
-        private Object mTag;
-        private TabListener mListener;
+        final   android.app.ActionBar.Tab mNativeTab;
+        private Object                    mTag;
+        @Nullable
+        private TabListener               mListener;
 
-        public TabWrapper(android.app.ActionBar.Tab nativeTab) {
+        public TabWrapper(android.app.ActionBar.Tab nativeTab)
+        {
             mNativeTab = nativeTab;
             mNativeTab.setTag(this);
         }
 
         @Override
-        public int getPosition() {
+        public int getPosition()
+        {
             return mNativeTab.getPosition();
         }
 
         @Override
-        public Drawable getIcon() {
+        public Drawable getIcon()
+        {
             return mNativeTab.getIcon();
         }
 
         @Override
-        public CharSequence getText() {
+        public CharSequence getText()
+        {
             return mNativeTab.getText();
         }
 
+        @NotNull
         @Override
-        public Tab setIcon(Drawable icon) {
+        public Tab setIcon(Drawable icon)
+        {
             mNativeTab.setIcon(icon);
             return this;
         }
 
+        @NotNull
         @Override
-        public Tab setIcon(int resId) {
+        public Tab setIcon(int resId)
+        {
             mNativeTab.setIcon(resId);
             return this;
         }
 
+        @NotNull
         @Override
-        public Tab setText(CharSequence text) {
+        public Tab setText(CharSequence text)
+        {
             mNativeTab.setText(text);
             return this;
         }
 
+        @NotNull
         @Override
-        public Tab setText(int resId) {
+        public Tab setText(int resId)
+        {
             mNativeTab.setText(resId);
             return this;
         }
 
+        @NotNull
         @Override
-        public Tab setCustomView(View view) {
+        public Tab setCustomView(View view)
+        {
             mNativeTab.setCustomView(view);
             return this;
         }
 
+        @NotNull
         @Override
-        public Tab setCustomView(int layoutResId) {
+        public Tab setCustomView(int layoutResId)
+        {
             mNativeTab.setCustomView(layoutResId);
             return this;
         }
 
         @Override
-        public View getCustomView() {
+        public View getCustomView()
+        {
             return mNativeTab.getCustomView();
         }
 
+        @NotNull
         @Override
-        public Tab setTag(Object obj) {
+        public Tab setTag(Object obj)
+        {
             mTag = obj;
             return this;
         }
 
         @Override
-        public Object getTag() {
+        public Object getTag()
+        {
             return mTag;
         }
 
+        @NotNull
         @Override
-        public Tab setTabListener(TabListener listener) {
+        public Tab setTabListener(@Nullable TabListener listener)
+        {
             mNativeTab.setTabListener(listener != null ? this : null);
             mListener = listener;
             return this;
         }
 
         @Override
-        public void select() {
+        public void select()
+        {
             mNativeTab.select();
         }
 
+        @NotNull
         @Override
-        public Tab setContentDescription(int resId) {
+        public Tab setContentDescription(int resId)
+        {
             mNativeTab.setContentDescription(resId);
             return this;
         }
 
+        @NotNull
         @Override
-        public Tab setContentDescription(CharSequence contentDesc) {
+        public Tab setContentDescription(CharSequence contentDesc)
+        {
             mNativeTab.setContentDescription(contentDesc);
             return this;
         }
 
         @Override
-        public CharSequence getContentDescription() {
+        public CharSequence getContentDescription()
+        {
             return mNativeTab.getContentDescription();
         }
 
         @Override
-        public void onTabReselected(android.app.ActionBar.Tab tab, android.app.FragmentTransaction ft) {
+        public void onTabReselected(android.app.ActionBar.Tab tab, android.app.FragmentTransaction ft)
+        {
             if (mListener != null) {
                 FragmentTransaction trans = null;
                 if (mActivity instanceof FragmentActivity) {
-                    trans = ((FragmentActivity)mActivity).getSupportFragmentManager().beginTransaction()
-                            .disallowAddToBackStack();
+                    trans = ((FragmentActivity) mActivity).getSupportFragmentManager().beginTransaction()
+                        .disallowAddToBackStack();
                 }
 
                 mListener.onTabReselected(this, trans);
@@ -345,12 +384,13 @@ public class ActionBarWrapper extends ActionBar implements android.app.ActionBar
         }
 
         @Override
-        public void onTabSelected(android.app.ActionBar.Tab tab, android.app.FragmentTransaction ft) {
+        public void onTabSelected(android.app.ActionBar.Tab tab, android.app.FragmentTransaction ft)
+        {
             if (mListener != null) {
 
                 if (mFragmentTransaction == null && mActivity instanceof FragmentActivity) {
-                    mFragmentTransaction = ((FragmentActivity)mActivity).getSupportFragmentManager().beginTransaction()
-                            .disallowAddToBackStack();
+                    mFragmentTransaction = ((FragmentActivity) mActivity).getSupportFragmentManager().beginTransaction()
+                        .disallowAddToBackStack();
                 }
 
                 mListener.onTabSelected(this, mFragmentTransaction);
@@ -365,12 +405,13 @@ public class ActionBarWrapper extends ActionBar implements android.app.ActionBar
         }
 
         @Override
-        public void onTabUnselected(android.app.ActionBar.Tab tab, android.app.FragmentTransaction ft) {
+        public void onTabUnselected(android.app.ActionBar.Tab tab, android.app.FragmentTransaction ft)
+        {
             if (mListener != null) {
                 FragmentTransaction trans = null;
                 if (mActivity instanceof FragmentActivity) {
-                    trans = ((FragmentActivity)mActivity).getSupportFragmentManager().beginTransaction()
-                            .disallowAddToBackStack();
+                    trans = ((FragmentActivity) mActivity).getSupportFragmentManager().beginTransaction()
+                        .disallowAddToBackStack();
                     mFragmentTransaction = trans;
                 }
 
@@ -379,80 +420,98 @@ public class ActionBarWrapper extends ActionBar implements android.app.ActionBar
         }
     }
 
+    @NotNull
     @Override
-    public Tab newTab() {
+    public Tab newTab()
+    {
         return new TabWrapper(mActionBar.newTab());
     }
 
     @Override
-    public void addTab(Tab tab) {
-        mActionBar.addTab(((TabWrapper)tab).mNativeTab);
+    public void addTab(@NotNull Tab tab)
+    {
+        mActionBar.addTab(((TabWrapper) tab).mNativeTab);
     }
 
     @Override
-    public void addTab(Tab tab, boolean setSelected) {
-        mActionBar.addTab(((TabWrapper)tab).mNativeTab, setSelected);
+    public void addTab(@NotNull Tab tab, boolean setSelected)
+    {
+        mActionBar.addTab(((TabWrapper) tab).mNativeTab, setSelected);
     }
 
     @Override
-    public void addTab(Tab tab, int position) {
-        mActionBar.addTab(((TabWrapper)tab).mNativeTab, position);
+    public void addTab(@NotNull Tab tab, int position)
+    {
+        mActionBar.addTab(((TabWrapper) tab).mNativeTab, position);
     }
 
     @Override
-    public void addTab(Tab tab, int position, boolean setSelected) {
-        mActionBar.addTab(((TabWrapper)tab).mNativeTab, position, setSelected);
+    public void addTab(@NotNull Tab tab, int position, boolean setSelected)
+    {
+        mActionBar.addTab(((TabWrapper) tab).mNativeTab, position, setSelected);
     }
 
     @Override
-    public void removeTab(Tab tab) {
-        mActionBar.removeTab(((TabWrapper)tab).mNativeTab);
+    public void removeTab(@NotNull Tab tab)
+    {
+        mActionBar.removeTab(((TabWrapper) tab).mNativeTab);
     }
 
     @Override
-    public void removeTabAt(int position) {
+    public void removeTabAt(int position)
+    {
         mActionBar.removeTabAt(position);
     }
 
     @Override
-    public void removeAllTabs() {
+    public void removeAllTabs()
+    {
         mActionBar.removeAllTabs();
     }
 
     @Override
-    public void selectTab(Tab tab) {
-        mActionBar.selectTab(((TabWrapper)tab).mNativeTab);
+    public void selectTab(@NotNull Tab tab)
+    {
+        mActionBar.selectTab(((TabWrapper) tab).mNativeTab);
     }
 
+    @Nullable
     @Override
-    public Tab getSelectedTab() {
+    public Tab getSelectedTab()
+    {
         android.app.ActionBar.Tab selected = mActionBar.getSelectedTab();
-        return (selected != null) ? (Tab)selected.getTag() : null;
+        return (selected != null) ? (Tab) selected.getTag() : null;
     }
 
+    @Nullable
     @Override
-    public Tab getTabAt(int index) {
+    public Tab getTabAt(int index)
+    {
         android.app.ActionBar.Tab selected = mActionBar.getTabAt(index);
-        return (selected != null) ? (Tab)selected.getTag() : null;
+        return (selected != null) ? (Tab) selected.getTag() : null;
     }
 
     @Override
-    public int getTabCount() {
+    public int getTabCount()
+    {
         return mActionBar.getTabCount();
     }
 
     @Override
-    public int getHeight() {
+    public int getHeight()
+    {
         return mActionBar.getHeight();
     }
 
     @Override
-    public void show() {
+    public void show()
+    {
         mActionBar.show();
     }
 
     @Override
-    public void hide() {
+    public void hide()
+    {
         mActionBar.hide();
     }
 

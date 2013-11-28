@@ -59,6 +59,8 @@ import com.actionbarsherlock.view.CollapsibleActionView;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.actionbarsherlock.internal.ResourcesCompat.getResources_getBoolean;
 
@@ -77,7 +79,7 @@ public class ActionBarView extends AbsActionBarView {
      * Display options that require re-layout as opposed to a simple invalidate
      */
     private static final int DISPLAY_RELAYOUT_MASK =
-            ActionBar.DISPLAY_SHOW_HOME |
+        ActionBar.DISPLAY_SHOW_HOME |
             ActionBar.DISPLAY_USE_LOGO |
             ActionBar.DISPLAY_HOME_AS_UP |
             ActionBar.DISPLAY_SHOW_CUSTOM |
@@ -87,24 +89,38 @@ public class ActionBarView extends AbsActionBarView {
 
     private int mNavigationMode;
     private int mDisplayOptions = -1;
+    @Nullable
     private CharSequence mTitle;
+    @Nullable
     private CharSequence mSubtitle;
-    private Drawable mIcon;
-    private Drawable mLogo;
+    @Nullable
+    private Drawable     mIcon;
+    @Nullable
+    private Drawable     mLogo;
 
-    private HomeView mHomeLayout;
-    private HomeView mExpandedHomeLayout;
+    @Nullable
+    private HomeView     mHomeLayout;
+    @Nullable
+    private HomeView     mExpandedHomeLayout;
+    @Nullable
     private LinearLayout mTitleLayout;
-    private TextView mTitleView;
-    private TextView mSubtitleView;
-    private View mTitleUpView;
+    @Nullable
+    private TextView     mTitleView;
+    @Nullable
+    private TextView     mSubtitleView;
+    @Nullable
+    private View         mTitleUpView;
 
-    private IcsSpinner mSpinner;
-    private IcsLinearLayout mListNavLayout;
+    @Nullable
+    private IcsSpinner                mSpinner;
+    @Nullable
+    private IcsLinearLayout           mListNavLayout;
+    @Nullable
     private ScrollingTabContainerView mTabScrollView;
-    private View mCustomNavView;
-    private IcsProgressBar mProgressView;
-    private IcsProgressBar mIndeterminateProgressView;
+    @Nullable
+    private View                      mCustomNavView;
+    private IcsProgressBar            mProgressView;
+    private IcsProgressBar            mIndeterminateProgressView;
 
     private int mProgressBarPadding;
     private int mItemPadding;
@@ -123,34 +139,44 @@ public class ActionBarView extends AbsActionBarView {
 
     private ActionBarContextView mContextView;
 
+    @Nullable
     private ActionMenuItem mLogoNavItem;
 
-    private SpinnerAdapter mSpinnerAdapter;
+    private SpinnerAdapter       mSpinnerAdapter;
     private OnNavigationListener mCallback;
 
     //UNUSED private Runnable mTabSelector;
 
     private ExpandedActionViewMenuPresenter mExpandedMenuPresenter;
-    View mExpandedActionView;
+    @Nullable
+            View                            mExpandedActionView;
 
     Window.Callback mWindowCallback;
 
+    @Nullable
     @SuppressWarnings("rawtypes")
     private final IcsAdapterView.OnItemSelectedListener mNavItemSelectedListener =
-            new IcsAdapterView.OnItemSelectedListener() {
-        public void onItemSelected(IcsAdapterView parent, View view, int position, long id) {
-            if (mCallback != null) {
-                mCallback.onNavigationItemSelected(position, id);
+        new IcsAdapterView.OnItemSelectedListener()
+        {
+            public void onItemSelected(IcsAdapterView parent, View view, int position, long id)
+            {
+                if (mCallback != null) {
+                    mCallback.onNavigationItemSelected(position, id);
+                }
             }
-        }
-        public void onNothingSelected(IcsAdapterView parent) {
-            // Do nothing
-        }
-    };
 
-    private final OnClickListener mExpandedActionViewUpListener = new OnClickListener() {
+            public void onNothingSelected(IcsAdapterView parent)
+            {
+                // Do nothing
+            }
+        };
+
+    @Nullable
+    private final OnClickListener mExpandedActionViewUpListener = new OnClickListener()
+    {
         @Override
-        public void onClick(View v) {
+        public void onClick(View v)
+        {
             final MenuItemImpl item = mExpandedMenuPresenter.mCurrentExpandedItem;
             if (item != null) {
                 item.collapseActionView();
@@ -158,25 +184,28 @@ public class ActionBarView extends AbsActionBarView {
         }
     };
 
-    private final OnClickListener mUpClickListener = new OnClickListener() {
-        public void onClick(View v) {
+    private final OnClickListener mUpClickListener = new OnClickListener()
+    {
+        public void onClick(View v)
+        {
             mWindowCallback.onMenuItemSelected(Window.FEATURE_OPTIONS_PANEL, mLogoNavItem);
         }
     };
 
-    public ActionBarView(Context context, AttributeSet attrs) {
+    public ActionBarView(@NotNull Context context, @NotNull AttributeSet attrs)
+    {
         super(context, attrs);
 
         // Background is always provided by the container.
         setBackgroundResource(0);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SherlockActionBar,
-                R.attr.actionBarStyle, 0);
+            R.attr.actionBarStyle, 0);
 
         ApplicationInfo appInfo = context.getApplicationInfo();
         PackageManager pm = context.getPackageManager();
         mNavigationMode = a.getInt(R.styleable.SherlockActionBar_navigationMode,
-                ActionBar.NAVIGATION_MODE_STANDARD);
+            ActionBar.NAVIGATION_MODE_STANDARD);
         mTitle = a.getText(R.styleable.SherlockActionBar_title);
         mSubtitle = a.getText(R.styleable.SherlockActionBar_subtitle);
 
@@ -191,7 +220,8 @@ public class ActionBarView extends AbsActionBarView {
                         mLogo = context.getResources().getDrawable(resId);
                     }
                 }
-            } else {
+            }
+            else {
                 if (context instanceof Activity) {
                     try {
                         mLogo = pm.getActivityLogo(((Activity) context).getComponentName());
@@ -222,8 +252,8 @@ public class ActionBarView extends AbsActionBarView {
         final LayoutInflater inflater = LayoutInflater.from(context);
 
         final int homeResId = a.getResourceId(
-                R.styleable.SherlockActionBar_homeLayout,
-                R.layout.abs__action_bar_home);
+            R.styleable.SherlockActionBar_homeLayout,
+            R.layout.abs__action_bar_home);
 
         mHomeLayout = (HomeView) inflater.inflate(homeResId, this, false);
 
@@ -356,7 +386,7 @@ public class ActionBarView extends AbsActionBarView {
         return mIncludeTabs;
     }
 
-    public void setEmbeddedTabView(ScrollingTabContainerView tabs) {
+    public void setEmbeddedTabView(@Nullable ScrollingTabContainerView tabs) {
         if (mTabScrollView != null) {
             removeView(mTabScrollView);
         }
@@ -438,7 +468,7 @@ public class ActionBarView extends AbsActionBarView {
         mMenuView = menuView;
     }
 
-    private void configPresenters(MenuBuilder builder) {
+    private void configPresenters(@Nullable MenuBuilder builder) {
         if (builder != null) {
             builder.addMenuPresenter(mActionMenuPresenter);
             builder.addMenuPresenter(mExpandedMenuPresenter);
@@ -474,6 +504,7 @@ public class ActionBarView extends AbsActionBarView {
         }
     }
 
+    @Nullable
     public CharSequence getTitle() {
         return mTitle;
     }
@@ -515,11 +546,12 @@ public class ActionBarView extends AbsActionBarView {
         }
     }
 
+    @Nullable
     public CharSequence getSubtitle() {
         return mSubtitle;
     }
 
-    public void setSubtitle(CharSequence subtitle) {
+    public void setSubtitle(@Nullable CharSequence subtitle) {
         mSubtitle = subtitle;
         if (mSubtitleView != null) {
             mSubtitleView.setText(subtitle);
@@ -613,7 +645,7 @@ public class ActionBarView extends AbsActionBarView {
         }
     }
 
-    public void setIcon(Drawable icon) {
+    public void setIcon(@Nullable Drawable icon) {
         mIcon = icon;
         if (icon != null &&
                 ((mDisplayOptions & ActionBar.DISPLAY_USE_LOGO) == 0 || mLogo == null)) {
@@ -625,7 +657,7 @@ public class ActionBarView extends AbsActionBarView {
         setIcon(mContext.getResources().getDrawable(resId));
     }
 
-    public void setLogo(Drawable logo) {
+    public void setLogo(@Nullable Drawable logo) {
         mLogo = logo;
         if (logo != null && (mDisplayOptions & ActionBar.DISPLAY_USE_LOGO) != 0) {
             mHomeLayout.setIcon(logo);
@@ -699,6 +731,7 @@ public class ActionBarView extends AbsActionBarView {
         return mSpinner.getSelectedItemPosition();
     }
 
+    @Nullable
     public View getCustomNavigationView() {
         return mCustomNavView;
     }
@@ -711,6 +744,7 @@ public class ActionBarView extends AbsActionBarView {
         return mDisplayOptions;
     }
 
+    @NotNull
     @Override
     protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
         // Used by custom nav views if they don't supply layout params. Everything else
@@ -1124,18 +1158,19 @@ public class ActionBarView extends AbsActionBarView {
     }
 
     @Override
-    public ViewGroup.LayoutParams generateLayoutParams(AttributeSet attrs) {
+    public ViewGroup.LayoutParams generateLayoutParams(@NotNull AttributeSet attrs) {
         return new ActionBar.LayoutParams(getContext(), attrs);
     }
 
     @Override
-    public ViewGroup.LayoutParams generateLayoutParams(ViewGroup.LayoutParams lp) {
+    public ViewGroup.LayoutParams generateLayoutParams(@Nullable ViewGroup.LayoutParams lp) {
         if (lp == null) {
             lp = generateDefaultLayoutParams();
         }
         return lp;
     }
 
+    @NotNull
     @Override
     public Parcelable onSaveInstanceState() {
         Parcelable superState = super.onSaveInstanceState();
@@ -1177,60 +1212,71 @@ public class ActionBarView extends AbsActionBarView {
             super(superState);
         }
 
-        private SavedState(Parcel in) {
+        private SavedState(@NotNull Parcel in) {
             super(in);
             expandedMenuItemId = in.readInt();
             isOverflowOpen = in.readInt() != 0;
         }
 
         @Override
-        public void writeToParcel(Parcel out, int flags) {
+        public void writeToParcel(@NotNull Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeInt(expandedMenuItemId);
             out.writeInt(isOverflowOpen ? 1 : 0);
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR =
-                new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
-            }
+            new Parcelable.Creator<SavedState>()
+            {
+                public SavedState createFromParcel(@NotNull Parcel in)
+                {
+                    return new SavedState(in);
+                }
 
-            public SavedState[] newArray(int size) {
-                return new SavedState[size];
-            }
-        };
+                @NotNull
+                public SavedState[] newArray(int size)
+                {
+                    return new SavedState[size];
+                }
+            };
     }
 
-    public static class HomeView extends FrameLayout {
-        private View mUpView;
+    public static class HomeView extends FrameLayout
+    {
+        private View      mUpView;
         private ImageView mIconView;
-        private int mUpWidth;
+        private int       mUpWidth;
 
-        public HomeView(Context context) {
+        public HomeView(@NotNull Context context)
+        {
             this(context, null);
         }
 
-        public HomeView(Context context, AttributeSet attrs) {
+        public HomeView(@NotNull Context context, AttributeSet attrs)
+        {
             super(context, attrs);
         }
 
-        public void setUp(boolean isUp) {
+        public void setUp(boolean isUp)
+        {
             mUpView.setVisibility(isUp ? VISIBLE : GONE);
         }
 
-        public void setIcon(Drawable icon) {
+        public void setIcon(Drawable icon)
+        {
             mIconView.setImageDrawable(icon);
         }
 
         @Override
-        public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
+        public boolean dispatchPopulateAccessibilityEvent(@NotNull AccessibilityEvent event)
+        {
             onPopulateAccessibilityEvent(event);
             return true;
         }
 
         @Override
-        public void onPopulateAccessibilityEvent(AccessibilityEvent event) {
+        public void onPopulateAccessibilityEvent(@NotNull AccessibilityEvent event)
+        {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
                 super.onPopulateAccessibilityEvent(event);
             }
@@ -1241,23 +1287,27 @@ public class ActionBarView extends AbsActionBarView {
         }
 
         @Override
-        public boolean dispatchHoverEvent(MotionEvent event) {
+        public boolean dispatchHoverEvent(@NotNull MotionEvent event)
+        {
             // Don't allow children to hover; we want this to be treated as a single component.
             return onHoverEvent(event);
         }
 
         @Override
-        protected void onFinishInflate() {
+        protected void onFinishInflate()
+        {
             mUpView = findViewById(R.id.abs__up);
             mIconView = (ImageView) findViewById(R.id.abs__home);
         }
 
-        public int getLeftOffset() {
+        public int getLeftOffset()
+        {
             return mUpView.getVisibility() == GONE ? mUpWidth : 0;
         }
 
         @Override
-        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+        {
             measureChildWithMargins(mUpView, widthMeasureSpec, 0, heightMeasureSpec, 0);
             final LayoutParams upLp = (LayoutParams) mUpView.getLayoutParams();
             mUpWidth = upLp.leftMargin + mUpView.getMeasuredWidth() + upLp.rightMargin;
@@ -1267,7 +1317,7 @@ public class ActionBarView extends AbsActionBarView {
             final LayoutParams iconLp = (LayoutParams) mIconView.getLayoutParams();
             width += iconLp.leftMargin + mIconView.getMeasuredWidth() + iconLp.rightMargin;
             height = Math.max(height,
-                    iconLp.topMargin + mIconView.getMeasuredHeight() + iconLp.bottomMargin);
+                iconLp.topMargin + mIconView.getMeasuredHeight() + iconLp.bottomMargin);
 
             final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
             final int heightMode = MeasureSpec.getMode(heightMeasureSpec);
@@ -1300,7 +1350,8 @@ public class ActionBarView extends AbsActionBarView {
         }
 
         @Override
-        protected void onLayout(boolean changed, int l, int t, int r, int b) {
+        protected void onLayout(boolean changed, int l, int t, int r, int b)
+        {
             final int vCenter = (b - t) / 2;
             //UNUSED int width = r - l;
             int upOffset = 0;
@@ -1324,12 +1375,15 @@ public class ActionBarView extends AbsActionBarView {
         }
     }
 
-    private class ExpandedActionViewMenuPresenter implements MenuPresenter {
+    private class ExpandedActionViewMenuPresenter implements MenuPresenter
+    {
         MenuBuilder mMenu;
+        @Nullable
         MenuItemImpl mCurrentExpandedItem;
 
         @Override
-        public void initForMenu(Context context, MenuBuilder menu) {
+        public void initForMenu(Context context, MenuBuilder menu)
+        {
             // Clear the expanded action view when menus change.
             if (mMenu != null && mCurrentExpandedItem != null) {
                 mMenu.collapseItemActionView(mCurrentExpandedItem);
@@ -1337,13 +1391,16 @@ public class ActionBarView extends AbsActionBarView {
             mMenu = menu;
         }
 
+        @Nullable
         @Override
-        public MenuView getMenuView(ViewGroup root) {
+        public MenuView getMenuView(ViewGroup root)
+        {
             return null;
         }
 
         @Override
-        public void updateMenuView(boolean cleared) {
+        public void updateMenuView(boolean cleared)
+        {
             // Make sure the expanded item we have is still there.
             if (mCurrentExpandedItem != null) {
                 boolean found = false;
@@ -1367,25 +1424,30 @@ public class ActionBarView extends AbsActionBarView {
         }
 
         @Override
-        public void setCallback(Callback cb) {
+        public void setCallback(Callback cb)
+        {
         }
 
         @Override
-        public boolean onSubMenuSelected(SubMenuBuilder subMenu) {
+        public boolean onSubMenuSelected(SubMenuBuilder subMenu)
+        {
             return false;
         }
 
         @Override
-        public void onCloseMenu(MenuBuilder menu, boolean allMenusAreClosing) {
+        public void onCloseMenu(MenuBuilder menu, boolean allMenusAreClosing)
+        {
         }
 
         @Override
-        public boolean flagActionItems() {
+        public boolean flagActionItems()
+        {
             return false;
         }
 
         @Override
-        public boolean expandItemActionView(MenuBuilder menu, MenuItemImpl item) {
+        public boolean expandItemActionView(MenuBuilder menu, @NotNull MenuItemImpl item)
+        {
             mExpandedActionView = item.getActionView();
             mExpandedHomeLayout.setIcon(mIcon.getConstantState().newDrawable(/* TODO getResources() */));
             mCurrentExpandedItem = item;
@@ -1411,7 +1473,8 @@ public class ActionBarView extends AbsActionBarView {
         }
 
         @Override
-        public boolean collapseItemActionView(MenuBuilder menu, MenuItemImpl item) {
+        public boolean collapseItemActionView(MenuBuilder menu, @NotNull MenuItemImpl item)
+        {
             // Do this before detaching the actionview from the hierarchy, in case
             // it needs to dismiss the soft keyboard, etc.
             if (mExpandedActionView instanceof CollapsibleActionView) {
@@ -1427,7 +1490,8 @@ public class ActionBarView extends AbsActionBarView {
             if ((mDisplayOptions & ActionBar.DISPLAY_SHOW_TITLE) != 0) {
                 if (mTitleLayout == null) {
                     initTitle();
-                } else {
+                }
+                else {
                     mTitleLayout.setVisibility(VISIBLE);
                 }
             }
@@ -1449,17 +1513,21 @@ public class ActionBarView extends AbsActionBarView {
         }
 
         @Override
-        public int getId() {
+        public int getId()
+        {
             return 0;
         }
 
+        @Nullable
         @Override
-        public Parcelable onSaveInstanceState() {
+        public Parcelable onSaveInstanceState()
+        {
             return null;
         }
 
         @Override
-        public void onRestoreInstanceState(Parcelable state) {
+        public void onRestoreInstanceState(Parcelable state)
+        {
         }
     }
 }

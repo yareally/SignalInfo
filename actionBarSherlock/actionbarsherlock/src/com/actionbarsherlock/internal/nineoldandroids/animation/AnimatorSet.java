@@ -22,16 +22,18 @@ import java.util.HashMap;
 import java.util.List;
 
 import android.view.animation.Interpolator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class plays a set of {@link Animator} objects in the specified order. Animations
  * can be set up to play together, in sequence, or after a specified delay.
  *
  * <p>There are two different approaches to adding animations to a <code>AnimatorSet</code>:
- * either the {@link AnimatorSet#playTogether(Animator[]) playTogether()} or
- * {@link AnimatorSet#playSequentially(Animator[]) playSequentially()} methods can be called to add
- * a set of animations all at once, or the {@link AnimatorSet#play(Animator)} can be
- * used in conjunction with methods in the {@link AnimatorSet.Builder Builder}
+ * either the {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#playTogether(Animator[]) playTogether()} or
+ * {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#playSequentially(Animator[]) playSequentially()} methods can be called to add
+ * a set of animations all at once, or the {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#play(Animator)} can be
+ * used in conjunction with methods in the {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet.Builder Builder}
  * class to add animations
  * one by one.</p>
  *
@@ -56,6 +58,7 @@ public final class AnimatorSet extends Animator {
      * Tracks animations currently being played, so that we know what to
      * cancel or end when cancel() or end() is called on this AnimatorSet
      */
+    @NotNull
     private ArrayList<Animator> mPlayingSet = new ArrayList<Animator>();
 
     /**
@@ -64,6 +67,7 @@ public final class AnimatorSet extends Animator {
      * to a single node representing that Animator, not create a new Node
      * if one already exists.
      */
+    @NotNull
     private HashMap<Animator, Node> mNodeMap = new HashMap<Animator, Node>();
 
     /**
@@ -71,6 +75,7 @@ public final class AnimatorSet extends Animator {
      * starting the set, and the nodes are placed in sorted order into the
      * sortedNodes collection.
      */
+    @NotNull
     private ArrayList<Node> mNodes = new ArrayList<Node>();
 
     /**
@@ -78,6 +83,7 @@ public final class AnimatorSet extends Animator {
      * be played. The details about when exactly they will be played depend
      * on the dependency relationships of the nodes.
      */
+    @NotNull
     private ArrayList<Node> mSortedNodes = new ArrayList<Node>();
 
     /**
@@ -87,6 +93,7 @@ public final class AnimatorSet extends Animator {
      */
     private boolean mNeedsSort = true;
 
+    @Nullable
     private AnimatorSetListener mSetListener = null;
 
     /**
@@ -108,21 +115,21 @@ public final class AnimatorSet extends Animator {
     private long mStartDelay = 0;
 
     // Animator used for a nonzero startDelay
+    @Nullable
     private ValueAnimator mDelayAnim = null;
-
 
     // How long the child animations should last in ms. The default value is negative, which
     // simply means that there is no duration set on the AnimatorSet. When a real duration is
     // set, it is passed along to the child animations.
     private long mDuration = -1;
 
-
     /**
      * Sets up this AnimatorSet to play all of the supplied animations at the same time.
      *
      * @param items The animations that will be started simultaneously.
      */
-    public void playTogether(Animator... items) {
+    public void playTogether(@Nullable Animator... items)
+    {
         if (items != null) {
             mNeedsSort = true;
             Builder builder = play(items[0]);
@@ -137,14 +144,16 @@ public final class AnimatorSet extends Animator {
      *
      * @param items The animations that will be started simultaneously.
      */
-    public void playTogether(Collection<Animator> items) {
+    public void playTogether(@Nullable Collection<Animator> items)
+    {
         if (items != null && items.size() > 0) {
             mNeedsSort = true;
             Builder builder = null;
             for (Animator anim : items) {
                 if (builder == null) {
                     builder = play(anim);
-                } else {
+                }
+                else {
                     builder.with(anim);
                 }
             }
@@ -157,14 +166,16 @@ public final class AnimatorSet extends Animator {
      *
      * @param items The animations that will be started one after another.
      */
-    public void playSequentially(Animator... items) {
+    public void playSequentially(@Nullable Animator... items)
+    {
         if (items != null) {
             mNeedsSort = true;
             if (items.length == 1) {
                 play(items[0]);
-            } else {
+            }
+            else {
                 for (int i = 0; i < items.length - 1; ++i) {
-                    play(items[i]).before(items[i+1]);
+                    play(items[i]).before(items[i + 1]);
                 }
             }
         }
@@ -176,14 +187,16 @@ public final class AnimatorSet extends Animator {
      *
      * @param items The animations that will be started one after another.
      */
-    public void playSequentially(List<Animator> items) {
+    public void playSequentially(@Nullable List<Animator> items)
+    {
         if (items != null && items.size() > 0) {
             mNeedsSort = true;
             if (items.size() == 1) {
                 play(items.get(0));
-            } else {
+            }
+            else {
                 for (int i = 0; i < items.size() - 1; ++i) {
-                    play(items.get(i)).before(items.get(i+1));
+                    play(items.get(i)).before(items.get(i + 1));
                 }
             }
         }
@@ -197,6 +210,7 @@ public final class AnimatorSet extends Animator {
      *
      * @return ArrayList<Animator> The list of child animations of this AnimatorSet.
      */
+    @NotNull
     public ArrayList<Animator> getChildAnimations() {
         ArrayList<Animator> childList = new ArrayList<Animator>();
         for (Node node : mNodes) {
@@ -265,7 +279,8 @@ public final class AnimatorSet extends Animator {
      * outlined in the calls to <code>play</code> and the other methods in the
      * <code>Builder</code object.
      */
-    public Builder play(Animator anim) {
+    @Nullable
+    public Builder play(@Nullable Animator anim) {
         if (anim != null) {
             mNeedsSort = true;
             return new Builder(anim);
@@ -410,6 +425,7 @@ public final class AnimatorSet extends Animator {
      * @param duration The length of the animation, in milliseconds, of each of the child
      * animations of this AnimatorSet.
      */
+    @NotNull
     @Override
     public AnimatorSet setDuration(long duration) {
         if (duration < 0) {
@@ -545,6 +561,7 @@ public final class AnimatorSet extends Animator {
         }
     }
 
+    @NotNull
     @Override
     public AnimatorSet clone() {
         final AnimatorSet anim = (AnimatorSet) super.clone();
@@ -648,7 +665,7 @@ public final class AnimatorSet extends Animator {
         /**
          * An end event is received - see if this is an event we are listening for
          */
-        public void onAnimationEnd(Animator animation) {
+        public void onAnimationEnd(@NotNull Animator animation) {
             if (mRule == Dependency.AFTER) {
                 startIfReady(animation);
             }
@@ -663,7 +680,7 @@ public final class AnimatorSet extends Animator {
         /**
          * A start event is received - see if this is an event we are listening for
          */
-        public void onAnimationStart(Animator animation) {
+        public void onAnimationStart(@NotNull Animator animation) {
             if (mRule == Dependency.WITH) {
                 startIfReady(animation);
             }
@@ -675,7 +692,7 @@ public final class AnimatorSet extends Animator {
          * the animation.
          * @param dependencyAnimation the animation that sent the event.
          */
-        private void startIfReady(Animator dependencyAnimation) {
+        private void startIfReady(@NotNull Animator dependencyAnimation) {
             if (mAnimatorSet.mTerminated) {
                 // if the parent AnimatorSet was canceled, then don't start any dependent anims
                 return;
@@ -726,7 +743,7 @@ public final class AnimatorSet extends Animator {
             }
         }
 
-        public void onAnimationEnd(Animator animation) {
+        public void onAnimationEnd(@NotNull Animator animation) {
             animation.removeListener(this);
             mPlayingSet.remove(animation);
             Node animNode = mAnimatorSet.mNodeMap.get(animation);
@@ -878,6 +895,7 @@ public final class AnimatorSet extends Animator {
          *  other animation ends, then there will be an item in this node's
          *  dependencies list for that other animation's node.
          */
+        @Nullable
         public ArrayList<Dependency> dependencies = null;
 
         /**
@@ -889,12 +907,14 @@ public final class AnimatorSet extends Animator {
          * list when the AnimatorSet starts and use this tmpDependencies list to track the
          * list of satisfied dependencies.
          */
+        @Nullable
         public ArrayList<Dependency> tmpDependencies = null;
 
         /**
          * nodeDependencies is just a list of the nodes that this Node is dependent upon.
          * This information is used in sortNodes(), to determine when a node is a root.
          */
+        @Nullable
         public ArrayList<Node> nodeDependencies = null;
 
         /**
@@ -902,6 +922,7 @@ public final class AnimatorSet extends Animator {
          * is a utility field used in sortNodes to facilitate removing this node as a
          * dependency when it is a root node.
          */
+        @Nullable
         public ArrayList<Node> nodeDependents = null;
 
         /**
@@ -918,7 +939,8 @@ public final class AnimatorSet extends Animator {
          *
          * @param animation The animation that the Node encapsulates.
          */
-        public Node(Animator animation) {
+        public Node(Animator animation)
+        {
             this.animation = animation;
         }
 
@@ -927,7 +949,8 @@ public final class AnimatorSet extends Animator {
          * node that this node is dependency upon and the nature of the dependency.
          * @param dependency
          */
-        public void addDependency(Dependency dependency) {
+        public void addDependency(@NotNull Dependency dependency)
+        {
             if (dependencies == null) {
                 dependencies = new ArrayList<Dependency>();
                 nodeDependencies = new ArrayList<Node>();
@@ -943,14 +966,16 @@ public final class AnimatorSet extends Animator {
             dependencyNode.nodeDependents.add(this);
         }
 
+        @NotNull
         @Override
-        public Node clone() {
+        public Node clone()
+        {
             try {
                 Node node = (Node) super.clone();
                 node.animation = animation.clone();
                 return node;
             } catch (CloneNotSupportedException e) {
-               throw new AssertionError();
+                throw new AssertionError();
             }
         }
     }
@@ -959,14 +984,14 @@ public final class AnimatorSet extends Animator {
      * The <code>Builder</code> object is a utility class to facilitate adding animations to a
      * <code>AnimatorSet</code> along with the relationships between the various animations. The
      * intention of the <code>Builder</code> methods, along with the {@link
-     * AnimatorSet#play(Animator) play()} method of <code>AnimatorSet</code> is to make it possible
+     * com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#play(Animator) play()} method of <code>AnimatorSet</code> is to make it possible
      * to express the dependency relationships of animations in a natural way. Developers can also
-     * use the {@link AnimatorSet#playTogether(Animator[]) playTogether()} and {@link
-     * AnimatorSet#playSequentially(Animator[]) playSequentially()} methods if these suit the need,
+     * use the {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#playTogether(Animator[]) playTogether()} and {@link
+     * com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#playSequentially(Animator[]) playSequentially()} methods if these suit the need,
      * but it might be easier in some situations to express the AnimatorSet of animations in pairs.
      * <p/>
      * <p>The <code>Builder</code> object cannot be constructed directly, but is rather constructed
-     * internally via a call to {@link AnimatorSet#play(Animator)}.</p>
+     * internally via a call to {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#play(Animator)}.</p>
      * <p/>
      * <p>For example, this sets up a AnimatorSet to play anim1 and anim2 at the same time, anim3 to
      * play when anim2 finishes, and anim4 to play when anim3 finishes:</p>
@@ -977,14 +1002,14 @@ public final class AnimatorSet extends Animator {
      *     s.play(anim4).after(anim3);
      * </pre>
      * <p/>
-     * <p>Note in the example that both {@link Builder#before(Animator)} and {@link
-     * Builder#after(Animator)} are used. These are just different ways of expressing the same
+     * <p>Note in the example that both {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet.Builder#before(Animator)} and {@link
+     * com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet.Builder#after(Animator)} are used. These are just different ways of expressing the same
      * relationship and are provided to make it easier to say things in a way that is more natural,
      * depending on the situation.</p>
      * <p/>
      * <p>It is possible to make several calls into the same <code>Builder</code> object to express
      * multiple relationships. However, note that it is only the animation passed into the initial
-     * {@link AnimatorSet#play(Animator)} method that is the dependency in any of the successive
+     * {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#play(Animator)} method that is the dependency in any of the successive
      * calls to the <code>Builder</code> object. For example, the following code starts both anim2
      * and anim3 when anim1 ends; there is no direct dependency relationship between anim2 and
      * anim3:
@@ -1007,7 +1032,8 @@ public final class AnimatorSet extends Animator {
      * that can boil down to a simple, one-way relationship of animations starting with, before, and
      * after other, different, animations.</p>
      */
-    public class Builder {
+    public class Builder
+    {
 
         /**
          * This tracks the current node being processed. It is supplied to the play() method
@@ -1022,7 +1048,8 @@ public final class AnimatorSet extends Animator {
          * @param anim The animation that is the dependency for the other animations passed into
          * the other methods of this Builder object.
          */
-        Builder(Animator anim) {
+        Builder(Animator anim)
+        {
             mCurrentNode = mNodeMap.get(anim);
             if (mCurrentNode == null) {
                 mCurrentNode = new Node(anim);
@@ -1033,12 +1060,14 @@ public final class AnimatorSet extends Animator {
 
         /**
          * Sets up the given animation to play at the same time as the animation supplied in the
-         * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object.
+         * {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#play(Animator)} call that created this <code>Builder</code> object.
          *
          * @param anim The animation that will play when the animation supplied to the
-         * {@link AnimatorSet#play(Animator)} method starts.
+         * {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#play(Animator)} method starts.
          */
-        public Builder with(Animator anim) {
+        @NotNull
+        public Builder with(Animator anim)
+        {
             Node node = mNodeMap.get(anim);
             if (node == null) {
                 node = new Node(anim);
@@ -1052,13 +1081,15 @@ public final class AnimatorSet extends Animator {
 
         /**
          * Sets up the given animation to play when the animation supplied in the
-         * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
+         * {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
          * ends.
          *
          * @param anim The animation that will play when the animation supplied to the
-         * {@link AnimatorSet#play(Animator)} method ends.
+         * {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#play(Animator)} method ends.
          */
-        public Builder before(Animator anim) {
+        @NotNull
+        public Builder before(Animator anim)
+        {
             Node node = mNodeMap.get(anim);
             if (node == null) {
                 node = new Node(anim);
@@ -1072,13 +1103,15 @@ public final class AnimatorSet extends Animator {
 
         /**
          * Sets up the given animation to play when the animation supplied in the
-         * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
+         * {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
          * to start when the animation supplied in this method call ends.
          *
          * @param anim The animation whose end will cause the animation supplied to the
-         * {@link AnimatorSet#play(Animator)} method to play.
+         * {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#play(Animator)} method to play.
          */
-        public Builder after(Animator anim) {
+        @NotNull
+        public Builder after(Animator anim)
+        {
             Node node = mNodeMap.get(anim);
             if (node == null) {
                 node = new Node(anim);
@@ -1092,20 +1125,20 @@ public final class AnimatorSet extends Animator {
 
         /**
          * Sets up the animation supplied in the
-         * {@link AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
+         * {@link com.actionbarsherlock.internal.nineoldandroids.animation.AnimatorSet#play(Animator)} call that created this <code>Builder</code> object
          * to play when the given amount of time elapses.
          *
          * @param delay The number of milliseconds that should elapse before the
          * animation starts.
          */
-        public Builder after(long delay) {
+        @NotNull
+        public Builder after(long delay)
+        {
             // setup dummy ValueAnimator just to run the clock
             ValueAnimator anim = ValueAnimator.ofFloat(0f, 1f);
             anim.setDuration(delay);
             after(anim);
             return this;
         }
-
     }
-
 }

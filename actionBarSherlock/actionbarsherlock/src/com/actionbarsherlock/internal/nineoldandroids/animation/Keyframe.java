@@ -17,6 +17,7 @@
 package com.actionbarsherlock.internal.nineoldandroids.animation;
 
 import android.view.animation.Interpolator;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class holds a time/value pair for an animation. The Keyframe class is used
@@ -52,7 +53,8 @@ public abstract class Keyframe implements Cloneable {
      * The optional time interpolator for the interval preceding this keyframe. A null interpolator
      * (the default) results in linear interpolation over the interval.
      */
-    private /*Time*/Interpolator mInterpolator = null;
+    @Nullable
+    private /*Time*/ Interpolator mInterpolator = null;
 
     /**
      * Flag to indicate whether this keyframe has a valid value. This flag is used when an
@@ -73,7 +75,8 @@ public abstract class Keyframe implements Cloneable {
      * the time in this keyframe, and the the value animated from as the time passes the time in
      * this keyframe.
      */
-    public static Keyframe ofInt(float fraction, int value) {
+    public static Keyframe ofInt(float fraction, int value)
+    {
         return new IntKeyframe(fraction, value);
     }
 
@@ -89,7 +92,8 @@ public abstract class Keyframe implements Cloneable {
      * @param fraction The time, expressed as a value between 0 and 1, representing the fraction
      * of time elapsed of the overall animation duration.
      */
-    public static Keyframe ofInt(float fraction) {
+    public static Keyframe ofInt(float fraction)
+    {
         return new IntKeyframe(fraction);
     }
 

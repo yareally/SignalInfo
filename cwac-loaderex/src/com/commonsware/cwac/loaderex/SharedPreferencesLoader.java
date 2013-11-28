@@ -22,55 +22,65 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class SharedPreferencesLoader extends
     AsyncTaskLoader<SharedPreferences> implements
     SharedPreferences.OnSharedPreferenceChangeListener {
-  private SharedPreferences prefs=null;
+    @Nullable
+    private SharedPreferences prefs = null;
 
-  public static void persist(final SharedPreferences.Editor editor) {
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
-      editor.apply();
-    }
-    else {
-      new Thread() {
-        public void run() {
-          editor.commit();
+    public static void persist(@NotNull final SharedPreferences.Editor editor)
+    {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD) {
+            editor.apply();
         }
-      }.start();
+        else {
+            new Thread()
+            {
+                public void run()
+                {
+                    editor.commit();
+                }
+            }.start();
+        }
     }
-  }
 
-  public SharedPreferencesLoader(Context context) {
-    super(context);
-  }
+    public SharedPreferencesLoader(@NotNull Context context)
+    {
+        super(context);
+    }
 
-  /**
-   * Runs on a worker thread, loading in our data.
-   */
-  @Override
-  public SharedPreferences loadInBackground() {
-    prefs=PreferenceManager.getDefaultSharedPreferences(getContext());
-    prefs.registerOnSharedPreferenceChangeListener(this);
-    
-    return(prefs);
-  }
+    /**
+     * Runs on a worker thread, loading in our data.
+     */
+    @Nullable
+    @Override
+    public SharedPreferences loadInBackground()
+    {
+        prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
+        prefs.registerOnSharedPreferenceChangeListener(this);
 
-  @Override
-  public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-                                        String key) {
-    onContentChanged();
-  }
+        return (prefs);
+    }
 
-  /**
-   * Starts an asynchronous load of the list data. When the
-   * result is ready the callbacks will be called on the UI
-   * thread. If a previous load has been completed and is
-   * still valid the result may be passed to the callbacks
-   * immediately.
-   * 
-   * Must be called from the UI thread.
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+                                          String key)
+    {
+        onContentChanged();
+    }
+
+    /**
+     * Starts an asynchronous load of the list data. When the
+     * result is ready the callbacks will be called on the UI
+     * thread. If a previous load has been completed and is
+     * still valid the result may be passed to the callbacks
+     * immediately.
+     *
+     * Must be called from the UI thread.
    */
   @Override
   protected void onStartLoading() {

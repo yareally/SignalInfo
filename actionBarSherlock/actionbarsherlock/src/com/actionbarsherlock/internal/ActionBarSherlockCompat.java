@@ -42,6 +42,9 @@ import com.actionbarsherlock.view.MenuItem;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.xmlpull.v1.XmlPullParser;
 
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
@@ -69,7 +72,8 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
     private boolean mReserveOverflowSet = false;
 
     /** Current menu instance for managing action items. */
-    private MenuBuilder mMenu;
+    @Nullable
+    private   MenuBuilder                                  mMenu;
     /** Map between native options items and sherlock items. */
     protected HashMap<android.view.MenuItem, MenuItemImpl> mNativeItemMap;
 
@@ -81,20 +85,21 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
     /** Whether or not the title is stable and can be displayed. */
     private boolean mIsTitleReady = false;
     /** Whether or not the parent activity has been destroyed. */
-    private boolean mIsDestroyed = false;
+    private boolean mIsDestroyed  = false;
 
     /* Emulate PanelFeatureState */
     private boolean mClosingActionMenu;
     private boolean mMenuIsPrepared;
     private boolean mMenuRefreshContent;
-    private Bundle mMenuFrozenActionViewState;
+    @Nullable
+    private Bundle  mMenuFrozenActionViewState;
 
     /** Implementation which backs the action bar interface API. */
     private ActionBarImpl aActionBar;
     /** Main action bar view which displays the core content. */
     private ActionBarView wActionBar;
     /** Relevant window and action bar features flags. */
-    private int mFeatures = DEFAULT_FEATURES;
+    private int mFeatures  = DEFAULT_FEATURES;
     /** Relevant user interface option flags. */
     private int mUiOptions = 0;
 
@@ -104,10 +109,10 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
     private IcsProgressBar mHorizontalProgressBar;
 
     /** Current displayed context action bar, if any. */
-    private ActionMode mActionMode;
+    @Nullable
+    private ActionMode           mActionMode;
     /** Parent view in which the context action bar is displayed. */
     private ActionBarContextView mActionModeView;
-
 
 
     ///////////////////////////////////////////////////////////////////////////
@@ -115,14 +120,16 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
     ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public ActionBar getActionBar() {
+    public ActionBar getActionBar()
+    {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[getActionBar]");
 
         initActionBar();
         return aActionBar;
     }
 
-    private void initActionBar() {
+    private void initActionBar()
+    {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[initActionBar]");
 
         // Initializing the window decor can change window feature flags.
@@ -143,20 +150,25 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
         }
     }
 
+    @Nullable
     @Override
-    protected Context getThemedContext() {
+    protected Context getThemedContext()
+    {
         return aActionBar.getThemedContext();
     }
 
     @Override
-    public void setTitle(CharSequence title) {
+    public void setTitle(CharSequence title)
+    {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[setTitle] title: " + title);
 
         dispatchTitleChanged(title, 0);
     }
 
+    @Nullable
     @Override
-    public ActionMode startActionMode(ActionMode.Callback callback) {
+    public ActionMode startActionMode(@NotNull ActionMode.Callback callback)
+    {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[startActionMode] callback: " + callback);
 
         if (mActionMode != null) {
@@ -174,11 +186,12 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
 
         if (mode != null) {
             mActionMode = mode;
-        } else {
+        }
+        else {
             if (mActionModeView == null) {
-                ViewStub stub = (ViewStub)mDecor.findViewById(R.id.abs__action_mode_bar_stub);
+                ViewStub stub = (ViewStub) mDecor.findViewById(R.id.abs__action_mode_bar_stub);
                 if (stub != null) {
-                    mActionModeView = (ActionBarContextView)stub.inflate();
+                    mActionModeView = (ActionBarContextView) stub.inflate();
                 }
             }
             if (mActionModeView != null) {
@@ -314,7 +327,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
     }
 
     @Override
-    public boolean dispatchPrepareOptionsMenu(android.view.Menu menu) {
+    public boolean dispatchPrepareOptionsMenu(@NotNull android.view.Menu menu) {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[dispatchPrepareOptionsMenu] android.view.Menu: " + menu);
 
         if (mActionMode != null) {
@@ -385,7 +398,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
     }
 
     @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
+    public boolean dispatchKeyEvent(@NotNull KeyEvent event) {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[dispatchKeyEvent] event: " + event);
 
         final int keyCode = event.getKeyCode();
@@ -423,7 +436,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
     }
 
     @Override
-    public void dispatchSaveInstanceState(Bundle outState) {
+    public void dispatchSaveInstanceState(@NotNull Bundle outState) {
         if (mMenu != null) {
             mMenuFrozenActionViewState = new Bundle();
             mMenu.saveActionViewStates(mMenuFrozenActionViewState);
@@ -432,7 +445,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
     }
 
     @Override
-    public void dispatchRestoreInstanceState(Bundle savedInstanceState) {
+    public void dispatchRestoreInstanceState(@NotNull Bundle savedInstanceState) {
         mMenuFrozenActionViewState = savedInstanceState.getParcelable(PANELS_TAG);
     }
 
@@ -714,7 +727,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
         }
     }
 
-    private void showProgressBars(IcsProgressBar horizontalProgressBar, IcsProgressBar spinnyProgressBar) {
+    private void showProgressBars(@NotNull IcsProgressBar horizontalProgressBar, @NotNull IcsProgressBar spinnyProgressBar) {
         final int features = mFeatures;//getLocalFeatures();
         if ((features & (1 << Window.FEATURE_INDETERMINATE_PROGRESS)) != 0 &&
                 spinnyProgressBar.getVisibility() == View.INVISIBLE) {
@@ -727,7 +740,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
         }
     }
 
-    private void hideProgressBars(IcsProgressBar horizontalProgressBar, IcsProgressBar spinnyProgressBar) {
+    private void hideProgressBars(@NotNull IcsProgressBar horizontalProgressBar, @NotNull IcsProgressBar spinnyProgressBar) {
         final int features = mFeatures;//getLocalFeatures();
         Animation anim = AnimationUtils.loadAnimation(mActivity, android.R.anim.fade_out);
         anim.setDuration(1000);
@@ -839,7 +852,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
         }
         mActivity.getLayoutInflater().inflate(layoutResId, mContentParent);
 
-        android.view.Window.Callback callback = mActivity.getWindow().getCallback();
+        Window.Callback callback = mActivity.getWindow().getCallback();
         if (callback != null) {
             callback.onContentChanged();
         }
@@ -848,7 +861,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
     }
 
     @Override
-    public void setContentView(View view, ViewGroup.LayoutParams params) {
+    public void setContentView(@NotNull View view, ViewGroup.LayoutParams params) {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[setContentView] view: " + view + ", params: " + params);
 
         if (mContentParent == null) {
@@ -858,7 +871,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
         }
         mContentParent.addView(view, params);
 
-        android.view.Window.Callback callback = mActivity.getWindow().getCallback();
+        Window.Callback callback = mActivity.getWindow().getCallback();
         if (callback != null) {
             callback.onContentChanged();
         }
@@ -867,7 +880,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
     }
 
     @Override
-    public void addContentView(View view, ViewGroup.LayoutParams params) {
+    public void addContentView(@NotNull View view, ViewGroup.LayoutParams params) {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[addContentView] view: " + view + ", params: " + params);
 
         if (mContentParent == null) {
@@ -965,6 +978,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
         }
     }
 
+    @NotNull
     private ViewGroup generateLayout() {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[generateLayout]");
 
@@ -1047,7 +1061,7 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
         return mReserveOverflow;
     }
 
-    private static int loadUiOptionsFromManifest(Activity activity) {
+    private static int loadUiOptionsFromManifest(@NotNull Activity activity) {
         int uiOptions = 0;
         try {
             final String thisPackage = activity.getClass().getName();
@@ -1118,7 +1132,8 @@ public class ActionBarSherlockCompat extends ActionBarSherlock implements MenuBu
         return uiOptions;
     }
 
-    public static String cleanActivityName(String manifestPackage, String activityName) {
+    @NotNull
+    public static String cleanActivityName(String manifestPackage, @NotNull String activityName) {
         if (activityName.charAt(0) == '.') {
             //Relative activity name (e.g., android:name=".ui.SomeClass")
             return manifestPackage + activityName;

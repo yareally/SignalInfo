@@ -9,6 +9,7 @@ import android.util.FloatMath;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
+import org.jetbrains.annotations.NotNull;
 
 public final class AnimatorProxy extends Animation {
     public static final boolean NEEDS_PROXY = Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB;
@@ -25,29 +26,34 @@ public final class AnimatorProxy extends Animation {
         return proxy;
     }
 
+    @NotNull
     private final WeakReference<View> mView;
 
-    private float mAlpha = 1;
+    private float mAlpha  = 1;
     private float mScaleX = 1;
     private float mScaleY = 1;
     private float mTranslationX;
     private float mTranslationY;
 
-    private final RectF mBefore = new RectF();
-    private final RectF mAfter = new RectF();
+    private final RectF  mBefore     = new RectF();
+    private final RectF  mAfter      = new RectF();
     private final Matrix mTempMatrix = new Matrix();
 
-    private AnimatorProxy(View view) {
+    private AnimatorProxy(View view)
+    {
         setDuration(0); //perform transformation immediately
         setFillAfter(true); //persist transformation beyond duration
         view.setAnimation(this);
         mView = new WeakReference<View>(view);
     }
 
-    public float getAlpha() {
+    public float getAlpha()
+    {
         return mAlpha;
     }
-    public void setAlpha(float alpha) {
+
+    public void setAlpha(float alpha)
+    {
         if (mAlpha != alpha) {
             mAlpha = alpha;
             View view = mView.get();
@@ -56,20 +62,28 @@ public final class AnimatorProxy extends Animation {
             }
         }
     }
-    public float getScaleX() {
+
+    public float getScaleX()
+    {
         return mScaleX;
     }
-    public void setScaleX(float scaleX) {
+
+    public void setScaleX(float scaleX)
+    {
         if (mScaleX != scaleX) {
             prepareForUpdate();
             mScaleX = scaleX;
             invalidateAfterUpdate();
         }
     }
-    public float getScaleY() {
+
+    public float getScaleY()
+    {
         return mScaleY;
     }
-    public void setScaleY(float scaleY) {
+
+    public void setScaleY(float scaleY)
+    {
         if (mScaleY != scaleY) {
             prepareForUpdate();
             mScaleY = scaleY;

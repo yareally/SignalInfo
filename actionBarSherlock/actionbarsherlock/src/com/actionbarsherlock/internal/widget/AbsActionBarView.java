@@ -31,37 +31,44 @@ import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
 import com.actionbarsherlock.internal.nineoldandroids.view.NineViewGroup;
 import com.actionbarsherlock.internal.view.menu.ActionMenuPresenter;
 import com.actionbarsherlock.internal.view.menu.ActionMenuView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.actionbarsherlock.internal.ResourcesCompat.getResources_getBoolean;
 
 public abstract class AbsActionBarView extends NineViewGroup {
-    protected ActionMenuView mMenuView;
+    @Nullable
+    protected ActionMenuView      mMenuView;
     protected ActionMenuPresenter mActionMenuPresenter;
-    protected ActionBarContainer mSplitView;
-    protected boolean mSplitActionBar;
-    protected boolean mSplitWhenNarrow;
-    protected int mContentHeight;
+    protected ActionBarContainer  mSplitView;
+    protected boolean             mSplitActionBar;
+    protected boolean             mSplitWhenNarrow;
+    protected int                 mContentHeight;
 
     final Context mContext;
 
+    @Nullable
     protected Animator mVisibilityAnim;
     protected final VisibilityAnimListener mVisAnimListener = new VisibilityAnimListener();
 
-    private static final /*Time*/Interpolator sAlphaInterpolator = new DecelerateInterpolator();
+    private static final /*Time*/ Interpolator sAlphaInterpolator = new DecelerateInterpolator();
 
     private static final int FADE_DURATION = 200;
 
-    public AbsActionBarView(Context context) {
+    public AbsActionBarView(Context context)
+    {
         super(context);
         mContext = context;
     }
 
-    public AbsActionBarView(Context context, AttributeSet attrs) {
+    public AbsActionBarView(Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         mContext = context;
     }
 
-    public AbsActionBarView(Context context, AttributeSet attrs, int defStyle) {
+    public AbsActionBarView(Context context, AttributeSet attrs, int defStyle)
+    {
         super(context, attrs, defStyle);
         mContext = context;
     }
@@ -70,22 +77,24 @@ public abstract class AbsActionBarView extends NineViewGroup {
      * Must be public so we can dispatch pre-2.2 via ActionBarImpl.
      */
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(Configuration newConfig)
+    {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.FROYO) {
             super.onConfigurationChanged(newConfig);
-        } else if (mMenuView != null) {
+        }
+        else if (mMenuView != null) {
             mMenuView.onConfigurationChanged(newConfig);
         }
 
         // Action bar can change size on configuration changes.
         // Reread the desired height from the theme-specified style.
         TypedArray a = getContext().obtainStyledAttributes(null, R.styleable.SherlockActionBar,
-                R.attr.actionBarStyle, 0);
+            R.attr.actionBarStyle, 0);
         setContentHeight(a.getLayoutDimension(R.styleable.SherlockActionBar_height, 0));
         a.recycle();
         if (mSplitWhenNarrow) {
             setSplitActionBar(getResources_getBoolean(getContext(),
-                    R.bool.abs__split_action_bar_is_narrow));
+                R.bool.abs__split_action_bar_is_narrow));
         }
         if (mActionMenuPresenter != null) {
             mActionMenuPresenter.onConfigurationChanged(newConfig);
@@ -96,7 +105,8 @@ public abstract class AbsActionBarView extends NineViewGroup {
      * Sets whether the bar should be split right now, no questions asked.
      * @param split true if the bar should split
      */
-    public void setSplitActionBar(boolean split) {
+    public void setSplitActionBar(boolean split)
+    {
         mSplitActionBar = split;
     }
 
@@ -221,7 +231,7 @@ public abstract class AbsActionBarView extends NineViewGroup {
         }
     }
 
-    protected int measureChildView(View child, int availableWidth, int childSpecHeight,
+    protected int measureChildView(@NotNull View child, int availableWidth, int childSpecHeight,
             int spacing) {
         child.measure(MeasureSpec.makeMeasureSpec(availableWidth, MeasureSpec.AT_MOST),
                 childSpecHeight);
@@ -232,7 +242,7 @@ public abstract class AbsActionBarView extends NineViewGroup {
         return Math.max(0, availableWidth);
     }
 
-    protected int positionChild(View child, int x, int y, int contentHeight) {
+    protected int positionChild(@NotNull View child, int x, int y, int contentHeight) {
         int childWidth = child.getMeasuredWidth();
         int childHeight = child.getMeasuredHeight();
         int childTop = y + (contentHeight - childHeight) / 2;
@@ -242,7 +252,7 @@ public abstract class AbsActionBarView extends NineViewGroup {
         return childWidth;
     }
 
-    protected int positionChildInverse(View child, int x, int y, int contentHeight) {
+    protected int positionChildInverse(@NotNull View child, int x, int y, int contentHeight) {
         int childWidth = child.getMeasuredWidth();
         int childHeight = child.getMeasuredHeight();
         int childTop = y + (contentHeight - childHeight) / 2;
@@ -256,6 +266,7 @@ public abstract class AbsActionBarView extends NineViewGroup {
         private boolean mCanceled = false;
         int mFinalVisibility;
 
+        @NotNull
         public VisibilityAnimListener withFinalVisibility(int visibility) {
             mFinalVisibility = visibility;
             return this;

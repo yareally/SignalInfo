@@ -5,6 +5,8 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.TextView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -19,11 +21,11 @@ public class CapitalizingTextView extends TextView {
 
     private boolean mAllCaps;
 
-    public CapitalizingTextView(Context context, AttributeSet attrs) {
+    public CapitalizingTextView(@NotNull Context context, @NotNull AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public CapitalizingTextView(Context context, AttributeSet attrs, int defStyle) {
+    public CapitalizingTextView(@NotNull Context context, @NotNull AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R_styleable_TextView, defStyle, 0);
@@ -31,7 +33,7 @@ public class CapitalizingTextView extends TextView {
         a.recycle();
     }
 
-    public void setTextCompat(CharSequence text) {
+    public void setTextCompat(@Nullable CharSequence text) {
         if (SANS_ICE_CREAM && mAllCaps && text != null) {
             if (IS_GINGERBREAD) {
                 try {

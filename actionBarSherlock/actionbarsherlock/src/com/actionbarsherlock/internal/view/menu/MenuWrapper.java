@@ -7,6 +7,8 @@ import android.view.KeyEvent;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MenuWrapper implements Menu {
     private final android.view.Menu mNativeMenu;
@@ -23,33 +25,39 @@ public class MenuWrapper implements Menu {
         return mNativeMenu;
     }
 
+    @NotNull
     private MenuItem addInternal(android.view.MenuItem nativeItem) {
         MenuItem item = new MenuItemWrapper(nativeItem);
         mNativeMap.put(nativeItem, item);
         return item;
     }
 
+    @NotNull
     @Override
     public MenuItem add(CharSequence title) {
         return addInternal(mNativeMenu.add(title));
     }
 
+    @NotNull
     @Override
     public MenuItem add(int titleRes) {
         return addInternal(mNativeMenu.add(titleRes));
     }
 
+    @NotNull
     @Override
     public MenuItem add(int groupId, int itemId, int order, CharSequence title) {
         return addInternal(mNativeMenu.add(groupId, itemId, order, title));
     }
 
+    @NotNull
     @Override
     public MenuItem add(int groupId, int itemId, int order, int titleRes) {
         return addInternal(mNativeMenu.add(groupId, itemId, order, titleRes));
     }
 
-    private SubMenu addInternal(android.view.SubMenu nativeSubMenu) {
+    @NotNull
+    private SubMenu addInternal(@NotNull android.view.SubMenu nativeSubMenu) {
         SubMenu subMenu = new SubMenuWrapper(nativeSubMenu);
         android.view.MenuItem nativeItem = nativeSubMenu.getItem();
         MenuItem item = subMenu.getItem();
@@ -57,28 +65,32 @@ public class MenuWrapper implements Menu {
         return subMenu;
     }
 
+    @NotNull
     @Override
     public SubMenu addSubMenu(CharSequence title) {
         return addInternal(mNativeMenu.addSubMenu(title));
     }
 
+    @NotNull
     @Override
     public SubMenu addSubMenu(int titleRes) {
         return addInternal(mNativeMenu.addSubMenu(titleRes));
     }
 
+    @NotNull
     @Override
     public SubMenu addSubMenu(int groupId, int itemId, int order, CharSequence title) {
         return addInternal(mNativeMenu.addSubMenu(groupId, itemId, order, title));
     }
 
+    @NotNull
     @Override
     public SubMenu addSubMenu(int groupId, int itemId, int order, int titleRes) {
         return addInternal(mNativeMenu.addSubMenu(groupId, itemId, order, titleRes));
     }
 
     @Override
-    public int addIntentOptions(int groupId, int itemId, int order, ComponentName caller, Intent[] specifics, Intent intent, int flags, MenuItem[] outSpecificItems) {
+    public int addIntentOptions(int groupId, int itemId, int order, ComponentName caller, Intent[] specifics, Intent intent, int flags, @Nullable MenuItem[] outSpecificItems) {
         int result;
         if (outSpecificItems != null) {
             android.view.MenuItem[] nativeOutItems = new android.view.MenuItem[outSpecificItems.length];
@@ -149,13 +161,15 @@ public class MenuWrapper implements Menu {
         return mNativeMenu.hasVisibleItems();
     }
 
+    @Nullable
     @Override
     public MenuItem findItem(int id) {
         android.view.MenuItem nativeItem = mNativeMenu.findItem(id);
         return findItem(nativeItem);
     }
 
-    public MenuItem findItem(android.view.MenuItem nativeItem) {
+    @Nullable
+    public MenuItem findItem(@Nullable android.view.MenuItem nativeItem) {
         if (nativeItem == null) {
             return null;
         }
@@ -173,6 +187,7 @@ public class MenuWrapper implements Menu {
         return mNativeMenu.size();
     }
 
+    @Nullable
     @Override
     public MenuItem getItem(int index) {
         android.view.MenuItem nativeItem = mNativeMenu.getItem(index);

@@ -30,6 +30,8 @@ import android.widget.LinearLayout;
 import com.actionbarsherlock.view.ActionProvider;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @hide
@@ -38,20 +40,22 @@ public final class MenuItemImpl implements MenuItem {
     private static final String TAG = "MenuItemImpl";
 
     private static final int SHOW_AS_ACTION_MASK = SHOW_AS_ACTION_NEVER |
-            SHOW_AS_ACTION_IF_ROOM |
-            SHOW_AS_ACTION_ALWAYS;
+        SHOW_AS_ACTION_IF_ROOM |
+        SHOW_AS_ACTION_ALWAYS;
 
-    private final int mId;
-    private final int mGroup;
-    private final int mCategoryOrder;
-    private final int mOrdering;
-    private CharSequence mTitle;
-    private CharSequence mTitleCondensed;
-    private Intent mIntent;
-    private char mShortcutNumericChar;
-    private char mShortcutAlphabeticChar;
+    private final int          mId;
+    private final int          mGroup;
+    private final int          mCategoryOrder;
+    private final int          mOrdering;
+    private       CharSequence mTitle;
+    @Nullable
+    private       CharSequence mTitleCondensed;
+    private       Intent       mIntent;
+    private       char         mShortcutNumericChar;
+    private       char         mShortcutAlphabeticChar;
 
     /** The icon's drawable which is only created as needed */
+    @Nullable
     private Drawable mIconDrawable;
     /**
      * The icon's resource ID which is used to get the Drawable when it is
@@ -61,25 +65,27 @@ public final class MenuItemImpl implements MenuItem {
     private int mIconResId = NO_ICON;
 
     /** The menu to which this item belongs */
-    private MenuBuilder mMenu;
+    private MenuBuilder    mMenu;
     /** If this item should launch a sub menu, this is the sub menu to launch */
     private SubMenuBuilder mSubMenu;
 
-    private Runnable mItemCallback;
+    private Runnable                         mItemCallback;
     private MenuItem.OnMenuItemClickListener mClickListener;
 
-    private int mFlags = ENABLED;
-    private static final int CHECKABLE      = 0x00000001;
-    private static final int CHECKED        = 0x00000002;
-    private static final int EXCLUSIVE      = 0x00000004;
-    private static final int HIDDEN         = 0x00000008;
-    private static final int ENABLED        = 0x00000010;
-    private static final int IS_ACTION      = 0x00000020;
+    private              int mFlags    = ENABLED;
+    private static final int CHECKABLE = 0x00000001;
+    private static final int CHECKED   = 0x00000002;
+    private static final int EXCLUSIVE = 0x00000004;
+    private static final int HIDDEN    = 0x00000008;
+    private static final int ENABLED   = 0x00000010;
+    private static final int IS_ACTION = 0x00000020;
 
     private int mShowAsAction = SHOW_AS_ACTION_NEVER;
 
-    private View mActionView;
-    private ActionProvider mActionProvider;
+    @Nullable
+    private View                   mActionView;
+    @Nullable
+    private ActionProvider         mActionProvider;
     private OnActionExpandListener mOnActionExpandListener;
     private boolean mIsActionViewExpanded = false;
 
@@ -97,7 +103,6 @@ public final class MenuItemImpl implements MenuItem {
     private static String sDeleteShortcutLabel;
     private static String sSpaceShortcutLabel;
 
-
     /**
      * Instantiates this menu item.
      *
@@ -111,7 +116,8 @@ public final class MenuItemImpl implements MenuItem {
      * @param title The text to display for the item.
      */
     MenuItemImpl(MenuBuilder menu, int group, int id, int categoryOrder, int ordering,
-            CharSequence title, int showAsAction) {
+                 CharSequence title, int showAsAction)
+    {
 
         /* TODO if (sPrependShortcutLabel == null) {
             // This is instantiated from the UI thread, so no chance of sync issues
@@ -174,6 +180,7 @@ public final class MenuItemImpl implements MenuItem {
         return (mFlags & ENABLED) != 0;
     }
 
+    @NotNull
     public MenuItem setEnabled(boolean enabled) {
         if (enabled) {
             mFlags |= ENABLED;
@@ -207,6 +214,7 @@ public final class MenuItemImpl implements MenuItem {
         return mIntent;
     }
 
+    @NotNull
     public MenuItem setIntent(Intent intent) {
         mIntent = intent;
         return this;
@@ -216,6 +224,7 @@ public final class MenuItemImpl implements MenuItem {
         return mItemCallback;
     }
 
+    @NotNull
     public MenuItem setCallback(Runnable callback) {
         mItemCallback = callback;
         return this;
@@ -225,6 +234,7 @@ public final class MenuItemImpl implements MenuItem {
         return mShortcutAlphabeticChar;
     }
 
+    @NotNull
     public MenuItem setAlphabeticShortcut(char alphaChar) {
         if (mShortcutAlphabeticChar == alphaChar) return this;
 
@@ -239,6 +249,7 @@ public final class MenuItemImpl implements MenuItem {
         return mShortcutNumericChar;
     }
 
+    @NotNull
     public MenuItem setNumericShortcut(char numericChar) {
         if (mShortcutNumericChar == numericChar) return this;
 
@@ -249,6 +260,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @NotNull
     public MenuItem setShortcut(char numericChar, char alphaChar) {
         mShortcutNumericChar = numericChar;
         mShortcutAlphabeticChar = Character.toLowerCase(alphaChar);
@@ -270,6 +282,7 @@ public final class MenuItemImpl implements MenuItem {
      *         key (for example 'Menu+a'). Also, any non-human readable
      *         characters should be human readable (for example 'Menu+enter').
      */
+    @NotNull
     String getShortcutLabel() {
 
         char shortcut = getShortcut();
@@ -318,7 +331,7 @@ public final class MenuItemImpl implements MenuItem {
         return mSubMenu != null;
     }
 
-    void setSubMenu(SubMenuBuilder subMenu) {
+    void setSubMenu(@NotNull SubMenuBuilder subMenu) {
         mSubMenu = subMenu;
 
         subMenu.setHeaderTitle(getTitle());
@@ -336,12 +349,14 @@ public final class MenuItemImpl implements MenuItem {
      * @return Either the title or condensed title based on what the ItemView
      *         prefers
      */
-    CharSequence getTitleForItemView(MenuView.ItemView itemView) {
+    @Nullable
+    CharSequence getTitleForItemView(@Nullable MenuView.ItemView itemView) {
         return ((itemView != null) && itemView.prefersCondensedTitle())
                 ? getTitleCondensed()
                 : getTitle();
     }
 
+    @NotNull
     public MenuItem setTitle(CharSequence title) {
         mTitle = title;
 
@@ -354,15 +369,18 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @NotNull
     public MenuItem setTitle(int title) {
         return setTitle(mMenu.getContext().getString(title));
     }
 
+    @Nullable
     public CharSequence getTitleCondensed() {
         return mTitleCondensed != null ? mTitleCondensed : mTitle;
     }
 
-    public MenuItem setTitleCondensed(CharSequence title) {
+    @NotNull
+    public MenuItem setTitleCondensed(@Nullable CharSequence title) {
         mTitleCondensed = title;
 
         // Could use getTitle() in the loop below, but just cache what it would do here
@@ -375,6 +393,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Nullable
     public Drawable getIcon() {
         if (mIconDrawable != null) {
             return mIconDrawable;
@@ -387,6 +406,7 @@ public final class MenuItemImpl implements MenuItem {
         return null;
     }
 
+    @NotNull
     public MenuItem setIcon(Drawable icon) {
         mIconResId = NO_ICON;
         mIconDrawable = icon;
@@ -395,6 +415,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @NotNull
     public MenuItem setIcon(int iconResId) {
         mIconDrawable = null;
         mIconResId = iconResId;
@@ -409,6 +430,7 @@ public final class MenuItemImpl implements MenuItem {
         return (mFlags & CHECKABLE) == CHECKABLE;
     }
 
+    @NotNull
     public MenuItem setCheckable(boolean checkable) {
         final int oldFlags = mFlags;
         mFlags = (mFlags & ~CHECKABLE) | (checkable ? CHECKABLE : 0);
@@ -431,6 +453,7 @@ public final class MenuItemImpl implements MenuItem {
         return (mFlags & CHECKED) == CHECKED;
     }
 
+    @NotNull
     public MenuItem setChecked(boolean checked) {
         if ((mFlags & EXCLUSIVE) != 0) {
             // Call the method on the Menu since it knows about the others in this
@@ -470,6 +493,7 @@ public final class MenuItemImpl implements MenuItem {
         return oldFlags != mFlags;
     }
 
+    @NotNull
     public MenuItem setVisible(boolean shown) {
         // Try to set the shown state to the given state. If the shown state was changed
         // (i.e. the previous state isn't the same as given state), notify the parent menu that
@@ -479,6 +503,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+   @NotNull
    public MenuItem setOnMenuItemClickListener(MenuItem.OnMenuItemClickListener clickListener) {
         mClickListener = clickListener;
         return this;
@@ -549,7 +574,8 @@ public final class MenuItemImpl implements MenuItem {
         mMenu.onItemActionRequestChanged(this);
     }
 
-    public MenuItem setActionView(View view) {
+    @NotNull
+    public MenuItem setActionView(@Nullable View view) {
         mActionView = view;
         mActionProvider = null;
         if (view != null && view.getId() == View.NO_ID && mId > 0) {
@@ -559,6 +585,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @NotNull
     public MenuItem setActionView(int resId) {
         final Context context = mMenu.getContext();
         final LayoutInflater inflater = LayoutInflater.from(context);
@@ -566,6 +593,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @Nullable
     public View getActionView() {
         if (mActionView != null) {
             return mActionView;
@@ -577,10 +605,12 @@ public final class MenuItemImpl implements MenuItem {
         }
     }
 
+    @Nullable
     public ActionProvider getActionProvider() {
         return mActionProvider;
     }
 
+    @NotNull
     public MenuItem setActionProvider(ActionProvider actionProvider) {
         mActionView = null;
         mActionProvider = actionProvider;
@@ -588,6 +618,7 @@ public final class MenuItemImpl implements MenuItem {
         return this;
     }
 
+    @NotNull
     @Override
     public MenuItem setShowAsActionFlags(int actionEnum) {
         setShowAsAction(actionEnum);
@@ -626,6 +657,7 @@ public final class MenuItemImpl implements MenuItem {
         return false;
     }
 
+    @NotNull
     @Override
     public MenuItem setOnActionExpandListener(OnActionExpandListener listener) {
         mOnActionExpandListener = listener;

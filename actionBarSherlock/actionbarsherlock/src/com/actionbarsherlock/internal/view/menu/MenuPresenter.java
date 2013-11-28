@@ -51,7 +51,7 @@ public interface MenuPresenter {
     /**
      * Initialize this presenter for the given context and menu.
      * This method is called by MenuBuilder when a presenter is
-     * added. See {@link MenuBuilder#addMenuPresenter(MenuPresenter)}
+     * added. See {@link MenuBuilder#addMenuPresenter(com.actionbarsherlock.internal.view.menu.MenuPresenter)}
      *
      * @param context Context for this presenter; used for view creation and resource management
      * @param menu Menu to host
@@ -60,7 +60,7 @@ public interface MenuPresenter {
 
     /**
      * Retrieve a MenuView to display the menu specified in
-     * {@link #initForMenu(Context, Menu)}.
+     * {@link #initForMenu(android.content.Context, Menu)}.
      *
      * @param root Intended parent of the MenuView.
      * @return A freshly created MenuView.
@@ -134,7 +134,7 @@ public interface MenuPresenter {
 
     /**
      * Returns a Parcelable describing the current state of the presenter.
-     * It will be passed to the {@link #onRestoreInstanceState(Parcelable)}
+     * It will be passed to the {@link #onRestoreInstanceState(android.os.Parcelable)}
      * method of the presenter sharing the same ID later.
      * @return The saved instance state
      */

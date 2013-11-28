@@ -29,6 +29,8 @@ import android.view.KeyEvent;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @hide
@@ -49,18 +51,22 @@ public class ActionMenu implements Menu {
         return mContext;
     }
 
+    @NotNull
     public MenuItem add(CharSequence title) {
         return add(0, 0, 0, title);
     }
 
+    @NotNull
     public MenuItem add(int titleRes) {
         return add(0, 0, 0, titleRes);
     }
 
+    @NotNull
     public MenuItem add(int groupId, int itemId, int order, int titleRes) {
         return add(groupId, itemId, order, mContext.getResources().getString(titleRes));
     }
 
+    @NotNull
     public MenuItem add(int groupId, int itemId, int order, CharSequence title) {
         ActionMenuItem item = new ActionMenuItem(getContext(),
                 groupId, itemId, 0, order, title);
@@ -70,7 +76,7 @@ public class ActionMenu implements Menu {
 
     public int addIntentOptions(int groupId, int itemId, int order,
             ComponentName caller, Intent[] specifics, Intent intent, int flags,
-            MenuItem[] outSpecificItems) {
+            @Nullable MenuItem[] outSpecificItems) {
         PackageManager pm = mContext.getPackageManager();
         final List<ResolveInfo> lri =
                 pm.queryIntentActivityOptions(caller, specifics, intent, 0);
@@ -98,22 +104,26 @@ public class ActionMenu implements Menu {
         return N;
     }
 
+    @Nullable
     public SubMenu addSubMenu(CharSequence title) {
         // TODO Implement submenus
         return null;
     }
 
+    @Nullable
     public SubMenu addSubMenu(int titleRes) {
         // TODO Implement submenus
         return null;
     }
 
+    @Nullable
     public SubMenu addSubMenu(int groupId, int itemId, int order,
             CharSequence title) {
         // TODO Implement submenus
         return null;
     }
 
+    @Nullable
     public SubMenu addSubMenu(int groupId, int itemId, int order, int titleRes) {
         // TODO Implement submenus
         return null;
@@ -159,6 +169,7 @@ public class ActionMenu implements Menu {
         return false;
     }
 
+    @Nullable
     private ActionMenuItem findItemWithShortcut(int keyCode, KeyEvent event) {
         // TODO Make this smarter.
         final boolean qwerty = mIsQwerty;

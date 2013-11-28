@@ -54,6 +54,9 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import static com.actionbarsherlock.internal.ResourcesCompat.getResources_getBoolean;
 
 /**
@@ -66,50 +69,63 @@ import static com.actionbarsherlock.internal.ResourcesCompat.getResources_getBoo
 public class ActionBarImpl extends ActionBar {
     //UNUSED private static final String TAG = "ActionBarImpl";
 
-    private Context mContext;
-    private Context mThemedContext;
+    @Nullable
+    private Context  mContext;
+    @Nullable
+    private Context  mThemedContext;
     private Activity mActivity;
     //UNUSED private Dialog mDialog;
 
-    private ActionBarContainer mContainerView;
-    private ActionBarView mActionView;
-    private ActionBarContextView mContextView;
-    private ActionBarContainer mSplitView;
-    private NineFrameLayout mContentView;
+    private ActionBarContainer        mContainerView;
+    private ActionBarView             mActionView;
+    private ActionBarContextView      mContextView;
+    private ActionBarContainer        mSplitView;
+    private NineFrameLayout           mContentView;
+    @Nullable
     private ScrollingTabContainerView mTabScrollView;
 
+    @NotNull
     private ArrayList<TabImpl> mTabs = new ArrayList<TabImpl>();
 
+    @Nullable
     private TabImpl mSelectedTab;
     private int mSavedTabPosition = INVALID_POSITION;
 
-    ActionModeImpl mActionMode;
-    ActionMode mDeferredDestroyActionMode;
+    @Nullable
+    ActionModeImpl      mActionMode;
+    @Nullable
+    ActionMode          mDeferredDestroyActionMode;
+    @Nullable
     ActionMode.Callback mDeferredModeDestroyCallback;
 
     private boolean mLastMenuVisibility;
+    @NotNull
     private ArrayList<OnMenuVisibilityListener> mMenuVisibilityListeners =
-            new ArrayList<OnMenuVisibilityListener>();
+        new ArrayList<OnMenuVisibilityListener>();
 
     private static final int CONTEXT_DISPLAY_NORMAL = 0;
-    private static final int CONTEXT_DISPLAY_SPLIT = 1;
+    private static final int CONTEXT_DISPLAY_SPLIT  = 1;
 
     private static final int INVALID_POSITION = -1;
 
-    private int mContextDisplayMode;
+    private int     mContextDisplayMode;
     private boolean mHasEmbeddedTabs;
 
     final Handler mHandler = new Handler();
     Runnable mTabSelector;
 
+    @Nullable
     private Animator mCurrentShowAnim;
     private Animator mCurrentModeAnim;
-    private boolean mShowHideAnimationEnabled;
+    private boolean  mShowHideAnimationEnabled;
     boolean mWasHiddenBeforeMode;
 
-    final AnimatorListener mHideListener = new AnimatorListenerAdapter() {
+    @Nullable
+    final AnimatorListener mHideListener = new AnimatorListenerAdapter()
+    {
         @Override
-        public void onAnimationEnd(Animator animation) {
+        public void onAnimationEnd(Animator animation)
+        {
             if (mContentView != null) {
                 mContentView.setTranslationY(0);
                 mContainerView.setTranslationY(0);
@@ -124,15 +140,19 @@ public class ActionBarImpl extends ActionBar {
         }
     };
 
-    final AnimatorListener mShowListener = new AnimatorListenerAdapter() {
+    @Nullable
+    final AnimatorListener mShowListener = new AnimatorListenerAdapter()
+    {
         @Override
-        public void onAnimationEnd(Animator animation) {
+        public void onAnimationEnd(Animator animation)
+        {
             mCurrentShowAnim = null;
             mContainerView.requestLayout();
         }
     };
 
-    public ActionBarImpl(Activity activity, int features) {
+    public ActionBarImpl(@NotNull Activity activity, int features)
+    {
         mActivity = activity;
         Window window = activity.getWindow();
         View decor = window.getDecorView();
@@ -140,33 +160,35 @@ public class ActionBarImpl extends ActionBar {
 
         //window.hasFeature() workaround for pre-3.0
         if ((features & (1 << Window.FEATURE_ACTION_BAR_OVERLAY)) == 0) {
-            mContentView = (NineFrameLayout)decor.findViewById(android.R.id.content);
+            mContentView = (NineFrameLayout) decor.findViewById(android.R.id.content);
         }
     }
 
-    public ActionBarImpl(Dialog dialog) {
+    public ActionBarImpl(@NotNull Dialog dialog)
+    {
         //UNUSED mDialog = dialog;
         init(dialog.getWindow().getDecorView());
     }
 
-    private void init(View decor) {
+    private void init(@NotNull View decor)
+    {
         mContext = decor.getContext();
         mActionView = (ActionBarView) decor.findViewById(R.id.abs__action_bar);
         mContextView = (ActionBarContextView) decor.findViewById(
-                R.id.abs__action_context_bar);
+            R.id.abs__action_context_bar);
         mContainerView = (ActionBarContainer) decor.findViewById(
-                R.id.abs__action_bar_container);
+            R.id.abs__action_bar_container);
         mSplitView = (ActionBarContainer) decor.findViewById(
-                R.id.abs__split_action_bar);
+            R.id.abs__split_action_bar);
 
         if (mActionView == null || mContextView == null || mContainerView == null) {
             throw new IllegalStateException(getClass().getSimpleName() + " can only be used " +
-                    "with a compatible window decor layout");
+                "with a compatible window decor layout");
         }
 
         mActionView.setContextView(mContextView);
         mContextDisplayMode = mActionView.isSplitActionBar() ?
-                CONTEXT_DISPLAY_SPLIT : CONTEXT_DISPLAY_NORMAL;
+            CONTEXT_DISPLAY_SPLIT : CONTEXT_DISPLAY_NORMAL;
 
         // Older apps get the home button interaction enabled by default.
         // Newer apps need to enable it explicitly.
@@ -178,12 +200,13 @@ public class ActionBarImpl extends ActionBar {
         setHomeButtonEnabled(homeButtonEnabled);
 
         setHasEmbeddedTabs(getResources_getBoolean(mContext,
-                R.bool.abs__action_bar_embed_tabs));
+            R.bool.abs__action_bar_embed_tabs));
     }
 
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onConfigurationChanged(Configuration newConfig)
+    {
         setHasEmbeddedTabs(getResources_getBoolean(mContext,
-                R.bool.abs__action_bar_embed_tabs));
+            R.bool.abs__action_bar_embed_tabs));
 
         //Manually dispatch a configuration change to the action bar view on pre-2.2
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
@@ -194,13 +217,15 @@ public class ActionBarImpl extends ActionBar {
         }
     }
 
-    private void setHasEmbeddedTabs(boolean hasEmbeddedTabs) {
+    private void setHasEmbeddedTabs(boolean hasEmbeddedTabs)
+    {
         mHasEmbeddedTabs = hasEmbeddedTabs;
         // Switch tab layout configuration if needed
         if (!mHasEmbeddedTabs) {
             mActionView.setEmbeddedTabView(null);
             mContainerView.setTabContainer(mTabScrollView);
-        } else {
+        }
+        else {
             mContainerView.setTabContainer(null);
             mActionView.setEmbeddedTabView(mTabScrollView);
         }
@@ -396,6 +421,7 @@ public class ActionBarImpl extends ActionBar {
         return mActionView.getDisplayOptions();
     }
 
+    @Nullable
     public ActionMode startActionMode(ActionMode.Callback callback) {
         boolean wasHidden = false;
         if (mActionMode != null) {
@@ -468,13 +494,14 @@ public class ActionBarImpl extends ActionBar {
         }
     }
 
+    @NotNull
     @Override
     public Tab newTab() {
         return new TabImpl();
     }
 
     @Override
-    public void removeTab(Tab tab) {
+    public void removeTab(@NotNull Tab tab) {
         removeTabAt(tab.getPosition());
     }
 
@@ -504,7 +531,7 @@ public class ActionBarImpl extends ActionBar {
     }
 
     @Override
-    public void selectTab(Tab tab) {
+    public void selectTab(@Nullable Tab tab) {
         if (getNavigationMode() != NAVIGATION_MODE_TABS) {
             mSavedTabPosition = tab != null ? tab.getPosition() : INVALID_POSITION;
             return;
@@ -537,6 +564,7 @@ public class ActionBarImpl extends ActionBar {
         }
     }
 
+    @Nullable
     @Override
     public Tab getSelectedTab() {
         return mSelectedTab;
@@ -638,6 +666,7 @@ public class ActionBarImpl extends ActionBar {
         }
     }
 
+    @Nullable
     public Context getThemedContext() {
         if (mThemedContext == null) {
             TypedValue outValue = new TypedValue();
@@ -659,29 +688,35 @@ public class ActionBarImpl extends ActionBar {
      * @hide
      */
     public class ActionModeImpl extends ActionMode implements MenuBuilder.Callback {
+        @Nullable
         private ActionMode.Callback mCallback;
-        private MenuBuilder mMenu;
+        private MenuBuilder         mMenu;
         private WeakReference<View> mCustomView;
 
-        public ActionModeImpl(ActionMode.Callback callback) {
+        public ActionModeImpl(ActionMode.Callback callback)
+        {
             mCallback = callback;
             mMenu = new MenuBuilder(getThemedContext())
-                    .setDefaultShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+                .setDefaultShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
             mMenu.setCallback(this);
         }
 
+        @Nullable
         @Override
-        public MenuInflater getMenuInflater() {
+        public MenuInflater getMenuInflater()
+        {
             return new MenuInflater(getThemedContext());
         }
 
         @Override
-        public Menu getMenu() {
+        public Menu getMenu()
+        {
             return mMenu;
         }
 
         @Override
-        public void finish() {
+        public void finish()
+        {
             if (mActionMode != this) {
                 // Not the active action mode - no-op
                 return;
@@ -694,7 +729,8 @@ public class ActionBarImpl extends ActionBar {
             if (mWasHiddenBeforeMode) {
                 mDeferredDestroyActionMode = this;
                 mDeferredModeDestroyCallback = mCallback;
-            } else {
+            }
+            else {
                 mCallback.onDestroyActionMode(this);
             }
             mCallback = null;
@@ -712,7 +748,8 @@ public class ActionBarImpl extends ActionBar {
         }
 
         @Override
-        public void invalidate() {
+        public void invalidate()
+        {
             mMenu.stopDispatchingItemsChanged();
             try {
                 mCallback.onPrepareActionMode(this, mMenu);
@@ -721,7 +758,8 @@ public class ActionBarImpl extends ActionBar {
             }
         }
 
-        public boolean dispatchOnCreate() {
+        public boolean dispatchOnCreate()
+        {
             mMenu.stopDispatchingItemsChanged();
             try {
                 return mCallback.onCreateActionMode(this, mMenu);
@@ -731,58 +769,71 @@ public class ActionBarImpl extends ActionBar {
         }
 
         @Override
-        public void setCustomView(View view) {
+        public void setCustomView(View view)
+        {
             mContextView.setCustomView(view);
             mCustomView = new WeakReference<View>(view);
         }
 
         @Override
-        public void setSubtitle(CharSequence subtitle) {
+        public void setSubtitle(CharSequence subtitle)
+        {
             mContextView.setSubtitle(subtitle);
         }
 
         @Override
-        public void setTitle(CharSequence title) {
+        public void setTitle(CharSequence title)
+        {
             mContextView.setTitle(title);
         }
 
         @Override
-        public void setTitle(int resId) {
+        public void setTitle(int resId)
+        {
             setTitle(mContext.getResources().getString(resId));
         }
 
         @Override
-        public void setSubtitle(int resId) {
+        public void setSubtitle(int resId)
+        {
             setSubtitle(mContext.getResources().getString(resId));
         }
 
         @Override
-        public CharSequence getTitle() {
+        public CharSequence getTitle()
+        {
             return mContextView.getTitle();
         }
 
         @Override
-        public CharSequence getSubtitle() {
+        public CharSequence getSubtitle()
+        {
             return mContextView.getSubtitle();
         }
 
+        @Nullable
         @Override
-        public View getCustomView() {
+        public View getCustomView()
+        {
             return mCustomView != null ? mCustomView.get() : null;
         }
 
-        public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item) {
+        public boolean onMenuItemSelected(MenuBuilder menu, MenuItem item)
+        {
             if (mCallback != null) {
                 return mCallback.onActionItemClicked(this, item);
-            } else {
+            }
+            else {
                 return false;
             }
         }
 
-        public void onCloseMenu(MenuBuilder menu, boolean allMenusAreClosing) {
+        public void onCloseMenu(MenuBuilder menu, boolean allMenusAreClosing)
+        {
         }
 
-        public boolean onSubMenuSelected(SubMenuBuilder subMenu) {
+        public boolean onSubMenuSelected(@NotNull SubMenuBuilder subMenu)
+        {
             if (mCallback == null) {
                 return false;
             }
@@ -795,10 +846,12 @@ public class ActionBarImpl extends ActionBar {
             return true;
         }
 
-        public void onCloseSubMenu(SubMenuBuilder menu) {
+        public void onCloseSubMenu(SubMenuBuilder menu)
+        {
         }
 
-        public void onMenuModeChange(MenuBuilder menu) {
+        public void onMenuModeChange(MenuBuilder menu)
+        {
             if (mCallback == null) {
                 return;
             }
@@ -810,43 +863,53 @@ public class ActionBarImpl extends ActionBar {
     /**
      * @hide
      */
-    public class TabImpl extends ActionBar.Tab {
+    public class TabImpl extends ActionBar.Tab
+    {
         private ActionBar.TabListener mCallback;
-        private Object mTag;
-        private Drawable mIcon;
-        private CharSequence mText;
-        private CharSequence mContentDesc;
+        private Object                mTag;
+        private Drawable              mIcon;
+        private CharSequence          mText;
+        private CharSequence          mContentDesc;
         private int mPosition = -1;
         private View mCustomView;
 
         @Override
-        public Object getTag() {
+        public Object getTag()
+        {
             return mTag;
         }
 
+        @NotNull
         @Override
-        public Tab setTag(Object tag) {
+        public Tab setTag(Object tag)
+        {
             mTag = tag;
             return this;
         }
 
-        public ActionBar.TabListener getCallback() {
+        public ActionBar.TabListener getCallback()
+        {
             return mCallback;
         }
 
+        @NotNull
         @Override
-        public Tab setTabListener(ActionBar.TabListener callback) {
+        public Tab setTabListener(ActionBar.TabListener callback)
+        {
             mCallback = callback;
             return this;
         }
 
         @Override
-        public View getCustomView() {
+        public View getCustomView()
+        {
             return mCustomView;
         }
 
+        @NotNull
         @Override
-        public Tab setCustomView(View view) {
+        public Tab setCustomView(View view)
+        {
             mCustomView = view;
             if (mPosition >= 0) {
                 mTabScrollView.updateTab(mPosition);
@@ -854,33 +917,41 @@ public class ActionBarImpl extends ActionBar {
             return this;
         }
 
+        @NotNull
         @Override
-        public Tab setCustomView(int layoutResId) {
+        public Tab setCustomView(int layoutResId)
+        {
             return setCustomView(LayoutInflater.from(getThemedContext())
-                    .inflate(layoutResId, null));
+                .inflate(layoutResId, null));
         }
 
         @Override
-        public Drawable getIcon() {
+        public Drawable getIcon()
+        {
             return mIcon;
         }
 
         @Override
-        public int getPosition() {
+        public int getPosition()
+        {
             return mPosition;
         }
 
-        public void setPosition(int position) {
+        public void setPosition(int position)
+        {
             mPosition = position;
         }
 
         @Override
-        public CharSequence getText() {
+        public CharSequence getText()
+        {
             return mText;
         }
 
+        @NotNull
         @Override
-        public Tab setIcon(Drawable icon) {
+        public Tab setIcon(Drawable icon)
+        {
             mIcon = icon;
             if (mPosition >= 0) {
                 mTabScrollView.updateTab(mPosition);
@@ -888,13 +959,17 @@ public class ActionBarImpl extends ActionBar {
             return this;
         }
 
+        @NotNull
         @Override
-        public Tab setIcon(int resId) {
+        public Tab setIcon(int resId)
+        {
             return setIcon(mContext.getResources().getDrawable(resId));
         }
 
+        @NotNull
         @Override
-        public Tab setText(CharSequence text) {
+        public Tab setText(CharSequence text)
+        {
             mText = text;
             if (mPosition >= 0) {
                 mTabScrollView.updateTab(mPosition);
@@ -902,23 +977,30 @@ public class ActionBarImpl extends ActionBar {
             return this;
         }
 
+        @NotNull
         @Override
-        public Tab setText(int resId) {
+        public Tab setText(int resId)
+        {
             return setText(mContext.getResources().getText(resId));
         }
 
         @Override
-        public void select() {
+        public void select()
+        {
             selectTab(this);
         }
 
+        @NotNull
         @Override
-        public Tab setContentDescription(int resId) {
+        public Tab setContentDescription(int resId)
+        {
             return setContentDescription(mContext.getResources().getText(resId));
         }
 
+        @NotNull
         @Override
-        public Tab setContentDescription(CharSequence contentDesc) {
+        public Tab setContentDescription(CharSequence contentDesc)
+        {
             mContentDesc = contentDesc;
             if (mPosition >= 0) {
                 mTabScrollView.updateTab(mPosition);
@@ -927,30 +1009,35 @@ public class ActionBarImpl extends ActionBar {
         }
 
         @Override
-        public CharSequence getContentDescription() {
+        public CharSequence getContentDescription()
+        {
             return mContentDesc;
         }
     }
 
     @Override
-    public void setCustomView(View view) {
+    public void setCustomView(View view)
+    {
         mActionView.setCustomNavigationView(view);
     }
 
     @Override
-    public void setCustomView(View view, LayoutParams layoutParams) {
+    public void setCustomView(@NotNull View view, LayoutParams layoutParams)
+    {
         view.setLayoutParams(layoutParams);
         mActionView.setCustomNavigationView(view);
     }
 
     @Override
-    public void setListNavigationCallbacks(SpinnerAdapter adapter, OnNavigationListener callback) {
+    public void setListNavigationCallbacks(SpinnerAdapter adapter, OnNavigationListener callback)
+    {
         mActionView.setDropdownAdapter(adapter);
         mActionView.setCallback(callback);
     }
 
     @Override
-    public int getSelectedNavigationIndex() {
+    public int getSelectedNavigationIndex()
+    {
         switch (mActionView.getNavigationMode()) {
             case NAVIGATION_MODE_TABS:
                 return mSelectedTab != null ? mSelectedTab.getPosition() : -1;
@@ -962,7 +1049,8 @@ public class ActionBarImpl extends ActionBar {
     }
 
     @Override
-    public int getNavigationItemCount() {
+    public int getNavigationItemCount()
+    {
         switch (mActionView.getNavigationMode()) {
             case NAVIGATION_MODE_TABS:
                 return mTabs.size();
@@ -975,12 +1063,14 @@ public class ActionBarImpl extends ActionBar {
     }
 
     @Override
-    public int getTabCount() {
+    public int getTabCount()
+    {
         return mTabs.size();
     }
 
     @Override
-    public void setNavigationMode(int mode) {
+    public void setNavigationMode(int mode)
+    {
         final int oldMode = mActionView.getNavigationMode();
         switch (oldMode) {
             case NAVIGATION_MODE_TABS:
@@ -1004,28 +1094,32 @@ public class ActionBarImpl extends ActionBar {
     }
 
     @Override
-    public Tab getTabAt(int index) {
+    public Tab getTabAt(int index)
+    {
         return mTabs.get(index);
     }
 
-
     @Override
-    public void setIcon(int resId) {
+    public void setIcon(int resId)
+    {
         mActionView.setIcon(resId);
     }
 
     @Override
-    public void setIcon(Drawable icon) {
+    public void setIcon(Drawable icon)
+    {
         mActionView.setIcon(icon);
     }
 
     @Override
-    public void setLogo(int resId) {
+    public void setLogo(int resId)
+    {
         mActionView.setLogo(resId);
     }
 
     @Override
-    public void setLogo(Drawable logo) {
+    public void setLogo(Drawable logo)
+    {
         mActionView.setLogo(logo);
     }
 }

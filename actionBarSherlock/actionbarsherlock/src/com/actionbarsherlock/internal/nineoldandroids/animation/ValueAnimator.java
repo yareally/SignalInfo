@@ -24,6 +24,8 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -36,9 +38,9 @@ import java.util.HashMap;
  * custom handler to ensure that property changes happen on the UI thread.</p>
  *
  * <p>By default, ValueAnimator uses non-linear time interpolation, via the
- * {@link AccelerateDecelerateInterpolator} class, which accelerates into and decelerates
+ * {@link android.view.animation.AccelerateDecelerateInterpolator} class, which accelerates into and decelerates
  * out of an animation. This behavior can be changed by calling
- * {@link ValueAnimator#setInterpolator(TimeInterpolator)}.</p>
+ * {@link com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator#setInterpolator(TimeInterpolator)}.</p>
  */
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ValueAnimator extends Animator {
@@ -63,9 +65,9 @@ public class ValueAnimator extends Animator {
      * Values used with internal variable mPlayingState to indicate the current state of an
      * animation.
      */
-    static final int STOPPED    = 0; // Not yet playing
-    static final int RUNNING    = 1; // Playing normally
-    static final int SEEKED     = 2; // Seeked to some time value
+    static final int STOPPED = 0; // Not yet playing
+    static final int RUNNING = 1; // Playing normally
+    static final int SEEKED  = 2; // Seeked to some time value
 
     /**
      * Internal variables
@@ -92,58 +94,74 @@ public class ValueAnimator extends Animator {
 
     // The static sAnimationHandler processes the internal timing loop on which all animations
     // are based
+    @NotNull
     private static ThreadLocal<AnimationHandler> sAnimationHandler =
-            new ThreadLocal<AnimationHandler>();
+        new ThreadLocal<AnimationHandler>();
 
     // The per-thread list of all active animations
     private static final ThreadLocal<ArrayList<ValueAnimator>> sAnimations =
-            new ThreadLocal<ArrayList<ValueAnimator>>() {
-                @Override
-                protected ArrayList<ValueAnimator> initialValue() {
-                    return new ArrayList<ValueAnimator>();
-                }
-            };
+        new ThreadLocal<ArrayList<ValueAnimator>>()
+        {
+            @NotNull
+            @Override
+            protected ArrayList<ValueAnimator> initialValue()
+            {
+                return new ArrayList<ValueAnimator>();
+            }
+        };
 
     // The per-thread set of animations to be started on the next animation frame
     private static final ThreadLocal<ArrayList<ValueAnimator>> sPendingAnimations =
-            new ThreadLocal<ArrayList<ValueAnimator>>() {
-                @Override
-                protected ArrayList<ValueAnimator> initialValue() {
-                    return new ArrayList<ValueAnimator>();
-                }
-            };
+        new ThreadLocal<ArrayList<ValueAnimator>>()
+        {
+            @NotNull
+            @Override
+            protected ArrayList<ValueAnimator> initialValue()
+            {
+                return new ArrayList<ValueAnimator>();
+            }
+        };
 
     /**
      * Internal per-thread collections used to avoid set collisions as animations start and end
      * while being processed.
      */
     private static final ThreadLocal<ArrayList<ValueAnimator>> sDelayedAnims =
-            new ThreadLocal<ArrayList<ValueAnimator>>() {
-                @Override
-                protected ArrayList<ValueAnimator> initialValue() {
-                    return new ArrayList<ValueAnimator>();
-                }
-            };
+        new ThreadLocal<ArrayList<ValueAnimator>>()
+        {
+            @NotNull
+            @Override
+            protected ArrayList<ValueAnimator> initialValue()
+            {
+                return new ArrayList<ValueAnimator>();
+            }
+        };
 
     private static final ThreadLocal<ArrayList<ValueAnimator>> sEndingAnims =
-            new ThreadLocal<ArrayList<ValueAnimator>>() {
-                @Override
-                protected ArrayList<ValueAnimator> initialValue() {
-                    return new ArrayList<ValueAnimator>();
-                }
-            };
+        new ThreadLocal<ArrayList<ValueAnimator>>()
+        {
+            @NotNull
+            @Override
+            protected ArrayList<ValueAnimator> initialValue()
+            {
+                return new ArrayList<ValueAnimator>();
+            }
+        };
 
     private static final ThreadLocal<ArrayList<ValueAnimator>> sReadyAnims =
-            new ThreadLocal<ArrayList<ValueAnimator>>() {
-                @Override
-                protected ArrayList<ValueAnimator> initialValue() {
-                    return new ArrayList<ValueAnimator>();
-                }
-            };
+        new ThreadLocal<ArrayList<ValueAnimator>>()
+        {
+            @NotNull
+            @Override
+            protected ArrayList<ValueAnimator> initialValue()
+            {
+                return new ArrayList<ValueAnimator>();
+            }
+        };
 
     // The time interpolator to be used if none is set on the animation
-    private static final /*Time*/Interpolator sDefaultInterpolator =
-            new AccelerateDecelerateInterpolator();
+    private static final /*Time*/ Interpolator sDefaultInterpolator =
+        new AccelerateDecelerateInterpolator();
 
     // type evaluators for the primitive types handled by this implementation
     //private static final TypeEvaluator sIntEvaluator = new IntEvaluator();
@@ -238,11 +256,13 @@ public class ValueAnimator extends Animator {
      * through this interpolator to calculate the interpolated fraction, which is then used to
      * calculate the animated values.
      */
-    private /*Time*/Interpolator mInterpolator = sDefaultInterpolator;
+    @Nullable
+    private /*Time*/ Interpolator mInterpolator = sDefaultInterpolator;
 
     /**
      * The set of listeners to be sent events through the life of an animation.
      */
+    @Nullable
     private ArrayList<AnimatorUpdateListener> mUpdateListeners = null;
 
     /**
@@ -264,12 +284,12 @@ public class ValueAnimator extends Animator {
      * When the animation reaches the end and <code>repeatCount</code> is INFINITE
      * or a positive value, the animation restarts from the beginning.
      */
-    public static final int RESTART = 1;
+    public static final int RESTART  = 1;
     /**
      * When the animation reaches the end and <code>repeatCount</code> is INFINITE
      * or a positive value, the animation reverses direction on every iteration.
      */
-    public static final int REVERSE = 2;
+    public static final int REVERSE  = 2;
     /**
      * This value used used with the {@link #setRepeatCount(int)} property to repeat
      * the animation indefinitely.
@@ -281,7 +301,8 @@ public class ValueAnimator extends Animator {
      * use internally; the factory methods which take parameters are more generally
      * useful.
      */
-    public ValueAnimator() {
+    public ValueAnimator()
+    {
     }
 
     /**
@@ -295,7 +316,9 @@ public class ValueAnimator extends Animator {
      * @param values A set of values that the animation will animate between over time.
      * @return A ValueAnimator object that is set up to animate between the given values.
      */
-    public static ValueAnimator ofInt(int... values) {
+    @NotNull
+    public static ValueAnimator ofInt(int... values)
+    {
         ValueAnimator anim = new ValueAnimator();
         anim.setIntValues(values);
         return anim;
@@ -312,7 +335,9 @@ public class ValueAnimator extends Animator {
      * @param values A set of values that the animation will animate between over time.
      * @return A ValueAnimator object that is set up to animate between the given values.
      */
-    public static ValueAnimator ofFloat(float... values) {
+    @NotNull
+    public static ValueAnimator ofFloat(float... values)
+    {
         ValueAnimator anim = new ValueAnimator();
         anim.setFloatValues(values);
         return anim;
@@ -326,6 +351,7 @@ public class ValueAnimator extends Animator {
      * between over time.
      * @return A ValueAnimator object that is set up to animate between the given values.
      */
+    @NotNull
     public static ValueAnimator ofPropertyValuesHolder(PropertyValuesHolder... values) {
         ValueAnimator anim = new ValueAnimator();
         anim.setValues(values);
@@ -349,6 +375,7 @@ public class ValueAnimator extends Animator {
      * @param values A set of values that the animation will animate between over time.
      * @return A ValueAnimator object that is set up to animate between the given values.
      */
+    @NotNull
     public static ValueAnimator ofObject(TypeEvaluator evaluator, Object... values) {
         ValueAnimator anim = new ValueAnimator();
         anim.setObjectValues(values);
@@ -370,7 +397,7 @@ public class ValueAnimator extends Animator {
      *
      * @param values A set of values that the animation will animate between over time.
      */
-    public void setIntValues(int... values) {
+    public void setIntValues(@Nullable int... values) {
         if (values == null || values.length == 0) {
             return;
         }
@@ -398,7 +425,7 @@ public class ValueAnimator extends Animator {
      *
      * @param values A set of values that the animation will animate between over time.
      */
-    public void setFloatValues(float... values) {
+    public void setFloatValues(@Nullable float... values) {
         if (values == null || values.length == 0) {
             return;
         }
@@ -430,7 +457,7 @@ public class ValueAnimator extends Animator {
      *
      * @param values The set of values to animate between.
      */
-    public void setObjectValues(Object... values) {
+    public void setObjectValues(@Nullable Object... values) {
         if (values == null || values.length == 0) {
             return;
         }
@@ -453,7 +480,7 @@ public class ValueAnimator extends Animator {
      *
      * @param values The set of values, per property, being animated between.
      */
-    public void setValues(PropertyValuesHolder... values) {
+    public void setValues(@NotNull PropertyValuesHolder... values) {
         int numValues = values.length;
         mValues = values;
         mValuesMap = new HashMap<String, PropertyValuesHolder>(numValues);
@@ -583,7 +610,7 @@ public class ValueAnimator extends Animator {
          */
         @Override
         @SuppressWarnings("fallthrough")
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NotNull Message msg) {
             boolean callAgain = true;
             ArrayList<ValueAnimator> animations = sAnimations.get();
             ArrayList<ValueAnimator> delayedAnims = sDelayedAnims.get();
@@ -734,7 +761,7 @@ public class ValueAnimator extends Animator {
      * The most recent value calculated by this <code>ValueAnimator</code> when there is just one
      * property being animated. This value is only sensible while the animation is running. The main
      * purpose for this read-only property is to retrieve the value from the <code>ValueAnimator</code>
-     * during a call to {@link AnimatorUpdateListener#onAnimationUpdate(ValueAnimator)}, which
+     * during a call to {@link com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener#onAnimationUpdate(com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator)}, which
      * is called during each animation frame, immediately after the value is calculated.
      *
      * @return animatedValue The value most recently calculated by this <code>ValueAnimator</code> for
@@ -742,6 +769,7 @@ public class ValueAnimator extends Animator {
      * (specified by several PropertyValuesHolder objects in the constructor), this function
      * returns the animated value for the first of those objects.
      */
+    @Nullable
     public Object getAnimatedValue() {
         if (mValues != null && mValues.length > 0) {
             return mValues[0].getAnimatedValue();
@@ -754,12 +782,13 @@ public class ValueAnimator extends Animator {
      * The most recent value calculated by this <code>ValueAnimator</code> for <code>propertyName</code>.
      * The main purpose for this read-only property is to retrieve the value from the
      * <code>ValueAnimator</code> during a call to
-     * {@link AnimatorUpdateListener#onAnimationUpdate(ValueAnimator)}, which
+     * {@link com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator.AnimatorUpdateListener#onAnimationUpdate(com.actionbarsherlock.internal.nineoldandroids.animation.ValueAnimator)}, which
      * is called during each animation frame, immediately after the value is calculated.
      *
      * @return animatedValue The value most recently calculated for the named property
      * by this <code>ValueAnimator</code>.
      */
+    @Nullable
     public Object getAnimatedValue(String propertyName) {
         PropertyValuesHolder valuesHolder = mValuesMap.get(propertyName);
         if (valuesHolder != null) {
@@ -863,7 +892,7 @@ public class ValueAnimator extends Animator {
      * will result in linear interpolation.
      */
     @Override
-    public void setInterpolator(/*Time*/Interpolator value) {
+    public void setInterpolator(/*Time*/@Nullable Interpolator value) {
         if (value != null) {
             mInterpolator = value;
         } else {
@@ -876,6 +905,7 @@ public class ValueAnimator extends Animator {
      *
      * @return The timing interpolator for this ValueAnimator.
      */
+    @Nullable
     public /*Time*/Interpolator getInterpolator() {
         return mInterpolator;
     }
@@ -896,7 +926,7 @@ public class ValueAnimator extends Animator {
      *
      * @param value the evaluator to be used this animation
      */
-    public void setEvaluator(TypeEvaluator value) {
+    public void setEvaluator(@Nullable TypeEvaluator value) {
         if (value != null && mValues != null && mValues.length > 0) {
             mValues[0].setEvaluator(value);
         }

@@ -27,6 +27,8 @@
 
 package com.cc.signalinfo.util;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.lang.reflect.Array;
 
 /**
@@ -55,13 +57,14 @@ public class Arrays
      * @param original the array to be copied
      * @param newLength the length of the copy to be returned
      * @return a copy of the original array, truncated or padded with nulls
-     *         to obtain the specified length
+     * to obtain the specified length
      *
      * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
      * @throws NullPointerException if <tt>original</tt> is null
      * @since 1.6
      */
-    public static <T> T[] copyOf(T[] original, int newLength)
+    @NotNull
+    public static <T> T[] copyOf(@NotNull T[] original, int newLength)
     {
         return (T[]) copyOf(original, newLength, original.getClass());
     }
@@ -80,7 +83,7 @@ public class Arrays
      * @param newLength the length of the copy to be returned
      * @param newType the class of the copy to be returned
      * @return a copy of the original array, truncated or padded with nulls
-     *         to obtain the specified length
+     * to obtain the specified length
      *
      * @throws NegativeArraySizeException if <tt>newLength</tt> is negative
      * @throws NullPointerException if <tt>original</tt> is null
@@ -89,8 +92,9 @@ public class Arrays
      * an array of class <tt>newType</tt>
      * @since 1.6
      */
+    @NotNull
     @SuppressWarnings({"RedundantCast", "ObjectEquality", "SuspiciousSystemArraycopy"})
-    public static <T, U> T[] copyOf(U[] original, int newLength, Class<? extends T[]> newType)
+    public static <T, U> T[] copyOf(@NotNull U[] original, int newLength, @NotNull Class<? extends T[]> newType)
     {
         T[] copy = ((Object) newType == (Object) Object[].class)
             ? (T[]) new Object[newLength]

@@ -45,6 +45,8 @@ import com.actionbarsherlock.view.ActionProvider;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Implementation of the {@link android.view.Menu} interface for creating a
@@ -53,11 +55,11 @@ import com.actionbarsherlock.view.SubMenu;
 public class MenuBuilder implements Menu {
     //UNUSED private static final String TAG = "MenuBuilder";
 
-    private static final String PRESENTER_KEY = "android:menu:presenters";
-    private static final String ACTION_VIEW_STATES_KEY = "android:menu:actionviewstates";
+    private static final String PRESENTER_KEY           = "android:menu:presenters";
+    private static final String ACTION_VIEW_STATES_KEY  = "android:menu:actionviewstates";
     private static final String EXPANDED_ACTION_VIEW_ID = "android:menu:expandedactionview";
 
-    private static final int[]  sCategoryToOrder = new int[] {
+    private static final int[] sCategoryToOrder = new int[]{
         1, /* No category */
         4, /* CONTAINER */
         5, /* SYSTEM */
@@ -66,7 +68,8 @@ public class MenuBuilder implements Menu {
         0, /* SELECTED_ALTERNATIVE */
     };
 
-    private final Context mContext;
+    @NotNull
+    private final Context   mContext;
     private final Resources mResources;
 
     /**
@@ -97,7 +100,7 @@ public class MenuBuilder implements Menu {
      * Whether or not the items (or any one item's shown state) has changed since it was last
      * fetched from {@link #getVisibleItems()}
      */
-    private boolean mIsVisibleItemsStale;
+    private boolean                 mIsVisibleItemsStale;
 
     /**
      * Contains only the items that should appear in the Action Bar, if present.
@@ -127,11 +130,14 @@ public class MenuBuilder implements Menu {
     private ContextMenuInfo mCurrentMenuInfo;
 
     /** Header title for menu types that have a header (context and submenus) */
+    @Nullable
     CharSequence mHeaderTitle;
     /** Header icon for menu types that have a header and support icons (context) */
-    Drawable mHeaderIcon;
+    @Nullable
+    Drawable     mHeaderIcon;
     /** Header custom view for menu types that have a header and support custom views (context) */
-    View mHeaderView;
+    @Nullable
+    View         mHeaderView;
 
     /**
      * Contains the state of the View hierarchy for all menu views when the menu
@@ -143,27 +149,31 @@ public class MenuBuilder implements Menu {
      * Prevents onItemsChanged from doing its junk, useful for batching commands
      * that may individually call onItemsChanged.
      */
-    private boolean mPreventDispatchingItemsChanged = false;
+    private boolean mPreventDispatchingItemsChanged     = false;
     private boolean mItemsChangedWhileDispatchPrevented = false;
 
     private boolean mOptionalIconsVisible = false;
 
     private boolean mIsClosing = false;
 
+    @NotNull
     private ArrayList<MenuItemImpl> mTempShortcutItemList = new ArrayList<MenuItemImpl>();
 
+    @NotNull
     private CopyOnWriteArrayList<WeakReference<MenuPresenter>> mPresenters =
-            new CopyOnWriteArrayList<WeakReference<MenuPresenter>>();
+        new CopyOnWriteArrayList<WeakReference<MenuPresenter>>();
 
     /**
      * Currently expanded menu item; must be collapsed when we clear.
      */
+    @Nullable
     private MenuItemImpl mExpandedItem;
 
     /**
      * Called by menu to notify of close and selection changes.
      */
-    public interface Callback {
+    public interface Callback
+    {
         /**
          * Called when a menu item is selected.
          * @param menu The menu that is the parent of the item
@@ -183,11 +193,13 @@ public class MenuBuilder implements Menu {
     /**
      * Called by menu items to execute their associated action
      */
-    public interface ItemInvoker {
+    public interface ItemInvoker
+    {
         public boolean invokeItem(MenuItemImpl item);
     }
 
-    public MenuBuilder(Context context) {
+    public MenuBuilder(@NotNull Context context)
+    {
         mContext = context;
         mResources = context.getResources();
 
@@ -203,7 +215,9 @@ public class MenuBuilder implements Menu {
         setShortcutsVisibleInner(true);
     }
 
-    public MenuBuilder setDefaultShowAsAction(int defaultShowAsAction) {
+    @NotNull
+    public MenuBuilder setDefaultShowAsAction(int defaultShowAsAction)
+    {
         mDefaultShowAsAction = defaultShowAsAction;
         return this;
     }
@@ -215,7 +229,8 @@ public class MenuBuilder implements Menu {
      *
      * @param presenter The presenter to add
      */
-    public void addMenuPresenter(MenuPresenter presenter) {
+    public void addMenuPresenter(@NotNull MenuPresenter presenter)
+    {
         mPresenters.add(new WeakReference<MenuPresenter>(presenter));
         presenter.initForMenu(mContext, this);
         mIsActionItemsStale = true;
@@ -267,7 +282,7 @@ public class MenuBuilder implements Menu {
         return result;
     }
 
-    private void dispatchSaveInstanceState(Bundle outState) {
+    private void dispatchSaveInstanceState(@NotNull Bundle outState) {
         if (mPresenters.isEmpty()) return;
 
         SparseArray<Parcelable> presenterStates = new SparseArray<Parcelable>();
@@ -290,7 +305,7 @@ public class MenuBuilder implements Menu {
         outState.putSparseParcelableArray(PRESENTER_KEY, presenterStates);
     }
 
-    private void dispatchRestoreInstanceState(Bundle state) {
+    private void dispatchRestoreInstanceState(@NotNull Bundle state) {
         SparseArray<Parcelable> presenterStates = state.getSparseParcelableArray(PRESENTER_KEY);
 
         if (presenterStates == null || mPresenters.isEmpty()) return;
@@ -311,15 +326,15 @@ public class MenuBuilder implements Menu {
         }
     }
 
-    public void savePresenterStates(Bundle outState) {
+    public void savePresenterStates(@NotNull Bundle outState) {
         dispatchSaveInstanceState(outState);
     }
 
-    public void restorePresenterStates(Bundle state) {
+    public void restorePresenterStates(@NotNull Bundle state) {
         dispatchRestoreInstanceState(state);
     }
 
-    public void saveActionViewStates(Bundle outStates) {
+    public void saveActionViewStates(@NotNull Bundle outStates) {
         SparseArray<Parcelable> viewStates = null;
 
         final int itemCount = size();
@@ -346,7 +361,7 @@ public class MenuBuilder implements Menu {
         }
     }
 
-    public void restoreActionViewStates(Bundle states) {
+    public void restoreActionViewStates(@Nullable Bundle states) {
         if (states == null) {
             return;
         }
@@ -392,6 +407,7 @@ public class MenuBuilder implements Menu {
     /**
      * Adds an item to the menu.  The other add methods funnel to this.
      */
+    @NotNull
     private MenuItem addInternal(int group, int id, int categoryOrder, CharSequence title) {
         final int ordering = getOrdering(categoryOrder);
 
@@ -409,30 +425,37 @@ public class MenuBuilder implements Menu {
         return item;
     }
 
+    @NotNull
     public MenuItem add(CharSequence title) {
         return addInternal(0, 0, 0, title);
     }
 
+    @NotNull
     public MenuItem add(int titleRes) {
         return addInternal(0, 0, 0, mResources.getString(titleRes));
     }
 
+    @NotNull
     public MenuItem add(int group, int id, int categoryOrder, CharSequence title) {
         return addInternal(group, id, categoryOrder, title);
     }
 
+    @NotNull
     public MenuItem add(int group, int id, int categoryOrder, int title) {
         return addInternal(group, id, categoryOrder, mResources.getString(title));
     }
 
+    @NotNull
     public SubMenu addSubMenu(CharSequence title) {
         return addSubMenu(0, 0, 0, title);
     }
 
+    @NotNull
     public SubMenu addSubMenu(int titleRes) {
         return addSubMenu(0, 0, 0, mResources.getString(titleRes));
     }
 
+    @NotNull
     public SubMenu addSubMenu(int group, int id, int categoryOrder, CharSequence title) {
         final MenuItemImpl item = (MenuItemImpl) addInternal(group, id, categoryOrder, title);
         final SubMenuBuilder subMenu = new SubMenuBuilder(mContext, this, item);
@@ -441,12 +464,13 @@ public class MenuBuilder implements Menu {
         return subMenu;
     }
 
+    @NotNull
     public SubMenu addSubMenu(int group, int id, int categoryOrder, int title) {
         return addSubMenu(group, id, categoryOrder, mResources.getString(title));
     }
 
     public int addIntentOptions(int group, int id, int categoryOrder, ComponentName caller,
-            Intent[] specifics, Intent intent, int flags, MenuItem[] outSpecificItems) {
+            Intent[] specifics, Intent intent, int flags, @Nullable MenuItem[] outSpecificItems) {
         PackageManager pm = mContext.getPackageManager();
         final List<ResolveInfo> lri =
                 pm.queryIntentActivityOptions(caller, specifics, intent, 0);
@@ -534,7 +558,7 @@ public class MenuBuilder implements Menu {
         onItemsChanged(true);
     }
 
-    void setExclusiveItemChecked(MenuItem item) {
+    void setExclusiveItemChecked(@NotNull MenuItem item) {
         final int group = item.getGroupId();
 
         final int N = mItems.size();
@@ -603,6 +627,7 @@ public class MenuBuilder implements Menu {
         return false;
     }
 
+    @Nullable
     public MenuItem findItem(int id) {
         final int size = size();
         for (int i = 0; i < size; i++) {
@@ -665,7 +690,7 @@ public class MenuBuilder implements Menu {
         return mItems.get(index);
     }
 
-    public boolean isShortcutKey(int keyCode, KeyEvent event) {
+    public boolean isShortcutKey(int keyCode, @NotNull KeyEvent event) {
         return findItemWithShortcutForKey(keyCode, event) != null;
     }
 
@@ -736,6 +761,7 @@ public class MenuBuilder implements Menu {
         return mResources;
     }
 
+    @NotNull
     public Context getContext() {
         return mContext;
     }
@@ -753,7 +779,7 @@ public class MenuBuilder implements Menu {
         }
     }
 
-    private static int findInsertIndex(ArrayList<MenuItemImpl> items, int ordering) {
+    private static int findInsertIndex(@NotNull ArrayList<MenuItemImpl> items, int ordering) {
         for (int i = items.size() - 1; i >= 0; i--) {
             MenuItemImpl item = items.get(i);
             if (item.getOrdering() <= ordering) {
@@ -764,7 +790,7 @@ public class MenuBuilder implements Menu {
         return 0;
     }
 
-    public boolean performShortcut(int keyCode, KeyEvent event, int flags) {
+    public boolean performShortcut(int keyCode, @NotNull KeyEvent event, int flags) {
         final MenuItemImpl item = findItemWithShortcutForKey(keyCode, event);
 
         boolean handled = false;
@@ -787,7 +813,7 @@ public class MenuBuilder implements Menu {
      * with the keyCode.
      */
     @SuppressWarnings("deprecation")
-    void findItemsWithShortcutForKey(List<MenuItemImpl> items, int keyCode, KeyEvent event) {
+    void findItemsWithShortcutForKey(@NotNull List<MenuItemImpl> items, int keyCode, @NotNull KeyEvent event) {
         final boolean qwerty = isQwertyMode();
         final int metaState = event.getMetaState();
         final KeyCharacterMap.KeyData possibleChars = new KeyCharacterMap.KeyData();
@@ -829,8 +855,9 @@ public class MenuBuilder implements Menu {
      * On the other hand, if two (or more) shortcuts corresponds to the same key,
      * we have to only return the exact match.
      */
+    @Nullable
     @SuppressWarnings("deprecation")
-    MenuItemImpl findItemWithShortcutForKey(int keyCode, KeyEvent event) {
+    MenuItemImpl findItemWithShortcutForKey(int keyCode, @NotNull KeyEvent event) {
         // Get all items that can be associated directly or indirectly with the keyCode
         ArrayList<MenuItemImpl> items = mTempShortcutItemList;
         items.clear();
@@ -875,7 +902,7 @@ public class MenuBuilder implements Menu {
         return performItemAction(findItem(id), flags);
     }
 
-    public boolean performItemAction(MenuItem item, int flags) {
+    public boolean performItemAction(@NotNull MenuItem item, int flags) {
         MenuItemImpl itemImpl = (MenuItemImpl) item;
 
         if (itemImpl == null || !itemImpl.isEnabled()) {
@@ -1096,8 +1123,8 @@ public class MenuBuilder implements Menu {
         onItemsChanged(false);
     }
 
-    private void setHeaderInternal(final int titleRes, final CharSequence title, final int iconRes,
-            final Drawable icon, final View view) {
+    private void setHeaderInternal(final int titleRes, @Nullable final CharSequence title, final int iconRes,
+            @Nullable final Drawable icon, @Nullable final View view) {
         final Resources r = getResources();
 
         if (view != null) {
@@ -1134,6 +1161,7 @@ public class MenuBuilder implements Menu {
      * @param title The new title.
      * @return This MenuBuilder so additional setters can be called.
      */
+    @NotNull
     protected MenuBuilder setHeaderTitleInt(CharSequence title) {
         setHeaderInternal(0, title, 0, null, null);
         return this;
@@ -1146,6 +1174,7 @@ public class MenuBuilder implements Menu {
      * @param titleRes The new title (as a resource ID).
      * @return This MenuBuilder so additional setters can be called.
      */
+    @NotNull
     protected MenuBuilder setHeaderTitleInt(int titleRes) {
         setHeaderInternal(titleRes, null, 0, null, null);
         return this;
@@ -1158,6 +1187,7 @@ public class MenuBuilder implements Menu {
      * @param icon The new icon.
      * @return This MenuBuilder so additional setters can be called.
      */
+    @NotNull
     protected MenuBuilder setHeaderIconInt(Drawable icon) {
         setHeaderInternal(0, null, 0, icon, null);
         return this;
@@ -1170,6 +1200,7 @@ public class MenuBuilder implements Menu {
      * @param iconRes The new icon (as a resource ID).
      * @return This MenuBuilder so additional setters can be called.
      */
+    @NotNull
     protected MenuBuilder setHeaderIconInt(int iconRes) {
         setHeaderInternal(0, null, iconRes, null, null);
         return this;
@@ -1182,19 +1213,23 @@ public class MenuBuilder implements Menu {
      * @param view The new view.
      * @return This MenuBuilder so additional setters can be called.
      */
+    @NotNull
     protected MenuBuilder setHeaderViewInt(View view) {
         setHeaderInternal(0, null, 0, null, view);
         return this;
     }
 
+    @Nullable
     public CharSequence getHeaderTitle() {
         return mHeaderTitle;
     }
 
+    @Nullable
     public Drawable getHeaderIcon() {
         return mHeaderIcon;
     }
 
+    @Nullable
     public View getHeaderView() {
         return mHeaderView;
     }
@@ -1270,11 +1305,12 @@ public class MenuBuilder implements Menu {
         return collapsed;
     }
 
+    @Nullable
     public MenuItemImpl getExpandedItem() {
         return mExpandedItem;
     }
 
-    public boolean bindNativeOverflow(android.view.Menu menu, android.view.MenuItem.OnMenuItemClickListener listener, HashMap<android.view.MenuItem, MenuItemImpl> map) {
+    public boolean bindNativeOverflow(@NotNull android.view.Menu menu, android.view.MenuItem.OnMenuItemClickListener listener, @NotNull HashMap<android.view.MenuItem, MenuItemImpl> map) {
         final List<MenuItemImpl> nonActionItems = getNonActionItems();
         if (nonActionItems == null || nonActionItems.size() == 0) {
             return false;

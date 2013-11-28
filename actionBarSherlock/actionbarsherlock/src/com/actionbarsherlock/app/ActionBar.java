@@ -27,6 +27,8 @@ import android.view.ViewDebug;
 import android.view.ViewGroup;
 import android.view.ViewGroup.MarginLayoutParams;
 import android.widget.SpinnerAdapter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A window feature at the top of the activity that may display the activity title, navigation
@@ -41,14 +43,14 @@ import android.widget.SpinnerAdapter;
  * the left, followed by the activity title. If your activity has an options menu, you can make
  * select items accessible directly from the action bar as "action items". You can also
  * modify various characteristics of the action bar or remove it completely.</p>
- * <p>From your activity, you can retrieve an instance of {@link ActionBar} by calling {@link
+ * <p>From your activity, you can retrieve an instance of {@link com.actionbarsherlock.app.ActionBar} by calling {@link
  * android.app.Activity#getActionBar getActionBar()}.</p>
  * <p>In some cases, the action bar may be overlayed by another bar that enables contextual actions,
  * using an {@link android.view.ActionMode}. For example, when the user selects one or more items in
  * your activity, you can enable an action mode that offers actions specific to the selected
  * items, with a UI that temporarily replaces the action bar. Although the UI may occupy the
  * same space, the {@link android.view.ActionMode} APIs are distinct and independent from those for
- * {@link ActionBar}.
+ * {@link com.actionbarsherlock.app.ActionBar}.
  * <div class="special reference">
  * <h3>Developer Guides</h3>
  * <p>For information about how to use the action bar, including how to add action items, navigation
@@ -125,7 +127,7 @@ public abstract class ActionBar {
 
     /**
      * Show the custom view if one has been set.
-     * @see #setCustomView(View)
+     * @see #setCustomView(android.view.View)
      * @see #setDisplayOptions(int)
      * @see #setDisplayOptions(int, int)
      */
@@ -422,8 +424,8 @@ public abstract class ActionBar {
      * action bar.
      *
      * @param d Background drawable
-     * @see #setStackedBackgroundDrawable(Drawable)
-     * @see #setSplitBackgroundDrawable(Drawable)
+     * @see #setStackedBackgroundDrawable(android.graphics.drawable.Drawable)
+     * @see #setSplitBackgroundDrawable(android.graphics.drawable.Drawable)
      */
     public abstract void setBackgroundDrawable(Drawable d);
 
@@ -496,7 +498,7 @@ public abstract class ActionBar {
     public abstract int getDisplayOptions();
 
     /**
-     * Create and return a new {@link Tab}.
+     * Create and return a new {@link com.actionbarsherlock.app.ActionBar.Tab}.
      * This tab will not be included in the action bar until it is added.
      *
      * <p>Very often tabs will be used to switch between {@link Fragment}
@@ -507,7 +509,7 @@ public abstract class ActionBar {
      *
      * @return A new Tab
      *
-     * @see #addTab(Tab)
+     * @see #addTab(com.actionbarsherlock.app.ActionBar.Tab)
      */
     public abstract Tab newTab();
 
@@ -659,7 +661,7 @@ public abstract class ActionBar {
     public void setHomeButtonEnabled(boolean enabled) { }
 
     /**
-     * Returns a {@link Context} with an appropriate theme for creating views that
+     * Returns a {@link android.content.Context} with an appropriate theme for creating views that
      * will appear in the action bar. If you are inflating or instantiating custom views
      * that will appear in an action bar, you should use the Context returned by this method.
      * (This includes adapters used for list navigation mode.)
@@ -667,6 +669,7 @@ public abstract class ActionBar {
      *
      * @return A themed Context for creating views
      */
+    @Nullable
     public Context getThemedContext() { return null; }
 
     /**
@@ -770,7 +773,7 @@ public abstract class ActionBar {
 
         /**
          * Set a custom view to be used for this tab. This overrides values set by
-         * {@link #setText(CharSequence)} and {@link #setIcon(Drawable)}.
+         * {@link #setText(CharSequence)} and {@link #setIcon(android.graphics.drawable.Drawable)}.
          *
          * @param view Custom view to be used as a tab.
          * @return The current instance for call chaining
@@ -779,7 +782,7 @@ public abstract class ActionBar {
 
         /**
          * Set a custom view to be used for this tab. This overrides values set by
-         * {@link #setText(CharSequence)} and {@link #setIcon(Drawable)}.
+         * {@link #setText(CharSequence)} and {@link #setIcon(android.graphics.drawable.Drawable)}.
          *
          * @param layoutResId A layout resource to inflate and use as a custom tab view
          * @return The current instance for call chaining
@@ -789,7 +792,7 @@ public abstract class ActionBar {
         /**
          * Retrieve a previously set custom view for this tab.
          *
-         * @return The custom view set by {@link #setCustomView(View)}.
+         * @return The custom view set by {@link #setCustomView(android.view.View)}.
          */
         public abstract View getCustomView();
 
@@ -807,7 +810,7 @@ public abstract class ActionBar {
         public abstract Object getTag();
 
         /**
-         * Set the {@link TabListener} that will handle switching to and from this tab.
+         * Set the {@link com.actionbarsherlock.app.ActionBar.TabListener} that will handle switching to and from this tab.
          * All tabs must have a TabListener set before being added to the ActionBar.
          *
          * @param listener Listener to handle tab selection events
@@ -860,7 +863,7 @@ public abstract class ActionBar {
          * Called when a tab enters the selected state.
          *
          * @param tab The tab that was selected
-         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+         * @param ft A {@link android.support.v4.app.FragmentTransaction} for queuing fragment operations to execute
          *        during a tab switch. The previous tab's unselect and this tab's select will be
          *        executed in a single transaction. This FragmentTransaction does not support
          *        being added to the back stack.
@@ -871,7 +874,7 @@ public abstract class ActionBar {
          * Called when a tab exits the selected state.
          *
          * @param tab The tab that was unselected
-         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+         * @param ft A {@link android.support.v4.app.FragmentTransaction} for queuing fragment operations to execute
          *        during a tab switch. This tab's unselect and the newly selected tab's select
          *        will be executed in a single transaction. This FragmentTransaction does not
          *        support being added to the back stack.
@@ -883,7 +886,7 @@ public abstract class ActionBar {
          * Some applications may use this action to return to the top level of a category.
          *
          * @param tab The tab that was reselected.
-         * @param ft A {@link FragmentTransaction} for queuing fragment operations to execute
+         * @param ft A {@link android.support.v4.app.FragmentTransaction} for queuing fragment operations to execute
          *        once this method returns. This FragmentTransaction does not support
          *        being added to the back stack.
          */
@@ -921,7 +924,7 @@ public abstract class ActionBar {
         })
         public int gravity = -1;
 
-        public LayoutParams(Context c, AttributeSet attrs) {
+        public LayoutParams(@NotNull Context c, @NotNull AttributeSet attrs) {
             super(c, attrs);
 
             TypedArray a = c.obtainStyledAttributes(attrs, ATTRS);
@@ -943,13 +946,13 @@ public abstract class ActionBar {
             this(WRAP_CONTENT, FILL_PARENT, gravity);
         }
 
-        public LayoutParams(LayoutParams source) {
+        public LayoutParams(@NotNull LayoutParams source) {
             super(source);
 
             this.gravity = source.gravity;
         }
 
-        public LayoutParams(ViewGroup.LayoutParams source) {
+        public LayoutParams(@NotNull ViewGroup.LayoutParams source) {
             super(source);
         }
     }

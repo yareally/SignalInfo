@@ -29,6 +29,8 @@ import android.view.ViewGroup;
 import com.actionbarsherlock.R;
 import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.internal.nineoldandroids.widget.NineFrameLayout;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class acts as a container for the action bar view and action mode context views.
@@ -36,30 +38,36 @@ import com.actionbarsherlock.internal.nineoldandroids.widget.NineFrameLayout;
  * @hide
  */
 public class ActionBarContainer extends NineFrameLayout {
-    private boolean mIsTransitioning;
-    private View mTabContainer;
+    private boolean       mIsTransitioning;
+    @Nullable
+    private View          mTabContainer;
     private ActionBarView mActionBarView;
 
+    @Nullable
     private Drawable mBackground;
+    @Nullable
     private Drawable mStackedBackground;
+    @Nullable
     private Drawable mSplitBackground;
-    private boolean mIsSplit;
-    private boolean mIsStacked;
+    private boolean  mIsSplit;
+    private boolean  mIsStacked;
 
-    public ActionBarContainer(Context context) {
+    public ActionBarContainer(@NotNull Context context)
+    {
         this(context, null);
     }
 
-    public ActionBarContainer(Context context, AttributeSet attrs) {
+    public ActionBarContainer(@NotNull Context context, @NotNull AttributeSet attrs)
+    {
         super(context, attrs);
 
         setBackgroundDrawable(null);
 
         TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.SherlockActionBar);
+            R.styleable.SherlockActionBar);
         mBackground = a.getDrawable(R.styleable.SherlockActionBar_background);
         mStackedBackground = a.getDrawable(
-                R.styleable.SherlockActionBar_backgroundStacked);
+            R.styleable.SherlockActionBar_backgroundStacked);
 
         //Fix for issue #379
         if (mStackedBackground instanceof ColorDrawable && Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
@@ -69,26 +77,29 @@ public class ActionBarContainer extends NineFrameLayout {
         if (getId() == R.id.abs__split_action_bar) {
             mIsSplit = true;
             mSplitBackground = a.getDrawable(
-                    R.styleable.SherlockActionBar_backgroundSplit);
+                R.styleable.SherlockActionBar_backgroundSplit);
         }
         a.recycle();
 
         setWillNotDraw(mIsSplit ? mSplitBackground == null :
-                mBackground == null && mStackedBackground == null);
+            mBackground == null && mStackedBackground == null);
     }
 
     @Override
-    public void onFinishInflate() {
+    public void onFinishInflate()
+    {
         super.onFinishInflate();
         mActionBarView = (ActionBarView) findViewById(R.id.abs__action_bar);
     }
 
-    public void setPrimaryBackground(Drawable bg) {
+    public void setPrimaryBackground(Drawable bg)
+    {
         mBackground = bg;
         invalidate();
     }
 
-    public void setStackedBackground(Drawable bg) {
+    public void setStackedBackground(Drawable bg)
+    {
         mStackedBackground = bg;
         invalidate();
     }
@@ -118,7 +129,7 @@ public class ActionBarContainer extends NineFrameLayout {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
+    public boolean onTouchEvent(@NotNull MotionEvent ev) {
         super.onTouchEvent(ev);
 
         // An action bar always eats touch events.
@@ -126,14 +137,14 @@ public class ActionBarContainer extends NineFrameLayout {
     }
 
     @Override
-    public boolean onHoverEvent(MotionEvent ev) {
+    public boolean onHoverEvent(@NotNull MotionEvent ev) {
         super.onHoverEvent(ev);
 
         // An action bar always eats hover events.
         return true;
     }
 
-    public void setTabContainer(ScrollingTabContainerView tabView) {
+    public void setTabContainer(@Nullable ScrollingTabContainerView tabView) {
         if (mTabContainer != null) {
             removeView(mTabContainer);
         }
@@ -147,6 +158,7 @@ public class ActionBarContainer extends NineFrameLayout {
         }
     }
 
+    @Nullable
     public View getTabContainer() {
         return mTabContainer;
     }

@@ -10,6 +10,7 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.actionbarsherlock.internal.nineoldandroids.widget.NineLinearLayout;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A simple extension of a regular linear layout that supports the divider API
@@ -52,7 +53,7 @@ public class IcsLinearLayout extends NineLinearLayout {
     private int mShowDividers;
     private int mDividerPadding;
 
-    public IcsLinearLayout(Context context, AttributeSet attrs) {
+    public IcsLinearLayout(@NotNull Context context, @NotNull AttributeSet attrs) {
         super(context, attrs);
 
         TypedArray a = context.obtainStyledAttributes(attrs, /*com.android.internal.R.styleable.*/R_styleable_LinearLayout);
@@ -120,7 +121,7 @@ public class IcsLinearLayout extends NineLinearLayout {
      * @param padding Padding value in pixels that will be applied to each end
      *
      * @see #setShowDividers(int)
-     * @see #setDividerDrawable(Drawable)
+     * @see #setDividerDrawable(android.graphics.drawable.Drawable)
      * @see #getDividerPadding()
      */
     public void setDividerPadding(int padding) {
@@ -131,7 +132,7 @@ public class IcsLinearLayout extends NineLinearLayout {
      * Get the padding size used to inset dividers in pixels
      *
      * @see #setShowDividers(int)
-     * @see #setDividerDrawable(Drawable)
+     * @see #setDividerDrawable(android.graphics.drawable.Drawable)
      * @see #setDividerPadding(int)
      */
     public int getDividerPadding() {
@@ -148,7 +149,7 @@ public class IcsLinearLayout extends NineLinearLayout {
     }
 
     @Override
-    protected void measureChildWithMargins(View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
+    protected void measureChildWithMargins(@NotNull View child, int parentWidthMeasureSpec, int widthUsed, int parentHeightMeasureSpec, int heightUsed) {
         final int index = indexOfChild(child);
         final int orientation = getOrientation();
         final LayoutParams params = (LayoutParams) child.getLayoutParams();

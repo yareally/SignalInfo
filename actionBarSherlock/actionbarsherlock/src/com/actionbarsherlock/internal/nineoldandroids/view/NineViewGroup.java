@@ -5,19 +5,26 @@ import android.util.AttributeSet;
 import android.view.ViewGroup;
 
 import com.actionbarsherlock.internal.nineoldandroids.view.animation.AnimatorProxy;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public abstract class NineViewGroup extends ViewGroup {
+    @Nullable
     private final AnimatorProxy mProxy;
 
-    public NineViewGroup(Context context) {
+    public NineViewGroup(Context context)
+    {
         super(context);
         mProxy = AnimatorProxy.NEEDS_PROXY ? AnimatorProxy.wrap(this) : null;
     }
-    public NineViewGroup(Context context, AttributeSet attrs) {
+
+    public NineViewGroup(@NotNull Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         mProxy = AnimatorProxy.NEEDS_PROXY ? AnimatorProxy.wrap(this) : null;
     }
-    public NineViewGroup(Context context, AttributeSet attrs, int defStyle) {
+
+    public NineViewGroup(@NotNull Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         mProxy = AnimatorProxy.NEEDS_PROXY ? AnimatorProxy.wrap(this) : null;
     }

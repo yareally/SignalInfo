@@ -43,6 +43,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.actionbarsherlock.R;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -57,34 +59,35 @@ import java.util.WeakHashMap;
  */
 class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListener {
 
-    private static final boolean DBG = false;
-    private static final String LOG_TAG = "SuggestionsAdapter";
-    private static final int QUERY_LIMIT = 50;
+    private static final boolean DBG         = false;
+    private static final String  LOG_TAG     = "SuggestionsAdapter";
+    private static final int     QUERY_LIMIT = 50;
 
-    static final int REFINE_NONE = 0;
+    static final int REFINE_NONE     = 0;
     static final int REFINE_BY_ENTRY = 1;
-    static final int REFINE_ALL = 2;
+    static final int REFINE_ALL      = 2;
 
-    private SearchManager mSearchManager;
-    private SearchableInfo mSearchable;
-    private SearchView mSearchView;
-    private Context mProviderContext;
+    private SearchManager                               mSearchManager;
+    private SearchableInfo                              mSearchable;
+    private SearchView                                  mSearchView;
+    private Context                                     mProviderContext;
     private WeakHashMap<String, Drawable.ConstantState> mOutsideDrawablesCache;
-    private boolean mClosed = false;
-    private int mQueryRefinement = REFINE_BY_ENTRY;
+    private boolean mClosed          = false;
+    private int     mQueryRefinement = REFINE_BY_ENTRY;
 
     // URL color
+    @Nullable
     private ColorStateList mUrlColor;
 
     static final int INVALID_INDEX = -1;
 
     // Cached column indexes, updated when the cursor changes.
-    private int mText1Col = INVALID_INDEX;
-    private int mText2Col = INVALID_INDEX;
-    private int mText2UrlCol = INVALID_INDEX;
+    private int mText1Col     = INVALID_INDEX;
+    private int mText2Col     = INVALID_INDEX;
+    private int mText2UrlCol  = INVALID_INDEX;
     private int mIconName1Col = INVALID_INDEX;
     private int mIconName2Col = INVALID_INDEX;
-    private int mFlagsCol = INVALID_INDEX;
+    private int mFlagsCol     = INVALID_INDEX;
 
     // private final Runnable mStartSpinnerRunnable;
     // private final Runnable mStopSpinnerRunnable;
@@ -93,9 +96,9 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      * The amount of time we delay in the filter when the user presses the delete key.
      */
     //private static final long DELETE_KEY_POST_DELAY = 500L;
-
     public SuggestionsAdapter(Context context, SearchView searchView,
-                              SearchableInfo searchable, WeakHashMap<String, Drawable.ConstantState> outsideDrawablesCache) {
+                              SearchableInfo searchable, WeakHashMap<String, Drawable.ConstantState> outsideDrawablesCache)
+    {
         super(context,
             R.layout.abs__search_dropdown_item_icons_2line,
             null,   // no initial cursor
@@ -120,18 +123,18 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
         // };
 
         // delay 500ms when deleting
-//  TODO  getFilter().setDelayer(new Filter.Delayer() {
-//
-//      private int mPreviousLength = 0;
-//
-//      public long getPostingDelay(CharSequence constraint) {
-//        if (constraint == null) return 0;
-//
-//        long delay = constraint.length() < mPreviousLength ? DELETE_KEY_POST_DELAY : 0;
-//        mPreviousLength = constraint.length();
-//        return delay;
-//      }
-//    });
+        //  TODO  getFilter().setDelayer(new Filter.Delayer() {
+        //
+        //      private int mPreviousLength = 0;
+        //
+        //      public long getPostingDelay(CharSequence constraint) {
+        //        if (constraint == null) return 0;
+        //
+        //        long delay = constraint.length() < mPreviousLength ? DELETE_KEY_POST_DELAY : 0;
+        //        mPreviousLength = constraint.length();
+        //        return delay;
+        //      }
+        //    });
     }
 
     /**
@@ -169,8 +172,9 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      * in a worker thread, so it's OK if the query is slow (e.g. round trip for suggestions).
      * The results will be processed in the UI thread and changeCursor() will be called.
      */
+    @Nullable
     @Override
-    public Cursor runQueryOnBackgroundThread(CharSequence constraint) {
+    public Cursor runQueryOnBackgroundThread(@Nullable CharSequence constraint) {
         if (DBG) Log.d(LOG_TAG, "runQueryOnBackgroundThread(" + constraint + ")");
         String query = (constraint == null) ? "" : constraint.toString();
         /**
@@ -200,6 +204,7 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
         return null;
     }
 
+    @Nullable
     public Cursor getSuggestions(String query, int limit) {
         if (mSearchable == null) {
             return null;
@@ -269,7 +274,7 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
         updateSpinnerState(getCursor());
     }
 
-    private void updateSpinnerState(Cursor cursor) {
+    private void updateSpinnerState(@Nullable Cursor cursor) {
         Bundle extras = cursor != null ? cursor.getExtras() : null;
         if (DBG) {
             Log.d(LOG_TAG, "updateSpinnerState - extra = "
@@ -291,7 +296,7 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      * Cache columns.
      */
     @Override
-    public void changeCursor(Cursor c) {
+    public void changeCursor(@Nullable Cursor c) {
         if (DBG) Log.d(LOG_TAG, "changeCursor(" + c + ")");
 
         if (mClosed) {
@@ -331,13 +336,19 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      * each time the contents of a list item are changed.
      */
     private final static class ChildViewCache {
-        public final TextView mText1;
-        public final TextView mText2;
+        @NotNull
+        public final TextView  mText1;
+        @NotNull
+        public final TextView  mText2;
+        @NotNull
         public final ImageView mIcon1;
+        @NotNull
         public final ImageView mIcon2;
+        @NotNull
         public final ImageView mIconRefine;
 
-        public ChildViewCache(View v) {
+        public ChildViewCache(@NotNull View v)
+        {
             mText1 = (TextView) v.findViewById(android.R.id.text1);
             mText2 = (TextView) v.findViewById(android.R.id.text2);
             mIcon1 = (ImageView) v.findViewById(android.R.id.icon1);
@@ -347,7 +358,8 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
     }
 
     @Override
-    public void bindView(View view, Context context, Cursor cursor) {
+    public void bindView(@NotNull View view, Context context, @NotNull Cursor cursor)
+    {
         ChildViewCache views = (ChildViewCache) view.getTag();
 
         int flags = 0;
@@ -363,7 +375,8 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
             CharSequence text2 = getStringOrNull(cursor, mText2UrlCol);
             if (text2 != null) {
                 text2 = formatUrl(text2);
-            } else {
+            }
+            else {
                 text2 = getStringOrNull(cursor, mText2Col);
             }
 
@@ -374,7 +387,8 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
                     views.mText1.setSingleLine(false);
                     views.mText1.setMaxLines(2);
                 }
-            } else {
+            }
+            else {
                 if (views.mText1 != null) {
                     views.mText1.setSingleLine(true);
                     views.mText1.setMaxLines(1);
@@ -390,24 +404,28 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
             setViewDrawable(views.mIcon2, getIcon2(cursor), View.GONE);
         }
         if (mQueryRefinement == REFINE_ALL
-                || (mQueryRefinement == REFINE_BY_ENTRY
-                && (flags & SearchManager.FLAG_QUERY_REFINEMENT) != 0)) {
+            || (mQueryRefinement == REFINE_BY_ENTRY
+            && (flags & SearchManager.FLAG_QUERY_REFINEMENT) != 0)) {
             views.mIconRefine.setVisibility(View.VISIBLE);
             views.mIconRefine.setTag(views.mText1.getText());
             views.mIconRefine.setOnClickListener(this);
-        } else {
+        }
+        else {
             views.mIconRefine.setVisibility(View.GONE);
         }
     }
 
-    public void onClick(View v) {
+    public void onClick(@NotNull View v)
+    {
         Object tag = v.getTag();
         if (tag instanceof CharSequence) {
             mSearchView.onQueryRefine((CharSequence) tag);
         }
     }
 
-    private CharSequence formatUrl(CharSequence url) {
+    @NotNull
+    private CharSequence formatUrl(@NotNull CharSequence url)
+    {
         if (mUrlColor == null) {
             // Lazily get the URL color from the current theme.
             TypedValue colorValue = new TypedValue();
@@ -417,23 +435,27 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
 
         SpannableString text = new SpannableString(url);
         text.setSpan(new TextAppearanceSpan(null, 0, 0, mUrlColor, null),
-                0, url.length(),
-                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            0, url.length(),
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return text;
     }
 
-    private void setViewText(TextView v, CharSequence text) {
+    private void setViewText(@NotNull TextView v, CharSequence text)
+    {
         // Set the text even if it's null, since we need to clear any previous text.
         v.setText(text);
 
         if (TextUtils.isEmpty(text)) {
             v.setVisibility(View.GONE);
-        } else {
+        }
+        else {
             v.setVisibility(View.VISIBLE);
         }
     }
 
-    private Drawable getIcon1(Cursor cursor) {
+    @Nullable
+    private Drawable getIcon1(@NotNull Cursor cursor)
+    {
         if (mIconName1Col == INVALID_INDEX) {
             return null;
         }
@@ -445,7 +467,9 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
         return getDefaultIcon1(cursor);
     }
 
-    private Drawable getIcon2(Cursor cursor) {
+    @Nullable
+    private Drawable getIcon2(@NotNull Cursor cursor)
+    {
         if (mIconName2Col == INVALID_INDEX) {
             return null;
         }
@@ -457,14 +481,16 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      * Sets the drawable in an image view, makes sure the view is only visible if there
      * is a drawable.
      */
-    private void setViewDrawable(ImageView v, Drawable drawable, int nullVisibility) {
+    private void setViewDrawable(@NotNull ImageView v, @Nullable Drawable drawable, int nullVisibility)
+    {
         // Set the icon even if the drawable is null, since we need to clear any
         // previous icon.
         v.setImageDrawable(drawable);
 
         if (drawable == null) {
             v.setVisibility(nullVisibility);
-        } else {
+        }
+        else {
             v.setVisibility(View.VISIBLE);
 
             // This is a hack to get any animated drawables (like a 'working' spinner)
@@ -485,8 +511,10 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      * @return The text to show, or <code>null</code> if the query should not be
      *         changed when selecting this suggestion.
      */
+    @Nullable
     @Override
-    public CharSequence convertToString(Cursor cursor) {
+    public CharSequence convertToString(@Nullable Cursor cursor)
+    {
         if (cursor == null) {
             return null;
         }
@@ -503,10 +531,11 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      * This method is overridden purely to provide a bit of protection against
      * flaky content providers.
      *
-     * @see android.widget.ListAdapter#getView(int, View, ViewGroup)
+     * @see android.widget.ListAdapter#getView(int, android.view.View, android.view.ViewGroup)
      */
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent)
+    {
         try {
             return super.getView(position, convertView, parent);
         } catch (RuntimeException e) {
@@ -529,7 +558,7 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      * (e.g., "2130837524"), in which case we will try to retrieve a drawable from
      * the provider's resources. If the value is not an integer, it is
      * treated as a Uri and opened with
-     * {@link ContentResolver#openOutputStream(android.net.Uri, String)}.
+     * {@link android.content.ContentResolver#openOutputStream(android.net.Uri, String)}.
      *
      * All resources and URIs are read using the suggestion provider's context.
      *
@@ -541,7 +570,9 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      *        or "content://contacts/photos/253".
      * @return a Drawable, or null if none found
      */
-    private Drawable getDrawableFromResourceValue(String drawableId) {
+    @Nullable
+    private Drawable getDrawableFromResourceValue(@Nullable String drawableId)
+    {
         if (drawableId == null || drawableId.length() == 0 || "0".equals(drawableId)) {
             return null;
         }
@@ -550,7 +581,7 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
             int resourceId = Integer.parseInt(drawableId);
             // It's an int, look for it in the cache
             String drawableUri = ContentResolver.SCHEME_ANDROID_RESOURCE
-                    + "://" + mProviderContext.getPackageName() + "/" + resourceId;
+                + "://" + mProviderContext.getPackageName() + "/" + resourceId;
             // Must use URI as cache key, since ints are app-specific
             Drawable drawable = checkIconCache(drawableUri);
             if (drawable != null) {
@@ -583,7 +614,9 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      *
      * @return A drawable, or {@code null} if the drawable could not be loaded.
      */
-    private Drawable getDrawable(Uri uri) {
+    @Nullable
+    private Drawable getDrawable(@NotNull Uri uri)
+    {
         try {
             String scheme = uri.getScheme();
             if (ContentResolver.SCHEME_ANDROID_RESOURCE.equals(scheme)) {
@@ -593,7 +626,8 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
                 } catch (Resources.NotFoundException ex) {
                     throw new FileNotFoundException("Resource does not exist: " + uri);
                 }
-            } else {
+            }
+            else {
                 // Let the ContentResolver handle content and file URIs.
                 InputStream stream = mProviderContext.getContentResolver().openInputStream(uri);
                 if (stream == null) {
@@ -615,12 +649,15 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
         }
     }
 
-    public Drawable getTheDrawable(Uri uri) throws FileNotFoundException {
+    @Nullable
+    public Drawable getTheDrawable(@NotNull Uri uri) throws FileNotFoundException
+    {
         String authority = uri.getAuthority();
         Resources r;
         if (TextUtils.isEmpty(authority)) {
             throw new FileNotFoundException("No authority: " + uri);
-        } else {
+        }
+        else {
             try {
                 r = mContext.getPackageManager().getResourcesForApplication(authority);
             } catch (NameNotFoundException ex) {
@@ -650,6 +687,7 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
         return r.getDrawable(id);
     }
 
+    @Nullable
     private Drawable checkIconCache(String resourceUri) {
         Drawable.ConstantState cached = mOutsideDrawablesCache.get(resourceUri);
         if (cached == null) {
@@ -659,7 +697,7 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
         return cached.newDrawable();
     }
 
-    private void storeInIconCache(String resourceUri, Drawable drawable) {
+    private void storeInIconCache(String resourceUri, @Nullable Drawable drawable) {
         if (drawable != null) {
             mOutsideDrawablesCache.put(resourceUri, drawable.getConstantState());
         }
@@ -685,7 +723,8 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      * @return A drawable, or {@code null} if neither the activity nor the application
      *         has an icon set.
      */
-    private Drawable getActivityIconWithCache(ComponentName component) {
+    @Nullable
+    private Drawable getActivityIconWithCache(@NotNull ComponentName component) {
         // First check the icon cache
         String componentIconKey = component.flattenToShortString();
         // Using containsKey() since we also store null values.
@@ -708,7 +747,8 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      * @return A drawable, or {@code null} if neither the acitivy or the application
      *         have an icon set.
      */
-    private Drawable getActivityIcon(ComponentName component) {
+    @Nullable
+    private Drawable getActivityIcon(@NotNull ComponentName component) {
         PackageManager pm = mContext.getPackageManager();
         final ActivityInfo activityInfo;
         try {
@@ -737,12 +777,14 @@ class SuggestionsAdapter extends ResourceCursorAdapter implements OnClickListene
      * @return The value of the given column, or <code>null</null>
      *         if the cursor does not contain the given column.
      */
-    public static String getColumnString(Cursor cursor, String columnName) {
+    @Nullable
+    public static String getColumnString(@NotNull Cursor cursor, String columnName) {
         int col = cursor.getColumnIndex(columnName);
         return getStringOrNull(cursor, col);
     }
 
-    private static String getStringOrNull(Cursor cursor, int col) {
+    @Nullable
+    private static String getStringOrNull(@NotNull Cursor cursor, int col) {
         if (col == INVALID_INDEX) {
             return null;
         }

@@ -5,6 +5,7 @@ import android.content.res.TypedArray;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.LinearLayout;
+import org.jetbrains.annotations.NotNull;
 
 public class TabsLinearLayout extends IcsLinearLayout {
     private static final int[] R_styleable_LinearLayout = new int[] {
@@ -14,7 +15,7 @@ public class TabsLinearLayout extends IcsLinearLayout {
 
     private boolean mUseLargestChild;
 
-    public TabsLinearLayout(Context context, AttributeSet attrs) {
+    public TabsLinearLayout(@NotNull Context context, @NotNull AttributeSet attrs) {
         super(context, attrs);
 
         TypedArray a = context.obtainStyledAttributes(attrs, /*com.android.internal.R.styleable.*/R_styleable_LinearLayout);

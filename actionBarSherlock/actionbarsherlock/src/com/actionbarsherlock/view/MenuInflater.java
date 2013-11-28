@@ -20,6 +20,9 @@ package com.actionbarsherlock.view;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 import android.content.Context;
@@ -58,26 +61,29 @@ public class MenuInflater {
 
     private static final int NO_ID = 0;
 
-    private static final Class<?>[] ACTION_VIEW_CONSTRUCTOR_SIGNATURE = new Class[] {Context.class};
+    private static final Class<?>[] ACTION_VIEW_CONSTRUCTOR_SIGNATURE = new Class[]{Context.class};
 
     private static final Class<?>[] ACTION_PROVIDER_CONSTRUCTOR_SIGNATURE = ACTION_VIEW_CONSTRUCTOR_SIGNATURE;
 
+    @NotNull
     private final Object[] mActionViewConstructorArguments;
 
+    @NotNull
     private final Object[] mActionProviderConstructorArguments;
 
     private Context mContext;
-    private Object mRealOwner;
+    private Object  mRealOwner;
 
     /**
      * Constructs a menu inflater.
      *
      * @see Activity#getMenuInflater()
      */
-    public MenuInflater(Context context) {
+    public MenuInflater(Context context)
+    {
         mContext = context;
         mRealOwner = context;
-        mActionViewConstructorArguments = new Object[] {context};
+        mActionViewConstructorArguments = new Object[]{context};
         mActionProviderConstructorArguments = mActionViewConstructorArguments;
     }
 
@@ -87,23 +93,25 @@ public class MenuInflater {
      * @see Activity#getMenuInflater()
      * @hide
      */
-    public MenuInflater(Context context, Object realOwner) {
+    public MenuInflater(Context context, Object realOwner)
+    {
         mContext = context;
         mRealOwner = realOwner;
-        mActionViewConstructorArguments = new Object[] {context};
+        mActionViewConstructorArguments = new Object[]{context};
         mActionProviderConstructorArguments = mActionViewConstructorArguments;
     }
 
     /**
      * Inflate a menu hierarchy from the specified XML resource. Throws
-     * {@link InflateException} if there is an error.
+     * {@link android.view.InflateException} if there is an error.
      *
      * @param menuRes Resource ID for an XML layout resource to load (e.g.,
      *            <code>R.menu.main_activity</code>)
      * @param menu The Menu to inflate into. The items and submenus will be
      *            added to this Menu.
      */
-    public void inflate(int menuRes, Menu menu) {
+    public void inflate(int menuRes, Menu menu)
+    {
         XmlResourceParser parser = null;
         try {
             parser = mContext.getResources().getLayout(menuRes);
@@ -123,7 +131,7 @@ public class MenuInflater {
      * Called internally to fill the given menu. If a sub menu is seen, it will
      * call this recursively.
      */
-    private void parseMenu(XmlPullParser parser, AttributeSet attrs, Menu menu)
+    private void parseMenu(@NotNull XmlPullParser parser, @NotNull AttributeSet attrs, Menu menu)
             throws XmlPullParserException, IOException {
         MenuState menuState = new MenuState(menu);
 
@@ -210,7 +218,7 @@ public class MenuInflater {
         private Object mRealOwner;
         private Method mMethod;
 
-        public InflatedOnMenuItemClickListener(Object realOwner, String methodName) {
+        public InflatedOnMenuItemClickListener(@NotNull Object realOwner, String methodName) {
             mRealOwner = realOwner;
             Class<?> c = realOwner.getClass();
             try {
@@ -251,31 +259,33 @@ public class MenuInflater {
          * Group state is set on items as they are added, allowing an item to
          * override its group state. (As opposed to set on items at the group end tag.)
          */
-        private int groupId;
-        private int groupCategory;
-        private int groupOrder;
-        private int groupCheckable;
+        private int     groupId;
+        private int     groupCategory;
+        private int     groupOrder;
+        private int     groupCheckable;
         private boolean groupVisible;
         private boolean groupEnabled;
 
-        private boolean itemAdded;
-        private int itemId;
-        private int itemCategoryOrder;
+        private boolean      itemAdded;
+        private int          itemId;
+        private int          itemCategoryOrder;
+        @Nullable
         private CharSequence itemTitle;
+        @Nullable
         private CharSequence itemTitleCondensed;
-        private int itemIconResId;
-        private char itemAlphabeticShortcut;
-        private char itemNumericShortcut;
+        private int          itemIconResId;
+        private char         itemAlphabeticShortcut;
+        private char         itemNumericShortcut;
         /**
          * Sync to attrs.xml enum:
          * - 0: none
          * - 1: all
          * - 2: exclusive
          */
-        private int itemCheckable;
-        private boolean itemChecked;
-        private boolean itemVisible;
-        private boolean itemEnabled;
+        private int          itemCheckable;
+        private boolean      itemChecked;
+        private boolean      itemVisible;
+        private boolean      itemEnabled;
 
         /**
          * Sync to attrs.xml enum, values in MenuItem:
@@ -286,30 +296,36 @@ public class MenuInflater {
          */
         private int itemShowAsAction;
 
-        private int itemActionViewLayout;
+        private int    itemActionViewLayout;
+        @Nullable
         private String itemActionViewClassName;
+        @Nullable
         private String itemActionProviderClassName;
 
+        @Nullable
         private String itemListenerMethodName;
 
+        @Nullable
         private ActionProvider itemActionProvider;
 
-        private static final int defaultGroupId = NO_ID;
-        private static final int defaultItemId = NO_ID;
-        private static final int defaultItemCategory = 0;
-        private static final int defaultItemOrder = 0;
-        private static final int defaultItemCheckable = 0;
-        private static final boolean defaultItemChecked = false;
-        private static final boolean defaultItemVisible = true;
-        private static final boolean defaultItemEnabled = true;
+        private static final int     defaultGroupId       = NO_ID;
+        private static final int     defaultItemId        = NO_ID;
+        private static final int     defaultItemCategory  = 0;
+        private static final int     defaultItemOrder     = 0;
+        private static final int     defaultItemCheckable = 0;
+        private static final boolean defaultItemChecked   = false;
+        private static final boolean defaultItemVisible   = true;
+        private static final boolean defaultItemEnabled   = true;
 
-        public MenuState(final Menu menu) {
+        public MenuState(final Menu menu)
+        {
             this.menu = menu;
 
             resetGroup();
         }
 
-        public void resetGroup() {
+        public void resetGroup()
+        {
             groupId = defaultGroupId;
             groupCategory = defaultItemCategory;
             groupOrder = defaultItemOrder;
@@ -321,9 +337,10 @@ public class MenuInflater {
         /**
          * Called when the parser is pointing to a group tag.
          */
-        public void readGroup(AttributeSet attrs) {
+        public void readGroup(@NotNull AttributeSet attrs)
+        {
             TypedArray a = mContext.obtainStyledAttributes(attrs,
-                    R.styleable.SherlockMenuGroup);
+                R.styleable.SherlockMenuGroup);
 
             groupId = a.getResourceId(R.styleable.SherlockMenuGroup_android_id, defaultGroupId);
             groupCategory = a.getInt(R.styleable.SherlockMenuGroup_android_menuCategory, defaultItemCategory);
@@ -338,9 +355,10 @@ public class MenuInflater {
         /**
          * Called when the parser is pointing to an item tag.
          */
-        public void readItem(AttributeSet attrs) {
+        public void readItem(@NotNull AttributeSet attrs)
+        {
             TypedArray a = mContext.obtainStyledAttributes(attrs,
-                    R.styleable.SherlockMenuItem);
+                R.styleable.SherlockMenuItem);
 
             // Inherit attributes from the group as default value
             itemId = a.getResourceId(R.styleable.SherlockMenuItem_android_id, defaultItemId);
@@ -351,13 +369,14 @@ public class MenuInflater {
             itemTitleCondensed = a.getText(R.styleable.SherlockMenuItem_android_titleCondensed);
             itemIconResId = a.getResourceId(R.styleable.SherlockMenuItem_android_icon, 0);
             itemAlphabeticShortcut =
-                    getShortcut(a.getString(R.styleable.SherlockMenuItem_android_alphabeticShortcut));
+                getShortcut(a.getString(R.styleable.SherlockMenuItem_android_alphabeticShortcut));
             itemNumericShortcut =
-                    getShortcut(a.getString(R.styleable.SherlockMenuItem_android_numericShortcut));
+                getShortcut(a.getString(R.styleable.SherlockMenuItem_android_numericShortcut));
             if (a.hasValue(R.styleable.SherlockMenuItem_android_checkable)) {
                 // Item has attribute checkable, use it
                 itemCheckable = a.getBoolean(R.styleable.SherlockMenuItem_android_checkable, false) ? 1 : 0;
-            } else {
+            }
+            else {
                 // Item does not have attribute, use the group's (group can have one more state
                 // for checkable that represents the exclusive checkable)
                 itemCheckable = groupCheckable;
@@ -387,12 +406,13 @@ public class MenuInflater {
             final boolean hasActionProvider = itemActionProviderClassName != null;
             if (hasActionProvider && itemActionViewLayout == 0 && itemActionViewClassName == null) {
                 itemActionProvider = newInstance(itemActionProviderClassName,
-                            ACTION_PROVIDER_CONSTRUCTOR_SIGNATURE,
-                            mActionProviderConstructorArguments);
-            } else {
+                    ACTION_PROVIDER_CONSTRUCTOR_SIGNATURE,
+                    mActionProviderConstructorArguments);
+            }
+            else {
                 if (hasActionProvider) {
                     Log.w(LOG_TAG, "Ignoring attribute 'actionProviderClass'."
-                            + " Action view already specified.");
+                        + " Action view already specified.");
                 }
                 itemActionProvider = null;
             }
@@ -402,15 +422,18 @@ public class MenuInflater {
             itemAdded = false;
         }
 
-        private char getShortcut(String shortcutString) {
+        private char getShortcut(@Nullable String shortcutString)
+        {
             if (shortcutString == null) {
                 return 0;
-            } else {
+            }
+            else {
                 return shortcutString.charAt(0);
             }
         }
 
-        private void setItem(MenuItem item) {
+        private void setItem(@NotNull MenuItem item)
+        {
             item.setChecked(itemChecked)
                 .setVisible(itemVisible)
                 .setEnabled(itemEnabled)
@@ -427,17 +450,18 @@ public class MenuInflater {
             if (itemListenerMethodName != null) {
                 if (mContext.isRestricted()) {
                     throw new IllegalStateException("The android:onClick attribute cannot "
-                            + "be used within a restricted context");
+                        + "be used within a restricted context");
                 }
                 item.setOnMenuItemClickListener(
-                        new InflatedOnMenuItemClickListener(mRealOwner, itemListenerMethodName));
+                    new InflatedOnMenuItemClickListener(mRealOwner, itemListenerMethodName));
             }
 
             if (itemCheckable >= 2) {
                 if (item instanceof MenuItemImpl) {
                     MenuItemImpl impl = (MenuItemImpl) item;
                     impl.setExclusiveCheckable(true);
-                } else {
+                }
+                else {
                     menu.setGroupCheckable(groupId, true, true);
                 }
             }
@@ -445,7 +469,7 @@ public class MenuInflater {
             boolean actionViewSpecified = false;
             if (itemActionViewClassName != null) {
                 View actionView = (View) newInstance(itemActionViewClassName,
-                        ACTION_VIEW_CONSTRUCTOR_SIGNATURE, mActionViewConstructorArguments);
+                    ACTION_VIEW_CONSTRUCTOR_SIGNATURE, mActionViewConstructorArguments);
                 item.setActionView(actionView);
                 actionViewSpecified = true;
             }
@@ -453,9 +477,10 @@ public class MenuInflater {
                 if (!actionViewSpecified) {
                     item.setActionView(itemActionViewLayout);
                     actionViewSpecified = true;
-                } else {
+                }
+                else {
                     Log.w(LOG_TAG, "Ignoring attribute 'itemActionViewLayout'."
-                            + " Action view already specified.");
+                        + " Action view already specified.");
                 }
             }
             if (itemActionProvider != null) {
@@ -463,25 +488,30 @@ public class MenuInflater {
             }
         }
 
-        public void addItem() {
+        public void addItem()
+        {
             itemAdded = true;
             setItem(menu.add(groupId, itemId, itemCategoryOrder, itemTitle));
         }
 
-        public SubMenu addSubMenuItem() {
+        public SubMenu addSubMenuItem()
+        {
             itemAdded = true;
             SubMenu subMenu = menu.addSubMenu(groupId, itemId, itemCategoryOrder, itemTitle);
             setItem(subMenu.getItem());
             return subMenu;
         }
 
-        public boolean hasAddedItem() {
+        public boolean hasAddedItem()
+        {
             return itemAdded;
         }
 
+        @Nullable
         @SuppressWarnings("unchecked")
         private <T> T newInstance(String className, Class<?>[] constructorSignature,
-                Object[] arguments) {
+                                  Object[] arguments)
+        {
             try {
                 Class<?> clazz = mContext.getClassLoader().loadClass(className);
                 Constructor<?> constructor = clazz.getConstructor(constructorSignature);

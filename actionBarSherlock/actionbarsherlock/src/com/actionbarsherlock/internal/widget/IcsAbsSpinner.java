@@ -27,6 +27,8 @@ import android.util.SparseArray;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SpinnerAdapter;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An abstract base class for spinner widgets. SDK users will probably not
@@ -244,14 +246,15 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
         mWidthMeasureSpec = widthMeasureSpec;
     }
 
-    int getChildHeight(View child) {
+    int getChildHeight(@NotNull View child) {
         return child.getMeasuredHeight();
     }
 
-    int getChildWidth(View child) {
+    int getChildWidth(@NotNull View child) {
         return child.getMeasuredWidth();
     }
 
+    @NotNull
     @Override
     protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
         return new ViewGroup.LayoutParams(
@@ -261,7 +264,7 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
 
     void recycleAllViews() {
         final int childCount = getChildCount();
-        final IcsAbsSpinner.RecycleBin recycleBin = mRecycler;
+        final RecycleBin recycleBin = mRecycler;
         final int position = mFirstPosition;
 
         // All views go in recycler
@@ -309,6 +312,7 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
 
     abstract void layout(int delta, boolean animate);
 
+    @Nullable
     @Override
     public View getSelectedView() {
         if (mItemCount > 0 && mSelectedPosition >= 0) {
@@ -383,19 +387,20 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
         /**
          * Constructor called from {@link #CREATOR}
          */
-        private SavedState(Parcel in) {
+        private SavedState(@NotNull Parcel in) {
             super(in);
             selectedId = in.readLong();
             position = in.readInt();
         }
 
         @Override
-        public void writeToParcel(Parcel out, int flags) {
+        public void writeToParcel(@NotNull Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeLong(selectedId);
             out.writeInt(position);
         }
 
+        @NotNull
         @Override
         public String toString() {
             return "AbsSpinner.SavedState{"
@@ -405,32 +410,40 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
         }
 
         public static final Parcelable.Creator<SavedState> CREATOR
-                = new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
+            = new Parcelable.Creator<SavedState>()
+        {
+            public SavedState createFromParcel(@NotNull Parcel in)
+            {
                 return new SavedState(in);
             }
 
-            public SavedState[] newArray(int size) {
+            @NotNull
+            public SavedState[] newArray(int size)
+            {
                 return new SavedState[size];
             }
         };
     }
 
+    @NotNull
     @Override
-    public Parcelable onSaveInstanceState() {
+    public Parcelable onSaveInstanceState()
+    {
         Parcelable superState = super.onSaveInstanceState();
         SavedState ss = new SavedState(superState);
         ss.selectedId = getSelectedItemId();
         if (ss.selectedId >= 0) {
             ss.position = getSelectedItemPosition();
-        } else {
+        }
+        else {
             ss.position = INVALID_POSITION;
         }
         return ss;
     }
 
     @Override
-    public void onRestoreInstanceState(Parcelable state) {
+    public void onRestoreInstanceState(Parcelable state)
+    {
         SavedState ss = (SavedState) state;
 
         super.onRestoreInstanceState(ss.getSuperState());
@@ -445,26 +458,31 @@ public abstract class IcsAbsSpinner extends IcsAdapterView<SpinnerAdapter> {
         }
     }
 
-    class RecycleBin {
+    class RecycleBin
+    {
         private final SparseArray<View> mScrapHeap = new SparseArray<View>();
 
-        public void put(int position, View v) {
+        public void put(int position, View v)
+        {
             mScrapHeap.put(position, v);
         }
 
-        View get(int position) {
+        View get(int position)
+        {
             // System.out.print("Looking for " + position);
             View result = mScrapHeap.get(position);
             if (result != null) {
                 // System.out.println(" HIT");
                 mScrapHeap.delete(position);
-            } else {
+            }
+            else {
                 // System.out.println(" MISS");
             }
             return result;
         }
 
-        void clear() {
+        void clear()
+        {
             final SparseArray<View> scrapHeap = mScrapHeap;
             final int count = scrapHeap.size();
             for (int i = 0; i < count; i++) {

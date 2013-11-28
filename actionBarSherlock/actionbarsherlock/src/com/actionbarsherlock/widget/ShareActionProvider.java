@@ -31,6 +31,7 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.MenuItem.OnMenuItemClickListener;
 import com.actionbarsherlock.view.SubMenu;
 import com.actionbarsherlock.widget.ActivityChooserModel.OnChooseActivityListener;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This is a provider for a share action. It is responsible for creating views
@@ -157,6 +158,7 @@ public class ShareActionProvider extends ActionProvider {
     /**
      * {@inheritDoc}
      */
+    @NotNull
     @Override
     public View onCreateActionView() {
         // Create the view and set its data model.
@@ -192,7 +194,7 @@ public class ShareActionProvider extends ActionProvider {
      * {@inheritDoc}
      */
     @Override
-    public void onPrepareSubMenu(SubMenu subMenu) {
+    public void onPrepareSubMenu(@NotNull SubMenu subMenu) {
         // Clear since the order of items may change.
         subMenu.clear();
 
@@ -259,8 +261,8 @@ public class ShareActionProvider extends ActionProvider {
      *
      * @param shareIntent The share intent.
      *
-     * @see Intent#ACTION_SEND
-     * @see Intent#ACTION_SEND_MULTIPLE
+     * @see android.content.Intent#ACTION_SEND
+     * @see android.content.Intent#ACTION_SEND_MULTIPLE
      */
     public void setShareIntent(Intent shareIntent) {
         ActivityChooserModel dataModel = ActivityChooserModel.get(mContext,
@@ -273,7 +275,7 @@ public class ShareActionProvider extends ActionProvider {
      */
     private class ShareMenuItemOnMenuItemClickListener implements OnMenuItemClickListener {
         @Override
-        public boolean onMenuItemClick(MenuItem item) {
+        public boolean onMenuItemClick(@NotNull MenuItem item) {
             ActivityChooserModel dataModel = ActivityChooserModel.get(mContext,
                     mShareHistoryFileName);
             final int itemId = item.getItemId();
@@ -301,7 +303,7 @@ public class ShareActionProvider extends ActionProvider {
     }
 
     /**
-     * Policy that delegates to the {@link OnShareTargetSelectedListener}, if such.
+     * Policy that delegates to the {@link com.actionbarsherlock.widget.ShareActionProvider.OnShareTargetSelectedListener}, if such.
      */
     private class ShareAcitivityChooserModelPolicy implements OnChooseActivityListener {
         @Override

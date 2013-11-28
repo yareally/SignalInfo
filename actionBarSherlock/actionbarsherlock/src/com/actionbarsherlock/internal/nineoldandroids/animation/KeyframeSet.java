@@ -23,6 +23,8 @@ import android.view.animation.Interpolator;
 import com.actionbarsherlock.internal.nineoldandroids.animation.Keyframe.FloatKeyframe;
 import com.actionbarsherlock.internal.nineoldandroids.animation.Keyframe.IntKeyframe;
 import com.actionbarsherlock.internal.nineoldandroids.animation.Keyframe.ObjectKeyframe;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This class holds a collection of Keyframe objects and is called by ValueAnimator to calculate
@@ -36,12 +38,14 @@ class KeyframeSet {
 
     Keyframe mFirstKeyframe;
     Keyframe mLastKeyframe;
-    /*Time*/Interpolator mInterpolator; // only used in the 2-keyframe case
+    /*Time*/
+    @Nullable
+    Interpolator mInterpolator; // only used in the 2-keyframe case
     ArrayList<Keyframe> mKeyframes; // only used when there are not 2 keyframes
-    TypeEvaluator mEvaluator;
+    TypeEvaluator       mEvaluator;
 
-
-    public KeyframeSet(Keyframe... keyframes) {
+    public KeyframeSet(@NotNull Keyframe... keyframes)
+    {
         mNumKeyframes = keyframes.length;
         mKeyframes = new ArrayList<Keyframe>();
         mKeyframes.addAll(Arrays.asList(keyframes));
@@ -50,13 +54,16 @@ class KeyframeSet {
         mInterpolator = mLastKeyframe.getInterpolator();
     }
 
-    public static KeyframeSet ofInt(int... values) {
+    @NotNull
+    public static KeyframeSet ofInt(@NotNull int... values)
+    {
         int numKeyframes = values.length;
-        IntKeyframe keyframes[] = new IntKeyframe[Math.max(numKeyframes,2)];
+        IntKeyframe keyframes[] = new IntKeyframe[Math.max(numKeyframes, 2)];
         if (numKeyframes == 1) {
             keyframes[0] = (IntKeyframe) Keyframe.ofInt(0f);
             keyframes[1] = (IntKeyframe) Keyframe.ofInt(1f, values[0]);
-        } else {
+        }
+        else {
             keyframes[0] = (IntKeyframe) Keyframe.ofInt(0f, values[0]);
             for (int i = 1; i < numKeyframes; ++i) {
                 keyframes[i] = (IntKeyframe) Keyframe.ofInt((float) i / (numKeyframes - 1), values[i]);
@@ -65,13 +72,16 @@ class KeyframeSet {
         return new IntKeyframeSet(keyframes);
     }
 
-    public static KeyframeSet ofFloat(float... values) {
+    @NotNull
+    public static KeyframeSet ofFloat(@NotNull float... values)
+    {
         int numKeyframes = values.length;
-        FloatKeyframe keyframes[] = new FloatKeyframe[Math.max(numKeyframes,2)];
+        FloatKeyframe keyframes[] = new FloatKeyframe[Math.max(numKeyframes, 2)];
         if (numKeyframes == 1) {
             keyframes[0] = (FloatKeyframe) Keyframe.ofFloat(0f);
             keyframes[1] = (FloatKeyframe) Keyframe.ofFloat(1f, values[0]);
-        } else {
+        }
+        else {
             keyframes[0] = (FloatKeyframe) Keyframe.ofFloat(0f, values[0]);
             for (int i = 1; i < numKeyframes; ++i) {
                 keyframes[i] = (FloatKeyframe) Keyframe.ofFloat((float) i / (numKeyframes - 1), values[i]);
@@ -80,7 +90,8 @@ class KeyframeSet {
         return new FloatKeyframeSet(keyframes);
     }
 
-    public static KeyframeSet ofKeyframe(Keyframe... keyframes) {
+    @NotNull
+    public static KeyframeSet ofKeyframe(@NotNull Keyframe... keyframes) {
         // if all keyframes of same primitive type, create the appropriate KeyframeSet
         int numKeyframes = keyframes.length;
         boolean hasFloat = false;
@@ -112,7 +123,8 @@ class KeyframeSet {
         }
     }
 
-    public static KeyframeSet ofObject(Object... values) {
+    @NotNull
+    public static KeyframeSet ofObject(@NotNull Object... values) {
         int numKeyframes = values.length;
         ObjectKeyframe keyframes[] = new ObjectKeyframe[Math.max(numKeyframes,2)];
         if (numKeyframes == 1) {
@@ -163,6 +175,7 @@ class KeyframeSet {
      * @param fraction The elapsed fraction of the animation
      * @return The animated value.
      */
+    @Nullable
     public Object getValue(float fraction) {
 
         // Special-case optimization for the common case of only two keyframes
@@ -216,6 +229,7 @@ class KeyframeSet {
         return mLastKeyframe.getValue();
     }
 
+    @NotNull
     @Override
     public String toString() {
         String returnVal = " ";

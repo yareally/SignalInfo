@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import android.view.animation.Interpolator;
 
 import com.actionbarsherlock.internal.nineoldandroids.animation.Keyframe.FloatKeyframe;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This class holds a collection of FloatKeyframe objects and is called by ValueAnimator to calculate
@@ -47,6 +48,7 @@ class FloatKeyframeSet extends KeyframeSet {
         return getFloatValue(fraction);
     }
 
+    @NotNull
     @Override
     public FloatKeyframeSet clone() {
         ArrayList<Keyframe> keyframes = mKeyframes;

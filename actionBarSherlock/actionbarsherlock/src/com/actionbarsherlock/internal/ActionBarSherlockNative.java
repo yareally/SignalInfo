@@ -16,27 +16,32 @@ import com.actionbarsherlock.internal.view.menu.MenuWrapper;
 import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 @ActionBarSherlock.Implementation(api = 14)
 public class ActionBarSherlockNative extends ActionBarSherlock {
-    private ActionBarWrapper mActionBar;
+    private ActionBarWrapper  mActionBar;
+    @Nullable
     private ActionModeWrapper mActionMode;
-    private MenuWrapper mMenu;
+    private MenuWrapper       mMenu;
 
-    public ActionBarSherlockNative(Activity activity, int flags) {
+    public ActionBarSherlockNative(Activity activity, int flags)
+    {
         super(activity, flags);
     }
 
-
     @Override
-    public ActionBar getActionBar() {
+    public ActionBar getActionBar()
+    {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[getActionBar]");
 
         initActionBar();
         return mActionBar;
     }
 
-    private void initActionBar() {
+    private void initActionBar()
+    {
         if (mActionBar != null || mActivity.getActionBar() == null) {
             return;
         }
@@ -45,7 +50,8 @@ public class ActionBarSherlockNative extends ActionBarSherlock {
     }
 
     @Override
-    public void dispatchInvalidateOptionsMenu() {
+    public void dispatchInvalidateOptionsMenu()
+    {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[dispatchInvalidateOptionsMenu]");
 
         mActivity.getWindow().invalidatePanelMenu(Window.FEATURE_OPTIONS_PANEL);
@@ -54,7 +60,8 @@ public class ActionBarSherlockNative extends ActionBarSherlock {
     }
 
     @Override
-    public boolean dispatchCreateOptionsMenu(android.view.Menu menu) {
+    public boolean dispatchCreateOptionsMenu(android.view.Menu menu)
+    {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[dispatchCreateOptionsMenu] menu: " + menu);
 
         if (mMenu == null || menu != mMenu.unwrap()) {
@@ -76,7 +83,7 @@ public class ActionBarSherlockNative extends ActionBarSherlock {
     }
 
     @Override
-    public boolean dispatchOptionsItemSelected(android.view.MenuItem item) {
+    public boolean dispatchOptionsItemSelected(@NotNull android.view.MenuItem item) {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[dispatchOptionsItemSelected] item: " + item.getTitleCondensed());
 
         MenuItem wrapped;
@@ -206,8 +213,9 @@ public class ActionBarSherlockNative extends ActionBarSherlock {
         return context;
     }
 
+    @Nullable
     @Override
-    public ActionMode startActionMode(com.actionbarsherlock.view.ActionMode.Callback callback) {
+    public ActionMode startActionMode(@Nullable com.actionbarsherlock.view.ActionMode.Callback callback) {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[startActionMode] callback: " + callback);
 
         if (mActionMode != null) {
@@ -268,50 +276,61 @@ public class ActionBarSherlockNative extends ActionBarSherlock {
 
     private class ActionModeWrapper extends ActionMode {
         private final android.view.ActionMode mActionMode;
+        @Nullable
         private MenuWrapper mMenu = null;
 
-        ActionModeWrapper(android.view.ActionMode actionMode) {
+        ActionModeWrapper(android.view.ActionMode actionMode)
+        {
             mActionMode = actionMode;
         }
 
         @Override
-        public void setTitle(CharSequence title) {
+        public void setTitle(CharSequence title)
+        {
             mActionMode.setTitle(title);
         }
 
         @Override
-        public void setTitle(int resId) {
+        public void setTitle(int resId)
+        {
             mActionMode.setTitle(resId);
         }
 
         @Override
-        public void setSubtitle(CharSequence subtitle) {
+        public void setSubtitle(CharSequence subtitle)
+        {
             mActionMode.setSubtitle(subtitle);
         }
 
         @Override
-        public void setSubtitle(int resId) {
+        public void setSubtitle(int resId)
+        {
             mActionMode.setSubtitle(resId);
         }
 
         @Override
-        public void setCustomView(View view) {
+        public void setCustomView(View view)
+        {
             mActionMode.setCustomView(view);
         }
 
         @Override
-        public void invalidate() {
+        public void invalidate()
+        {
             mActionMode.invalidate();
             if (mMenu != null) mMenu.invalidate();
         }
 
         @Override
-        public void finish() {
+        public void finish()
+        {
             mActionMode.finish();
         }
 
+        @Nullable
         @Override
-        public MenuWrapper getMenu() {
+        public MenuWrapper getMenu()
+        {
             if (mMenu == null) {
                 mMenu = new MenuWrapper(mActionMode.getMenu());
             }
@@ -319,32 +338,39 @@ public class ActionBarSherlockNative extends ActionBarSherlock {
         }
 
         @Override
-        public CharSequence getTitle() {
+        public CharSequence getTitle()
+        {
             return mActionMode.getTitle();
         }
 
         @Override
-        public CharSequence getSubtitle() {
+        public CharSequence getSubtitle()
+        {
             return mActionMode.getSubtitle();
         }
 
+        @Nullable
         @Override
-        public View getCustomView() {
+        public View getCustomView()
+        {
             return mActionMode.getCustomView();
         }
 
         @Override
-        public MenuInflater getMenuInflater() {
+        public MenuInflater getMenuInflater()
+        {
             return ActionBarSherlockNative.this.getMenuInflater();
         }
 
         @Override
-        public void setTag(Object tag) {
+        public void setTag(Object tag)
+        {
             mActionMode.setTag(tag);
         }
 
         @Override
-        public Object getTag() {
+        public Object getTag()
+        {
             return mActionMode.getTag();
         }
     }

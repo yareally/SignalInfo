@@ -27,10 +27,17 @@
   -->
 
 <resources>
+    <!-- **************** Fragment Preferences Related Strings **************** -->
+
+    <!-- Strings for possible PreferenceActivity Back/Next buttons -->
+    <string name="back_button_label">Back</string>
+    <string name="next_button_label">Next</string>
+
+    <!-- Optional button to Skip a PreferenceActivity [CHAR LIMIT=20] -->
+    <string name="skip_button_label">Skip</string>
 
 
-    <!-- **************** Preferences related strings **************** -->
-
+    <!-- **************** App Specific Preferences Related Strings **************** -->
     <!-- preference header screen strings -->
     <string name="mainPreferenceHeaderTitle">Signal Preferences</string>
     <string name="mainPreferenceHeaderSummary">Settings related to how signals are displayed.</string>

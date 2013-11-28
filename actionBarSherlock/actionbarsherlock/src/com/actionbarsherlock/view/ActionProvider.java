@@ -38,7 +38,7 @@ import android.view.View;
  * <ul>
  * <li>
  * Setting the action provider on a {@link MenuItem} directly by calling
- * {@link MenuItem#setActionProvider(ActionProvider)}.
+ * {@link MenuItem#setActionProvider(com.actionbarsherlock.view.ActionProvider)}.
  * </li>
  * <li>
  * Declaring the action provider in the menu XML resource. For example:
@@ -55,7 +55,7 @@ import android.view.View;
  * </ul>
  * </p>
  *
- * @see MenuItem#setActionProvider(ActionProvider)
+ * @see MenuItem#setActionProvider(com.actionbarsherlock.view.ActionProvider)
  * @see MenuItem#getActionProvider()
  */
 public abstract class ActionProvider {

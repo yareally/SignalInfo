@@ -10,46 +10,59 @@ import com.actionbarsherlock.view.ActionProvider;
 import com.actionbarsherlock.view.CollapsibleActionView;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuItemClickListener {
+    @Nullable
     private final android.view.MenuItem mNativeItem;
-    private SubMenu mSubMenu = null;
-    private OnMenuItemClickListener mMenuItemClickListener = null;
-    private OnActionExpandListener mActionExpandListener = null;
+    @Nullable
+    private SubMenu                                      mSubMenu                    = null;
+    @Nullable
+    private OnMenuItemClickListener                      mMenuItemClickListener      = null;
+    @Nullable
+    private OnActionExpandListener                       mActionExpandListener       = null;
+    @Nullable
     private android.view.MenuItem.OnActionExpandListener mNativeActionExpandListener = null;
 
-
-    public MenuItemWrapper(android.view.MenuItem nativeItem) {
+    public MenuItemWrapper(@Nullable android.view.MenuItem nativeItem)
+    {
         if (nativeItem == null) {
             throw new IllegalStateException("Wrapped menu item cannot be null.");
         }
         mNativeItem = nativeItem;
     }
 
-
     @Override
-    public int getItemId() {
+    public int getItemId()
+    {
         return mNativeItem.getItemId();
     }
 
     @Override
-    public int getGroupId() {
+    public int getGroupId()
+    {
         return mNativeItem.getGroupId();
     }
 
     @Override
-    public int getOrder() {
+    public int getOrder()
+    {
         return mNativeItem.getOrder();
     }
 
+    @NotNull
     @Override
-    public MenuItem setTitle(CharSequence title) {
+    public MenuItem setTitle(CharSequence title)
+    {
         mNativeItem.setTitle(title);
         return this;
     }
 
+    @NotNull
     @Override
-    public MenuItem setTitle(int title) {
+    public MenuItem setTitle(int title)
+    {
         mNativeItem.setTitle(title);
         return this;
     }
@@ -59,34 +72,40 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return mNativeItem.getTitle();
     }
 
+    @NotNull
     @Override
     public MenuItem setTitleCondensed(CharSequence title) {
         mNativeItem.setTitleCondensed(title);
         return this;
     }
 
+    @Nullable
     @Override
     public CharSequence getTitleCondensed() {
         return mNativeItem.getTitleCondensed();
     }
 
+    @NotNull
     @Override
     public MenuItem setIcon(Drawable icon) {
         mNativeItem.setIcon(icon);
         return this;
     }
 
+    @NotNull
     @Override
     public MenuItem setIcon(int iconRes) {
         mNativeItem.setIcon(iconRes);
         return this;
     }
 
+    @Nullable
     @Override
     public Drawable getIcon() {
         return mNativeItem.getIcon();
     }
 
+    @NotNull
     @Override
     public MenuItem setIntent(Intent intent) {
         mNativeItem.setIntent(intent);
@@ -98,12 +117,14 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return mNativeItem.getIntent();
     }
 
+    @NotNull
     @Override
     public MenuItem setShortcut(char numericChar, char alphaChar) {
         mNativeItem.setShortcut(numericChar, alphaChar);
         return this;
     }
 
+    @NotNull
     @Override
     public MenuItem setNumericShortcut(char numericChar) {
         mNativeItem.setNumericShortcut(numericChar);
@@ -115,6 +136,7 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return mNativeItem.getNumericShortcut();
     }
 
+    @NotNull
     @Override
     public MenuItem setAlphabeticShortcut(char alphaChar) {
         mNativeItem.setAlphabeticShortcut(alphaChar);
@@ -126,6 +148,7 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return mNativeItem.getAlphabeticShortcut();
     }
 
+    @NotNull
     @Override
     public MenuItem setCheckable(boolean checkable) {
         mNativeItem.setCheckable(checkable);
@@ -137,6 +160,7 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return mNativeItem.isCheckable();
     }
 
+    @NotNull
     @Override
     public MenuItem setChecked(boolean checked) {
         mNativeItem.setChecked(checked);
@@ -148,6 +172,7 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return mNativeItem.isChecked();
     }
 
+    @NotNull
     @Override
     public MenuItem setVisible(boolean visible) {
         mNativeItem.setVisible(visible);
@@ -159,6 +184,7 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return mNativeItem.isVisible();
     }
 
+    @NotNull
     @Override
     public MenuItem setEnabled(boolean enabled) {
         mNativeItem.setEnabled(enabled);
@@ -175,6 +201,7 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return mNativeItem.hasSubMenu();
     }
 
+    @Nullable
     @Override
     public SubMenu getSubMenu() {
         if (hasSubMenu() && (mSubMenu == null)) {
@@ -183,6 +210,7 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return mSubMenu;
     }
 
+    @NotNull
     @Override
     public MenuItem setOnMenuItemClickListener(OnMenuItemClickListener menuItemClickListener) {
         mMenuItemClickListener = menuItemClickListener;
@@ -199,6 +227,7 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return false;
     }
 
+    @Nullable
     @Override
     public ContextMenuInfo getMenuInfo() {
         return mNativeItem.getMenuInfo();
@@ -209,14 +238,16 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         mNativeItem.setShowAsAction(actionEnum);
     }
 
+    @NotNull
     @Override
     public MenuItem setShowAsActionFlags(int actionEnum) {
         mNativeItem.setShowAsActionFlags(actionEnum);
         return this;
     }
 
+    @NotNull
     @Override
-    public MenuItem setActionView(View view) {
+    public MenuItem setActionView(@Nullable View view) {
         if (view != null && view instanceof CollapsibleActionView) {
             view = new CollapsibleActionViewWrapper(view);
         }
@@ -224,6 +255,7 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return this;
     }
 
+    @NotNull
     @Override
     public MenuItem setActionView(int resId) {
         //Allow the native menu to inflate the resource
@@ -239,6 +271,7 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return this;
     }
 
+    @Nullable
     @Override
     public View getActionView() {
         View actionView = mNativeItem.getActionView();
@@ -248,12 +281,14 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return actionView;
     }
 
+    @NotNull
     @Override
     public MenuItem setActionProvider(ActionProvider actionProvider) {
         mNativeItem.setActionProvider(new ActionProviderWrapper(actionProvider));
         return this;
     }
 
+    @Nullable
     @Override
     public ActionProvider getActionProvider() {
         android.view.ActionProvider nativeProvider = mNativeItem.getActionProvider();
@@ -278,6 +313,7 @@ public class MenuItemWrapper implements MenuItem, android.view.MenuItem.OnMenuIt
         return mNativeItem.isActionViewExpanded();
     }
 
+    @NotNull
     @Override
     public MenuItem setOnActionExpandListener(OnActionExpandListener listener) {
         mActionExpandListener = listener;

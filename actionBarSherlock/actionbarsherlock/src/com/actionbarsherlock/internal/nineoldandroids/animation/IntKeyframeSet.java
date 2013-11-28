@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import android.view.animation.Interpolator;
 
 import com.actionbarsherlock.internal.nineoldandroids.animation.Keyframe.IntKeyframe;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * This class holds a collection of IntKeyframe objects and is called by ValueAnimator to calculate
@@ -47,6 +48,7 @@ class IntKeyframeSet extends KeyframeSet {
         return getIntValue(fraction);
     }
 
+    @NotNull
     @Override
     public IntKeyframeSet clone() {
         ArrayList<Keyframe> keyframes = mKeyframes;

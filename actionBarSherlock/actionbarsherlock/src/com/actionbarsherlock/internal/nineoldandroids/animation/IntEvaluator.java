@@ -16,6 +16,8 @@
 
 package com.actionbarsherlock.internal.nineoldandroids.animation;
 
+import org.jetbrains.annotations.NotNull;
+
 /**
  * This evaluator can be used to perform type interpolation between <code>int</code> values.
  */
@@ -35,6 +37,7 @@ public class IntEvaluator implements TypeEvaluator<Integer> {
      * @return A linear interpolation between the start and end values, given the
      *         <code>fraction</code> parameter.
      */
+    @NotNull
     public Integer evaluate(float fraction, Integer startValue, Integer endValue) {
         int startInt = startValue;
         return (int)(startInt + fraction * (endValue - startInt));

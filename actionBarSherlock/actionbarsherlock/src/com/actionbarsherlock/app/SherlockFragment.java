@@ -7,36 +7,43 @@ import com.actionbarsherlock.internal.view.menu.MenuWrapper;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import org.jetbrains.annotations.Nullable;
 
 import static android.support.v4.app.Watson.OnCreateOptionsMenuListener;
 import static android.support.v4.app.Watson.OnOptionsItemSelectedListener;
 import static android.support.v4.app.Watson.OnPrepareOptionsMenuListener;
 
 public class SherlockFragment extends Fragment implements OnCreateOptionsMenuListener, OnPrepareOptionsMenuListener, OnOptionsItemSelectedListener {
+    @Nullable
     private SherlockFragmentActivity mActivity;
 
-    public SherlockFragmentActivity getSherlockActivity() {
+    @Nullable
+    public SherlockFragmentActivity getSherlockActivity()
+    {
         return mActivity;
     }
 
     @Override
-    public void onAttach(Activity activity) {
+    public void onAttach(Activity activity)
+    {
         if (!(activity instanceof SherlockFragmentActivity)) {
             throw new IllegalStateException(getClass().getSimpleName() + " must be attached to a SherlockFragmentActivity.");
         }
-        mActivity = (SherlockFragmentActivity)activity;
+        mActivity = (SherlockFragmentActivity) activity;
 
         super.onAttach(activity);
     }
 
     @Override
-    public void onDetach() {
+    public void onDetach()
+    {
         mActivity = null;
         super.onDetach();
     }
 
     @Override
-    public final void onCreateOptionsMenu(android.view.Menu menu, android.view.MenuInflater inflater) {
+    public final void onCreateOptionsMenu(android.view.Menu menu, android.view.MenuInflater inflater)
+    {
         onCreateOptionsMenu(new MenuWrapper(menu), mActivity.getSupportMenuInflater());
     }
 

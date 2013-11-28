@@ -19,6 +19,7 @@ package com.actionbarsherlock.internal.nineoldandroids.animation;
 import java.util.ArrayList;
 
 import android.view.animation.Interpolator;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This is the superclass for classes which provide basic support for animations which can be
@@ -26,17 +27,17 @@ import android.view.animation.Interpolator;
  */
 public abstract class Animator implements Cloneable {
 
-
     /**
      * The set of listeners to be sent events through the life of an animation.
      */
+    @Nullable
     ArrayList<AnimatorListener> mListeners = null;
 
     /**
      * Starts this animation. If the animation has a nonzero startDelay, the animation will start
      * running after that delay elapses. A non-delayed animation will have its initial
      * value(s) set immediately, followed by calls to
-     * {@link AnimatorListener#onAnimationStart(Animator)} for any listeners of this animator.
+     * {@link com.actionbarsherlock.internal.nineoldandroids.animation.Animator.AnimatorListener#onAnimationStart(com.actionbarsherlock.internal.nineoldandroids.animation.Animator)} for any listeners of this animator.
      *
      * <p>The animation started by calling this method will be run on the thread that called
      * this method. This thread should have a Looper on it (a runtime exception will be thrown if
@@ -45,15 +46,16 @@ public abstract class Animator implements Cloneable {
      * thread for that view hierarchy.</p>
      *
      */
-    public void start() {
+    public void start()
+    {
     }
 
     /**
      * Cancels the animation. Unlike {@link #end()}, <code>cancel()</code> causes the animation to
      * stop in its tracks, sending an
-     * {@link android.animation.Animator.AnimatorListener#onAnimationCancel(Animator)} to
+     * {@link android.animation.Animator.AnimatorListener#onAnimationCancel(com.actionbarsherlock.internal.nineoldandroids.animation.Animator)} to
      * its listeners, followed by an
-     * {@link android.animation.Animator.AnimatorListener#onAnimationEnd(Animator)} message.
+     * {@link android.animation.Animator.AnimatorListener#onAnimationEnd(com.actionbarsherlock.internal.nineoldandroids.animation.Animator)} message.
      *
      * <p>This method must be called on the thread that is running the animation.</p>
      */
@@ -63,7 +65,7 @@ public abstract class Animator implements Cloneable {
     /**
      * Ends the animation. This causes the animation to assign the end value of the property being
      * animated, then calling the
-     * {@link android.animation.Animator.AnimatorListener#onAnimationEnd(Animator)} method on
+     * {@link android.animation.Animator.AnimatorListener#onAnimationEnd(com.actionbarsherlock.internal.nineoldandroids.animation.Animator)} method on
      * its listeners.
      *
      * <p>This method must be called on the thread that is running the animation.</p>
@@ -170,6 +172,7 @@ public abstract class Animator implements Cloneable {
      *
      * @return ArrayList<AnimatorListener> The set of listeners.
      */
+    @Nullable
     public ArrayList<AnimatorListener> getListeners() {
         return mListeners;
     }

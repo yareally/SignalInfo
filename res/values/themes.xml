@@ -1,7 +1,0 @@
-<resources>
-    <style name="MainTheme" parent="Theme.Sherlock">
-<!--        uncomment to use backport switch
-        <item name="switchStyle">@style/Widget.Holo.CompoundButton.Switch</item>
-        <item name="switchPreferenceStyle">@style/Preference.SwitchPreference</item>-->
-    </style>
-</resources>

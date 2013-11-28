@@ -23,6 +23,8 @@ import android.view.View;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.SubMenu;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * The model for a sub menu, which is an extension of the menu.  Most methods are proxied to
@@ -32,7 +34,7 @@ public class SubMenuBuilder extends MenuBuilder implements SubMenu {
     private MenuBuilder mParentMenu;
     private MenuItemImpl mItem;
 
-    public SubMenuBuilder(Context context, MenuBuilder parentMenu, MenuItemImpl item) {
+    public SubMenuBuilder(@NotNull Context context, MenuBuilder parentMenu, MenuItemImpl item) {
         super(context);
 
         mParentMenu = parentMenu;
@@ -83,32 +85,39 @@ public class SubMenuBuilder extends MenuBuilder implements SubMenu {
                 mParentMenu.dispatchMenuItemSelected(menu, item);
     }
 
+    @NotNull
     public SubMenu setIcon(Drawable icon) {
         mItem.setIcon(icon);
         return this;
     }
 
+    @NotNull
     public SubMenu setIcon(int iconRes) {
         mItem.setIcon(iconRes);
         return this;
     }
 
+    @NotNull
     public SubMenu setHeaderIcon(Drawable icon) {
         return (SubMenu) super.setHeaderIconInt(icon);
     }
 
+    @NotNull
     public SubMenu setHeaderIcon(int iconRes) {
         return (SubMenu) super.setHeaderIconInt(iconRes);
     }
 
+    @NotNull
     public SubMenu setHeaderTitle(CharSequence title) {
         return (SubMenu) super.setHeaderTitleInt(title);
     }
 
+    @NotNull
     public SubMenu setHeaderTitle(int titleRes) {
         return (SubMenu) super.setHeaderTitleInt(titleRes);
     }
 
+    @NotNull
     public SubMenu setHeaderView(View view) {
         return (SubMenu) super.setHeaderViewInt(view);
     }
@@ -123,6 +132,7 @@ public class SubMenuBuilder extends MenuBuilder implements SubMenu {
         return mParentMenu.collapseItemActionView(item);
     }
 
+    @Nullable
     @Override
     public String getActionViewStatesKey() {
         final int itemId = mItem != null ? mItem.getItemId() : 0;

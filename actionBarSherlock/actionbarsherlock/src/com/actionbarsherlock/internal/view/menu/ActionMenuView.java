@@ -26,6 +26,8 @@ import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
 import android.widget.LinearLayout;
 import com.actionbarsherlock.internal.widget.IcsLinearLayout;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @hide
@@ -49,11 +51,11 @@ public class ActionMenuView extends IcsLinearLayout implements MenuBuilder.ItemI
 
     private boolean mFirst = true;
 
-    public ActionMenuView(Context context) {
+    public ActionMenuView(@NotNull Context context) {
         this(context, null);
     }
 
-    public ActionMenuView(Context context, AttributeSet attrs) {
+    public ActionMenuView(@NotNull Context context, AttributeSet attrs) {
         super(context, attrs);
         setBaselineAligned(false);
         final float density = context.getResources().getDisplayMetrics().density;
@@ -344,7 +346,7 @@ public class ActionMenuView extends IcsLinearLayout implements MenuBuilder.ItemI
      * @param parentHeightPadding Padding present in the parent view
      * @return Number of cells this child was measured to occupy
      */
-    static int measureChildForCells(View child, int cellSize, int cellsRemaining,
+    static int measureChildForCells(@NotNull View child, int cellSize, int cellsRemaining,
             int parentHeightMeasureSpec, int parentHeightPadding) {
         final LayoutParams lp = (LayoutParams) child.getLayoutParams();
 
@@ -496,17 +498,18 @@ public class ActionMenuView extends IcsLinearLayout implements MenuBuilder.ItemI
     }
 
     @Override
-    protected boolean checkLayoutParams(ViewGroup.LayoutParams p) {
+    protected boolean checkLayoutParams(@Nullable ViewGroup.LayoutParams p) {
         return p != null && p instanceof LayoutParams;
     }
 
+    @Nullable
     public LayoutParams generateOverflowButtonLayoutParams() {
         LayoutParams result = generateDefaultLayoutParams();
         result.isOverflowButton = true;
         return result;
     }
 
-    public boolean invokeItem(MenuItemImpl item) {
+    public boolean invokeItem(@NotNull MenuItemImpl item) {
         return mMenu.performItemAction(item, 0);
     }
 
@@ -553,11 +556,11 @@ public class ActionMenuView extends IcsLinearLayout implements MenuBuilder.ItemI
 
         public boolean expanded;
 
-        public LayoutParams(Context c, AttributeSet attrs) {
+        public LayoutParams(@NotNull Context c, AttributeSet attrs) {
             super(c, attrs);
         }
 
-        public LayoutParams(LayoutParams other) {
+        public LayoutParams(@NotNull LayoutParams other) {
             super((LinearLayout.LayoutParams) other);
             isOverflowButton = other.isOverflowButton;
         }

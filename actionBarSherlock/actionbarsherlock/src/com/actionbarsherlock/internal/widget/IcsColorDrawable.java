@@ -6,6 +6,7 @@ import android.graphics.ColorFilter;
 import android.graphics.Paint;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * A version of {@link android.graphics.drawable.ColorDrawable} that respects bounds.
@@ -14,7 +15,7 @@ public class IcsColorDrawable extends Drawable {
     private int color;
     private final Paint paint = new Paint();
 
-    public IcsColorDrawable(ColorDrawable drawable) {
+    public IcsColorDrawable(@NotNull ColorDrawable drawable) {
         Bitmap bitmap = Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888);
         Canvas c = new Canvas(bitmap);
         drawable.draw(c);
@@ -26,7 +27,7 @@ public class IcsColorDrawable extends Drawable {
         this.color = color;
     }
 
-    @Override public void draw(Canvas canvas) {
+    @Override public void draw(@NotNull Canvas canvas) {
         if ((color >>> 24) != 0) {
             paint.setColor(color);
             canvas.drawRect(getBounds(), paint);

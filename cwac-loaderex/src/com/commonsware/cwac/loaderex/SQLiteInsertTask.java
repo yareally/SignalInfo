@@ -18,6 +18,7 @@ package com.commonsware.cwac.loaderex;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
+import org.jetbrains.annotations.Nullable;
 
 @Deprecated
 public class SQLiteInsertTask
@@ -26,7 +27,7 @@ public class SQLiteInsertTask
   String table;
   String nullColumnHack;
   ContentValues values;
-  
+
   public SQLiteInsertTask(SQLiteDatabase db, String table,
                            String nullColumnHack,
                            ContentValues values) {
@@ -35,7 +36,8 @@ public class SQLiteInsertTask
     this.nullColumnHack=nullColumnHack;
     this.values=values;
   }
-  
+
+  @Nullable
   @Override
   protected Exception doInBackground(Void... params) {
     try {
@@ -44,7 +46,7 @@ public class SQLiteInsertTask
     catch (Exception e) {
       return(e);
     }
-    
+
     return(null);
   }
 }

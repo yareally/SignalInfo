@@ -29,34 +29,39 @@ package com.cc.signalinfo.enums;
 import static com.cc.signalinfo.enums.NetworkType.*;
 
 /**
+ * Didn't convert the Enums to Scala because I don't
+ * like their implementation (or lack of)
+ *
+ * Contains all the constants for the signal info
+ *
  * @author Wes Lanning
  * @version 2013-04-29
  */
 public enum Signal implements SignalEnumMethods
 {
     /*    NONE(0),*/
-    GSM_SIG_STRENGTH(1, GSM, 31, 0, 0, 0),
-    GSM_BIT_ERROR(2, GSM, 0, 7, 0, 0),
-    CDMA_RSSI(3, CDMA, 0, 80, -40, 20),
-    CDMA_ECIO(4, CDMA, 0, 160, 0, 20),
-    EVDO_RSSI(5, CDMA, 0, 80, -40, 20),
-    EVDO_ECIO(6, CDMA, 0, 160, 0, 20),
-    EVDO_SNR(7, CDMA, 8, 0, 0, 0),
-    LTE_SIG_STRENGTH(8, LTE, 31, 0, 0, 0),
-    LTE_RSRP(9, LTE, 0, 76, -44, 22),
-    LTE_RSRQ(10, LTE, 0, 17, -3, 0),
-    LTE_SNR(11, LTE, 500, 0, 200, 0),
-    LTE_CQI(12, LTE, 15, 0, 0, 0),
-    LTE_RSSI(13, LTE, 0, 90, -30, 15),
-    GSM_RSSI(14, GSM, 0, 62, -51, 25),
-    GSM_ASU(15, GSM, 31, 0, 0, 0);
+    GSM_SIG_STRENGTH(0, GSM, 31, 0, 0, 0),
+    GSM_BIT_ERROR(1, GSM, 0, 7, 0, 0),
+    CDMA_RSSI(2, CDMA, 0, 80, -40, 20),
+    CDMA_ECIO(3, CDMA, 0, 160, 0, 20),
+    EVDO_RSSI(4, CDMA, 0, 80, -40, 20),
+    EVDO_ECIO(5, CDMA, 0, 160, 0, 20),
+    EVDO_SNR(6, CDMA, 8, 0, 0, 0),
+    LTE_SIG_STRENGTH(7, LTE, 31, 0, 0, 0),
+    LTE_RSRP(8, LTE, 0, 76, -44, 22),
+    LTE_RSRQ(9, LTE, 0, 17, -3, 0),
+    LTE_SNR(10, LTE, 500, 0, 200, 0),
+    LTE_CQI(11, LTE, 15, 0, 0, 0),
+    LTE_RSSI(12, LTE, 0, 90, -30, 15),
+    GSM_RSSI(13, GSM, 0, 62, -51, 25),
+    GSM_ASU(14, GSM, 31, 0, 0, 0);
 
     private       int         value;
     private       NetworkType networkType;
     private final int         best;
     private final int         worst;
     private       int         normalized;
-    private int fudged;
+    private       int         fudged;
 
     /**
      * Contains all the constants for the signal info

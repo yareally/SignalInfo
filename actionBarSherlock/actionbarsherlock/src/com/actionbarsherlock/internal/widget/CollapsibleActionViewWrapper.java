@@ -3,6 +3,7 @@ package com.actionbarsherlock.internal.widget;
 import android.view.View;
 import android.widget.FrameLayout;
 import com.actionbarsherlock.view.CollapsibleActionView;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Wraps an ABS collapsible action view in a native container that delegates the calls.
@@ -24,6 +25,7 @@ public class CollapsibleActionViewWrapper extends FrameLayout implements android
         child.onActionViewCollapsed();
     }
 
+    @Nullable
     public View unwrap() {
         return getChildAt(0);
     }

@@ -17,6 +17,8 @@
 package com.actionbarsherlock.internal.nineoldandroids.animation;
 
 import android.util.Log;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 //import android.util.Property;
 
 //import java.lang.reflect.Method;
@@ -37,6 +39,7 @@ public final class ObjectAnimator extends ValueAnimator {
     private static final boolean DBG = false;
 
     // The target object on which the property exists, set in the constructor
+    @Nullable
     private Object mTarget;
 
     private String mPropertyName;
@@ -168,6 +171,7 @@ public final class ObjectAnimator extends ValueAnimator {
      * @param values A set of values that the animation will animate between over time.
      * @return An ObjectAnimator object that is set up to animate between the given values.
      */
+    @NotNull
     public static ObjectAnimator ofInt(Object target, String propertyName, int... values) {
         ObjectAnimator anim = new ObjectAnimator(target, propertyName);
         anim.setIntValues(values);
@@ -206,6 +210,7 @@ public final class ObjectAnimator extends ValueAnimator {
      * @param values A set of values that the animation will animate between over time.
      * @return An ObjectAnimator object that is set up to animate between the given values.
      */
+    @NotNull
     public static ObjectAnimator ofFloat(Object target, String propertyName, float... values) {
         ObjectAnimator anim = new ObjectAnimator(target, propertyName);
         anim.setFloatValues(values);
@@ -248,6 +253,7 @@ public final class ObjectAnimator extends ValueAnimator {
      * @param values A set of values that the animation will animate between over time.
      * @return An ObjectAnimator object that is set up to animate between the given values.
      */
+    @NotNull
     public static ObjectAnimator ofObject(Object target, String propertyName,
             TypeEvaluator evaluator, Object... values) {
         ObjectAnimator anim = new ObjectAnimator(target, propertyName);
@@ -296,6 +302,7 @@ public final class ObjectAnimator extends ValueAnimator {
      * over time.
      * @return An ObjectAnimator object that is set up to animate between the given values.
      */
+    @NotNull
     public static ObjectAnimator ofPropertyValuesHolder(Object target,
             PropertyValuesHolder... values) {
         ObjectAnimator anim = new ObjectAnimator();
@@ -398,6 +405,7 @@ public final class ObjectAnimator extends ValueAnimator {
      * duration, as in
      * <code>ObjectAnimator.ofInt(target, propertyName, 0, 10).setDuration(500).start()</code>.
      */
+    @NotNull
     @Override
     public ObjectAnimator setDuration(long duration) {
         super.setDuration(duration);
@@ -410,6 +418,7 @@ public final class ObjectAnimator extends ValueAnimator {
      *
      * @return The object being animated
      */
+    @Nullable
     public Object getTarget() {
         return mTarget;
     }
@@ -420,7 +429,7 @@ public final class ObjectAnimator extends ValueAnimator {
      * @param target The object being animated
      */
     @Override
-    public void setTarget(Object target) {
+    public void setTarget(@Nullable Object target) {
         if (mTarget != target) {
             final Object oldTarget = mTarget;
             mTarget = target;
@@ -471,12 +480,14 @@ public final class ObjectAnimator extends ValueAnimator {
         }
     }
 
+    @NotNull
     @Override
     public ObjectAnimator clone() {
         final ObjectAnimator anim = (ObjectAnimator) super.clone();
         return anim;
     }
 
+    @NotNull
     @Override
     public String toString() {
         String returnVal = "ObjectAnimator@" + Integer.toHexString(hashCode()) + ", target " +

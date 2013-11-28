@@ -17,6 +17,7 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class SherlockExpandableListActivity extends ExpandableListActivity implements OnCreatePanelMenuListener, OnPreparePanelListener, OnMenuItemSelectedListener, OnActionModeStartedListener, OnActionModeFinishedListener {
     private ActionBarSherlock mSherlock;
@@ -109,7 +110,7 @@ public abstract class SherlockExpandableListActivity extends ExpandableListActiv
     }
 
     @Override
-    public boolean dispatchKeyEvent(KeyEvent event) {
+    public boolean dispatchKeyEvent(@NotNull KeyEvent event) {
         if (getSherlock().dispatchKeyEvent(event)) {
             return true;
         }

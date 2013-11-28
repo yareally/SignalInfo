@@ -26,7 +26,7 @@ import android.view.KeyEvent;
  * By default, every Activity supports an options menu of actions or options.
  * You can add items to this menu and handle clicks on your additions. The
  * easiest way of adding menu items is inflating an XML file into the
- * {@link Menu} via {@link MenuInflater}. The easiest way of attaching code to
+ * {@link com.actionbarsherlock.view.Menu} via {@link MenuInflater}. The easiest way of attaching code to
  * clicks is via {@link Activity#onOptionsItemSelected(MenuItem)} and
  * {@link Activity#onContextItemSelected(MenuItem)}.
  * <p>
@@ -54,7 +54,7 @@ public interface Menu {
      * This is the part of an order integer that the user can provide.
      * @hide
      */
-    static final int USER_MASK = 0x0000ffff;
+    static final int USER_MASK  = 0x0000ffff;
     /**
      * Bit shift of the user portion of the order integer.
      * @hide
@@ -66,7 +66,7 @@ public interface Menu {
      * item.
      * @hide
      */
-    static final int CATEGORY_MASK = 0xffff0000;
+    static final int CATEGORY_MASK  = 0xffff0000;
     /**
      * Bit shift of the category portion of the order integer.
      * @hide
@@ -126,7 +126,7 @@ public interface Menu {
     static final int FLAG_PERFORM_NO_CLOSE = 0x0001;
 
     /**
-     * Flag for {@link #performShortcut(int, KeyEvent, int)}: if set, always
+     * Flag for {@link #performShortcut(int, android.view.KeyEvent, int)}: if set, always
      * close the menu after executing the shortcut. Closing the menu also resets
      * the prepared state.
      */
@@ -245,8 +245,8 @@ public interface Menu {
      * Add a group of menu items corresponding to actions that can be performed
      * for a particular Intent. The Intent is most often configured with a null
      * action, the data that the current activity is working with, and includes
-     * either the {@link Intent#CATEGORY_ALTERNATIVE} or
-     * {@link Intent#CATEGORY_SELECTED_ALTERNATIVE} to find activities that have
+     * either the {@link android.content.Intent#CATEGORY_ALTERNATIVE} or
+     * {@link android.content.Intent#CATEGORY_SELECTED_ALTERNATIVE} to find activities that have
      * said they would like to be included as optional action. You can, however,
      * use any Intent you want.
      *
@@ -416,8 +416,8 @@ public interface Menu {
 
     /**
      * Is a keypress one of the defined shortcut keys for this window.
-     * @param keyCode the key code from {@link KeyEvent} to check.
-     * @param event the {@link KeyEvent} to use to help check.
+     * @param keyCode the key code from {@link android.view.KeyEvent} to check.
+     * @param event the {@link android.view.KeyEvent} to use to help check.
      */
     boolean isShortcutKey(int keyCode, KeyEvent event);
 

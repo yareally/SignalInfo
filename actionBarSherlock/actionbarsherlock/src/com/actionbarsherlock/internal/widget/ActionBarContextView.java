@@ -39,6 +39,8 @@ import com.actionbarsherlock.internal.view.menu.ActionMenuPresenter;
 import com.actionbarsherlock.internal.view.menu.ActionMenuView;
 import com.actionbarsherlock.internal.view.menu.MenuBuilder;
 import com.actionbarsherlock.view.ActionMode;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @hide
@@ -49,53 +51,62 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
     private CharSequence mTitle;
     private CharSequence mSubtitle;
 
+    @Nullable
     private NineLinearLayout mClose;
-    private View mCustomView;
-    private LinearLayout mTitleLayout;
-    private TextView mTitleView;
-    private TextView mSubtitleView;
-    private int mTitleStyleRes;
-    private int mSubtitleStyleRes;
-    private Drawable mSplitBackground;
+    @Nullable
+    private View             mCustomView;
+    @Nullable
+    private LinearLayout     mTitleLayout;
+    private TextView         mTitleView;
+    private TextView         mSubtitleView;
+    private int              mTitleStyleRes;
+    private int              mSubtitleStyleRes;
+    @Nullable
+    private Drawable         mSplitBackground;
 
+    @Nullable
     private Animator mCurrentAnimation;
-    private boolean mAnimateInOnLayout;
-    private int mAnimationMode;
+    private boolean  mAnimateInOnLayout;
+    private int      mAnimationMode;
 
     private static final int ANIMATE_IDLE = 0;
-    private static final int ANIMATE_IN = 1;
-    private static final int ANIMATE_OUT = 2;
+    private static final int ANIMATE_IN   = 1;
+    private static final int ANIMATE_OUT  = 2;
 
-    public ActionBarContextView(Context context) {
+    public ActionBarContextView(@NotNull Context context)
+    {
         this(context, null);
     }
 
-    public ActionBarContextView(Context context, AttributeSet attrs) {
+    public ActionBarContextView(@NotNull Context context, @NotNull AttributeSet attrs)
+    {
         this(context, attrs, R.attr.actionModeStyle);
     }
 
-    public ActionBarContextView(Context context, AttributeSet attrs, int defStyle) {
+    public ActionBarContextView(@NotNull Context context, @NotNull AttributeSet attrs, int defStyle)
+    {
         super(context, attrs, defStyle);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SherlockActionMode, defStyle, 0);
         setBackgroundDrawable(a.getDrawable(
-                R.styleable.SherlockActionMode_background));
+            R.styleable.SherlockActionMode_background));
         mTitleStyleRes = a.getResourceId(
-                R.styleable.SherlockActionMode_titleTextStyle, 0);
+            R.styleable.SherlockActionMode_titleTextStyle, 0);
         mSubtitleStyleRes = a.getResourceId(
-                R.styleable.SherlockActionMode_subtitleTextStyle, 0);
+            R.styleable.SherlockActionMode_subtitleTextStyle, 0);
 
         mContentHeight = a.getLayoutDimension(
-                R.styleable.SherlockActionMode_height, 0);
+            R.styleable.SherlockActionMode_height, 0);
 
         mSplitBackground = a.getDrawable(
-                R.styleable.SherlockActionMode_backgroundSplit);
+            R.styleable.SherlockActionMode_backgroundSplit);
 
         a.recycle();
     }
 
     @Override
-    public void onDetachedFromWindow() {
+    public void onDetachedFromWindow()
+    {
         super.onDetachedFromWindow();
         if (mActionMenuPresenter != null) {
             mActionMenuPresenter.hideOverflowMenu();
@@ -104,12 +115,13 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
     }
 
     @Override
-    public void setSplitActionBar(boolean split) {
+    public void setSplitActionBar(boolean split)
+    {
         if (mSplitActionBar != split) {
             if (mActionMenuPresenter != null) {
                 // Mode is already active; move everything over and adjust the menu itself.
                 final LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT,
-                        LayoutParams.MATCH_PARENT);
+                    LayoutParams.MATCH_PARENT);
                 if (!split) {
                     mMenuView = (ActionMenuView) mActionMenuPresenter.getMenuView(this);
                     mMenuView.setBackgroundDrawable(null);
@@ -140,7 +152,7 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
         mContentHeight = height;
     }
 
-    public void setCustomView(View view) {
+    public void setCustomView(@Nullable View view) {
         if (mCustomView != null) {
             removeView(mCustomView);
         }
@@ -200,7 +212,7 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
         }
     }
 
-    public void initForMode(final ActionMode mode) {
+    public void initForMode(@NotNull final ActionMode mode) {
         if (mClose == null) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             mClose = (NineLinearLayout)inflater.inflate(R.layout.abs__action_mode_close_item, this, false);
@@ -307,6 +319,7 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
         return false;
     }
 
+    @NotNull
     @Override
     protected ViewGroup.LayoutParams generateDefaultLayoutParams() {
         // Used by custom views if they don't supply layout params. Everything else
@@ -388,6 +401,7 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
         }
     }
 
+    @NotNull
     private Animator makeInAnimation() {
         mClose.setTranslationX(-mClose.getWidth() -
                 ((MarginLayoutParams) mClose.getLayoutParams()).leftMargin);
@@ -416,6 +430,7 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
         return set;
     }
 
+    @NotNull
     private Animator makeOutAnimation() {
         ObjectAnimator buttonAnimator = ObjectAnimator.ofFloat(mClose, "translationX",
                 -mClose.getWidth() - ((MarginLayoutParams) mClose.getLayoutParams()).leftMargin);
@@ -504,7 +519,7 @@ public class ActionBarContextView extends AbsActionBarView implements AnimatorLi
     }
 
     @Override
-    public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
+    public void onInitializeAccessibilityEvent(@NotNull AccessibilityEvent event) {
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             // Action mode started
             //TODO event.setSource(this);

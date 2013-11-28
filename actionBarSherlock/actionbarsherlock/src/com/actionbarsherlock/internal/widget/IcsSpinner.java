@@ -36,7 +36,8 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.SpinnerAdapter;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A view that displays one child at a time and lets the user pick among them.
@@ -69,16 +70,19 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
      */
     //private static final int MODE_THEME = -1;
 
-    private SpinnerPopup mPopup;
+    private SpinnerPopup    mPopup;
+    @Nullable
     private DropDownAdapter mTempAdapter;
     int mDropDownWidth;
 
-    private int mGravity;
+    private int     mGravity;
     private boolean mDisableChildrenWhenDisabled;
 
+    @NotNull
     private Rect mTempRect = new Rect();
 
-    public IcsSpinner(Context context, AttributeSet attrs) {
+    public IcsSpinner(@NotNull Context context, @NotNull AttributeSet attrs)
+    {
         this(context, attrs, R.attr.actionDropDownStyle);
     }
 
@@ -94,28 +98,29 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
      *        either be an attribute resource, whose value will be retrieved
      *        from the current theme, or an explicit style resource.
      */
-    public IcsSpinner(Context context, AttributeSet attrs, int defStyle) {
+    public IcsSpinner(@NotNull Context context, @NotNull AttributeSet attrs, int defStyle)
+    {
         super(context, attrs, defStyle);
 
         TypedArray a = context.obtainStyledAttributes(attrs,
-                R.styleable.SherlockSpinner, defStyle, 0);
+            R.styleable.SherlockSpinner, defStyle, 0);
 
 
         DropdownPopup popup = new DropdownPopup(context, attrs, defStyle);
 
         mDropDownWidth = a.getLayoutDimension(
-                R.styleable.SherlockSpinner_android_dropDownWidth,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
+            R.styleable.SherlockSpinner_android_dropDownWidth,
+            ViewGroup.LayoutParams.WRAP_CONTENT);
         popup.setBackgroundDrawable(a.getDrawable(
-                R.styleable.SherlockSpinner_android_popupBackground));
+            R.styleable.SherlockSpinner_android_popupBackground));
         final int verticalOffset = a.getDimensionPixelOffset(
-                R.styleable.SherlockSpinner_android_dropDownVerticalOffset, 0);
+            R.styleable.SherlockSpinner_android_dropDownVerticalOffset, 0);
         if (verticalOffset != 0) {
             popup.setVerticalOffset(verticalOffset);
         }
 
         final int horizontalOffset = a.getDimensionPixelOffset(
-                R.styleable.SherlockSpinner_android_dropDownHorizontalOffset, 0);
+            R.styleable.SherlockSpinner_android_dropDownHorizontalOffset, 0);
         if (horizontalOffset != 0) {
             popup.setHorizontalOffset(horizontalOffset);
         }
@@ -310,6 +315,7 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
      * @param position Position in the spinner for the view to obtain
      * @return A view that has been added to the spinner
      */
+    @Nullable
     private View makeAndAddView(int position) {
 
         View child;
@@ -339,7 +345,7 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
      *
      * @param child The view to position
      */
-    private void setUpChild(View child) {
+    private void setUpChild(@NotNull View child) {
 
         // Respect layout params that are already in the view. Otherwise
         // make some up...
@@ -395,7 +401,7 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
         return handled;
     }
 
-    public void onClick(DialogInterface dialog, int which) {
+    public void onClick(@NotNull DialogInterface dialog, int which) {
         setSelection(which);
         dialog.dismiss();
     }
@@ -423,7 +429,7 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
         return mPopup.getHintText();
     }
 
-    int measureContentWidth(SpinnerAdapter adapter, Drawable background) {
+    int measureContentWidth(@Nullable SpinnerAdapter adapter, @Nullable Drawable background) {
         if (adapter == null) {
             return 0;
         }
@@ -491,6 +497,7 @@ public class IcsSpinner extends IcsAbsSpinner implements OnClickListener {
             return mAdapter == null ? 0 : mAdapter.getCount();
         }
 
+        @Nullable
         public Object getItem(int position) {
             return mAdapter == null ? null : mAdapter.getItem(position);
         }

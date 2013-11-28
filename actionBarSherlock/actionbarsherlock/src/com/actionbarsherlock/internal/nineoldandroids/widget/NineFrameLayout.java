@@ -5,21 +5,27 @@ import android.util.AttributeSet;
 import android.widget.FrameLayout;
 
 import com.actionbarsherlock.internal.nineoldandroids.view.animation.AnimatorProxy;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class NineFrameLayout extends FrameLayout {
+    @Nullable
     private final AnimatorProxy mProxy;
 
-    public NineFrameLayout(Context context, AttributeSet attrs) {
+    public NineFrameLayout(@NotNull Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         mProxy = AnimatorProxy.NEEDS_PROXY ? AnimatorProxy.wrap(this) : null;
     }
 
     @Override
-    public void setVisibility(int visibility) {
+    public void setVisibility(int visibility)
+    {
         if (mProxy != null) {
             if (visibility == GONE) {
                 clearAnimation();
-            } else if (visibility == VISIBLE) {
+            }
+            else if (visibility == VISIBLE) {
                 setAnimation(mProxy);
             }
         }

@@ -23,6 +23,8 @@ import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.PopupWindow;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * A proxy between pre- and post-Honeycomb implementations of this class.
@@ -35,15 +37,17 @@ public class IcsListPopupWindow {
      */
     private static final int EXPAND_LIST_TIMEOUT = 250;
 
-    private Context mContext;
+    private       Context           mContext;
+    @NotNull
     private final PopupWindowCompat mPopup;
-    private ListAdapter mAdapter;
-    private DropDownListView mDropDownList;
+    private       ListAdapter       mAdapter;
+    @Nullable
+    private       DropDownListView  mDropDownList;
 
     private int mDropDownHeight = ViewGroup.LayoutParams.WRAP_CONTENT;
-    private int mDropDownWidth = ViewGroup.LayoutParams.WRAP_CONTENT;
-    private int mDropDownHorizontalOffset;
-    private int mDropDownVerticalOffset;
+    private int mDropDownWidth  = ViewGroup.LayoutParams.WRAP_CONTENT;
+    private int     mDropDownHorizontalOffset;
+    private int     mDropDownVerticalOffset;
     private boolean mDropDownVerticalOffsetSet;
 
     private int mListItemExpandMaximum = Integer.MAX_VALUE;
@@ -57,16 +61,18 @@ public class IcsListPopupWindow {
 
     private Drawable mDropDownListHighlight;
 
-    private AdapterView.OnItemClickListener mItemClickListener;
+    private AdapterView.OnItemClickListener    mItemClickListener;
     private AdapterView.OnItemSelectedListener mItemSelectedListener;
 
-    private final ResizePopupRunnable mResizePopupRunnable = new ResizePopupRunnable();
-    private final PopupTouchInterceptor mTouchInterceptor = new PopupTouchInterceptor();
-    private final PopupScrollListener mScrollListener = new PopupScrollListener();
-    private final ListSelectorHider mHideSelector = new ListSelectorHider();
+    private final ResizePopupRunnable   mResizePopupRunnable = new ResizePopupRunnable();
+    private final PopupTouchInterceptor mTouchInterceptor    = new PopupTouchInterceptor();
+    private final PopupScrollListener   mScrollListener      = new PopupScrollListener();
+    private final ListSelectorHider     mHideSelector        = new ListSelectorHider();
 
+    @NotNull
     private Handler mHandler = new Handler();
 
+    @NotNull
     private Rect mTempRect = new Rect();
 
     private boolean mModal;
@@ -74,28 +80,33 @@ public class IcsListPopupWindow {
     public static final int POSITION_PROMPT_ABOVE = 0;
     public static final int POSITION_PROMPT_BELOW = 1;
 
-    public IcsListPopupWindow(Context context) {
+    public IcsListPopupWindow(@NotNull Context context)
+    {
         this(context, null, R.attr.listPopupWindowStyle);
     }
 
-    public IcsListPopupWindow(Context context, AttributeSet attrs, int defStyleAttr) {
+    public IcsListPopupWindow(@NotNull Context context, AttributeSet attrs, int defStyleAttr)
+    {
         mContext = context;
         mPopup = new PopupWindowCompat(context, attrs, defStyleAttr);
         mPopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
     }
 
-    public IcsListPopupWindow(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public IcsListPopupWindow(@NotNull Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes)
+    {
         mContext = context;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
             Context wrapped = new ContextThemeWrapper(context, defStyleRes);
             mPopup = new PopupWindowCompat(wrapped, attrs, defStyleAttr);
-        } else {
+        }
+        else {
             mPopup = new PopupWindowCompat(context, attrs, defStyleAttr, defStyleRes);
         }
         mPopup.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
     }
 
-    public void setAdapter(ListAdapter adapter) {
+    public void setAdapter(@NotNull ListAdapter adapter)
+    {
         if (mObserver == null) {
             mObserver = new PopupDataSetObserver();
         } else if (mAdapter != null) {
@@ -293,6 +304,7 @@ public class IcsListPopupWindow {
         return mPopup.getInputMethodMode() == PopupWindow.INPUT_METHOD_NOT_NEEDED;
     }
 
+    @Nullable
     public ListView getListView() {
         return mDropDownList;
     }
@@ -421,7 +433,7 @@ public class IcsListPopupWindow {
         return listContent + otherHeights;
     }
 
-    private int getMaxAvailableHeight(View anchor, int yOffset, boolean ignoreBottomDecorations) {
+    private int getMaxAvailableHeight(@NotNull View anchor, int yOffset, boolean ignoreBottomDecorations) {
         final Rect displayFrame = new Rect();
         anchor.getWindowVisibleDisplayFrame(displayFrame);
 
@@ -501,7 +513,7 @@ public class IcsListPopupWindow {
         // completely fit, so return the returnedHeight
         return returnedHeight;
     }
-    private void measureScrapChild(View child, int position, int widthMeasureSpec) {
+    private void measureScrapChild(@NotNull View child, int position, int widthMeasureSpec) {
         ListView.LayoutParams p = (ListView.LayoutParams) child.getLayoutParams();
         if (p == null) {
             p = new ListView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
@@ -556,7 +568,7 @@ public class IcsListPopupWindow {
 
         private boolean mHijackFocus;
 
-        public DropDownListView(Context context, boolean hijackFocus) {
+        public DropDownListView(@NotNull Context context, boolean hijackFocus) {
             super(context, null, /*com.android.internal.*/R.attr.dropDownListViewStyle);
             mHijackFocus = hijackFocus;
             // TODO: Add an API to control this
@@ -628,7 +640,7 @@ public class IcsListPopupWindow {
     }
 
     private class PopupTouchInterceptor implements OnTouchListener {
-        public boolean onTouch(View v, MotionEvent event) {
+        public boolean onTouch(View v, @NotNull MotionEvent event) {
             final int action = event.getAction();
             final int x = (int) event.getX();
             final int y = (int) event.getY();

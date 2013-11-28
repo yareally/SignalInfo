@@ -10,6 +10,9 @@ import com.actionbarsherlock.ActionBarSherlock.OnPreparePanelListener;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.util.ArrayList;
 
 /** I'm in ur package. Stealing ur variables. */
@@ -29,6 +32,7 @@ public abstract class Watson extends FragmentActivity implements OnCreatePanelMe
         public boolean onOptionsItemSelected(MenuItem item);
     }
 
+    @Nullable
     private ArrayList<Fragment> mCreatedMenus;
 
 
@@ -37,8 +41,10 @@ public abstract class Watson extends FragmentActivity implements OnCreatePanelMe
     ///////////////////////////////////////////////////////////////////////////
 
     @Override
-    public boolean onCreatePanelMenu(int featureId, Menu menu) {
-        if (ActionBarSherlock.DEBUG) Log.d(TAG, "[onCreatePanelMenu] featureId: " + featureId + ", menu: " + menu);
+    public boolean onCreatePanelMenu(int featureId, Menu menu)
+    {
+        if (ActionBarSherlock.DEBUG)
+            Log.d(TAG, "[onCreatePanelMenu] featureId: " + featureId + ", menu: " + menu);
 
         if (featureId == Window.FEATURE_OPTIONS_PANEL) {
             boolean result = onCreateOptionsMenu(menu);
@@ -52,7 +58,7 @@ public abstract class Watson extends FragmentActivity implements OnCreatePanelMe
                     Fragment f = mFragments.mAdded.get(i);
                     if (f != null && !f.mHidden && f.mHasMenu && f.mMenuVisible && f instanceof OnCreateOptionsMenuListener) {
                         show = true;
-                        ((OnCreateOptionsMenuListener)f).onCreateOptionsMenu(menu, inflater);
+                        ((OnCreateOptionsMenuListener) f).onCreateOptionsMenu(menu, inflater);
                         if (newMenus == null) {
                             newMenus = new ArrayList<Fragment>();
                         }
@@ -82,7 +88,7 @@ public abstract class Watson extends FragmentActivity implements OnCreatePanelMe
     }
 
     @Override
-    public boolean onPreparePanel(int featureId, View view, Menu menu) {
+    public boolean onPreparePanel(int featureId, View view, @NotNull Menu menu) {
         if (ActionBarSherlock.DEBUG) Log.d(TAG, "[onPreparePanel] featureId: " + featureId + ", view: " + view + " menu: " + menu);
 
         if (featureId == Window.FEATURE_OPTIONS_PANEL) {

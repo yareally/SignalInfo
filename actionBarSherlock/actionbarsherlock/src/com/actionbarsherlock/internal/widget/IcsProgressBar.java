@@ -49,7 +49,8 @@ import android.view.animation.Interpolator;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.Transformation;
 import android.widget.RemoteViews.RemoteView;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * <p>
@@ -184,12 +185,12 @@ import android.widget.RemoteViews.RemoteView;
  */
 @RemoteView
 public class IcsProgressBar extends View {
-    private static final boolean IS_HONEYCOMB = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
-    private static final int MAX_LEVEL = 10000;
-    private static final int ANIMATION_RESOLUTION = 200;
-    private static final int TIMEOUT_SEND_ACCESSIBILITY_EVENT = 200;
+    private static final boolean IS_HONEYCOMB                     = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
+    private static final int     MAX_LEVEL                        = 10000;
+    private static final int     ANIMATION_RESOLUTION             = 200;
+    private static final int     TIMEOUT_SEND_ACCESSIBILITY_EVENT = 200;
 
-    private static final int[] ProgressBar = new int[] {
+    private static final int[] ProgressBar                       = new int[]{
         android.R.attr.maxWidth,
         android.R.attr.maxHeight,
         android.R.attr.max,
@@ -206,21 +207,21 @@ public class IcsProgressBar extends View {
         android.R.attr.interpolator,
         android.R.attr.animationResolution,
     };
-    private static final int ProgressBar_maxWidth = 0;
-    private static final int ProgressBar_maxHeight = 1;
-    private static final int ProgressBar_max = 2;
-    private static final int ProgressBar_progress = 3;
-    private static final int ProgressBar_secondaryProgress = 4;
-    private static final int ProgressBar_indeterminate = 5;
-    private static final int ProgressBar_indeterminateOnly = 6;
-    private static final int ProgressBar_indeterminateDrawable = 7;
-    private static final int ProgressBar_progressDrawable = 8;
-    private static final int ProgressBar_indeterminateDuration = 9;
-    private static final int ProgressBar_indeterminateBehavior = 10;
-    private static final int ProgressBar_minWidth = 11;
-    private static final int ProgressBar_minHeight = 12;
-    private static final int ProgressBar_interpolator = 13;
-    private static final int ProgressBar_animationResolution = 14;
+    private static final int   ProgressBar_maxWidth              = 0;
+    private static final int   ProgressBar_maxHeight             = 1;
+    private static final int   ProgressBar_max                   = 2;
+    private static final int   ProgressBar_progress              = 3;
+    private static final int   ProgressBar_secondaryProgress     = 4;
+    private static final int   ProgressBar_indeterminate         = 5;
+    private static final int   ProgressBar_indeterminateOnly     = 6;
+    private static final int   ProgressBar_indeterminateDrawable = 7;
+    private static final int   ProgressBar_progressDrawable      = 8;
+    private static final int   ProgressBar_indeterminateDuration = 9;
+    private static final int   ProgressBar_indeterminateBehavior = 10;
+    private static final int   ProgressBar_minWidth              = 11;
+    private static final int   ProgressBar_minHeight             = 12;
+    private static final int   ProgressBar_interpolator          = 13;
+    private static final int   ProgressBar_animationResolution   = 14;
 
     int mMinWidth;
     int mMaxWidth;
@@ -231,52 +232,62 @@ public class IcsProgressBar extends View {
     private int mSecondaryProgress;
     private int mMax;
 
-    private int mBehavior;
-    private int mDuration;
-    private boolean mIndeterminate;
-    private boolean mOnlyIndeterminate;
+    private int            mBehavior;
+    private int            mDuration;
+    private boolean        mIndeterminate;
+    private boolean        mOnlyIndeterminate;
+    @Nullable
     private Transformation mTransformation;
+    @Nullable
     private AlphaAnimation mAnimation;
-    private Drawable mIndeterminateDrawable;
-    private int mIndeterminateRealLeft;
-    private int mIndeterminateRealTop;
-    private Drawable mProgressDrawable;
-    private Drawable mCurrentDrawable;
+    @Nullable
+    private Drawable       mIndeterminateDrawable;
+    private int            mIndeterminateRealLeft;
+    private int            mIndeterminateRealTop;
+    @Nullable
+    private Drawable       mProgressDrawable;
+    @Nullable
+    private Drawable       mCurrentDrawable;
     Bitmap mSampleTile;
-    private boolean mNoInvalidate;
-    private Interpolator mInterpolator;
+    private boolean                 mNoInvalidate;
+    private Interpolator            mInterpolator;
+    @Nullable
     private RefreshProgressRunnable mRefreshProgressRunnable;
-    private long mUiThreadId;
-    private boolean mShouldStartAnimationDrawable;
-    private long mLastDrawTime;
+    private long                    mUiThreadId;
+    private boolean                 mShouldStartAnimationDrawable;
+    private long                    mLastDrawTime;
 
     private boolean mInDrawing;
 
     private int mAnimationResolution;
 
-    private AccessibilityManager mAccessibilityManager;
+    private AccessibilityManager     mAccessibilityManager;
     private AccessibilityEventSender mAccessibilityEventSender;
 
     /**
      * Create a new progress bar with range 0...100 and initial progress of 0.
      * @param context the application environment
      */
-    public IcsProgressBar(Context context) {
+    public IcsProgressBar(@NotNull Context context)
+    {
         this(context, null);
     }
 
-    public IcsProgressBar(Context context, AttributeSet attrs) {
+    public IcsProgressBar(@NotNull Context context, @NotNull AttributeSet attrs)
+    {
         this(context, attrs, android.R.attr.progressBarStyle);
     }
 
-    public IcsProgressBar(Context context, AttributeSet attrs, int defStyle) {
+    public IcsProgressBar(@NotNull Context context, @NotNull AttributeSet attrs, int defStyle)
+    {
         this(context, attrs, defStyle, 0);
     }
 
     /**
      * @hide
      */
-    public IcsProgressBar(Context context, AttributeSet attrs, int defStyle, int styleRes) {
+    public IcsProgressBar(@NotNull Context context, @NotNull AttributeSet attrs, int defStyle, int styleRes)
+    {
         super(context, attrs, defStyle);
         mUiThreadId = Thread.currentThread().getId();
         initProgressBar();
@@ -306,7 +317,7 @@ public class IcsProgressBar extends View {
 
         final int resID = a.getResourceId(
                 /*com.android.internal.R.styleable.*/ProgressBar_interpolator,
-                android.R.anim.linear_interpolator); // default to linear interpolator
+            android.R.anim.linear_interpolator); // default to linear interpolator
         if (resID > 0) {
             setInterpolator(context, resID);
         }
@@ -316,7 +327,7 @@ public class IcsProgressBar extends View {
         setProgress(a.getInt(/*R.styleable.*/ProgressBar_progress, mProgress));
 
         setSecondaryProgress(
-                a.getInt(/*R.styleable.*/ProgressBar_secondaryProgress, mSecondaryProgress));
+            a.getInt(/*R.styleable.*/ProgressBar_secondaryProgress, mSecondaryProgress));
 
         drawable = a.getDrawable(/*R.styleable.*/ProgressBar_indeterminateDrawable);
         if (drawable != null) {
@@ -333,18 +344,19 @@ public class IcsProgressBar extends View {
                 /*R.styleable.*/ProgressBar_indeterminate, mIndeterminate));
 
         mAnimationResolution = a.getInteger(/*R.styleable.*/ProgressBar_animationResolution,
-                ANIMATION_RESOLUTION);
+            ANIMATION_RESOLUTION);
 
         a.recycle();
 
-        mAccessibilityManager = (AccessibilityManager)context.getSystemService(Context.ACCESSIBILITY_SERVICE);
+        mAccessibilityManager = (AccessibilityManager) context.getSystemService(Context.ACCESSIBILITY_SERVICE);
     }
 
     /**
      * Converts a drawable to a tiled version of itself. It will recursively
      * traverse layer and state list drawables.
      */
-    private Drawable tileify(Drawable drawable, boolean clip) {
+    private Drawable tileify(Drawable drawable, boolean clip)
+    {
 
         if (drawable instanceof LayerDrawable) {
             LayerDrawable background = (LayerDrawable) drawable;
@@ -354,7 +366,7 @@ public class IcsProgressBar extends View {
             for (int i = 0; i < N; i++) {
                 int id = background.getId(i);
                 outDrawables[i] = tileify(background.getDrawable(i),
-                        (id == android.R.id.progress || id == android.R.id.secondaryProgress));
+                    (id == android.R.id.progress || id == android.R.id.secondaryProgress));
             }
 
             LayerDrawable newBg = new LayerDrawable(outDrawables);
@@ -364,7 +376,6 @@ public class IcsProgressBar extends View {
             }
 
             return newBg;
-
         }/* else if (drawable instanceof StateListDrawable) {
             StateListDrawable in = (StateListDrawable) drawable;
             StateListDrawable out = new StateListDrawable();
@@ -374,7 +385,8 @@ public class IcsProgressBar extends View {
             }
             return out;
 
-        }*/ else if (drawable instanceof BitmapDrawable) {
+        }*/
+        else if (drawable instanceof BitmapDrawable) {
             final Bitmap tileBitmap = ((BitmapDrawable) drawable).getBitmap();
             if (mSampleTile == null) {
                 mSampleTile = tileBitmap;
@@ -383,18 +395,20 @@ public class IcsProgressBar extends View {
             final ShapeDrawable shapeDrawable = new ShapeDrawable(getDrawableShape());
 
             final BitmapShader bitmapShader = new BitmapShader(tileBitmap,
-                    Shader.TileMode.REPEAT, Shader.TileMode.CLAMP);
+                Shader.TileMode.REPEAT, Shader.TileMode.CLAMP);
             shapeDrawable.getPaint().setShader(bitmapShader);
 
             return (clip) ? new ClipDrawable(shapeDrawable, Gravity.LEFT,
-                    ClipDrawable.HORIZONTAL) : shapeDrawable;
+                ClipDrawable.HORIZONTAL) : shapeDrawable;
         }
 
         return drawable;
     }
 
-    Shape getDrawableShape() {
-        final float[] roundedCorners = new float[] { 5, 5, 5, 5, 5, 5, 5, 5 };
+    @Nullable
+    Shape getDrawableShape()
+    {
+        final float[] roundedCorners = new float[]{5, 5, 5, 5, 5, 5, 5, 5};
         return new RoundRectShape(roundedCorners, null, null);
     }
 
@@ -403,7 +417,8 @@ public class IcsProgressBar extends View {
      * Each frame of the animation is wrapped in a ClipDrawable and
      * given a tiling BitmapShader.
      */
-    private Drawable tileifyIndeterminate(Drawable drawable) {
+    private Drawable tileifyIndeterminate(Drawable drawable)
+    {
         if (drawable instanceof AnimationDrawable) {
             AnimationDrawable background = (AnimationDrawable) drawable;
             final int N = background.getNumberOfFrames();
@@ -433,7 +448,8 @@ public class IcsProgressBar extends View {
      * <li>behavior = repeat</li>
      * </ul>
      */
-    private void initProgressBar() {
+    private void initProgressBar()
+    {
         mMax = 100;
         mProgress = 0;
         mSecondaryProgress = 0;
@@ -453,7 +469,8 @@ public class IcsProgressBar extends View {
      * @return true if the progress bar is in indeterminate mode
      */
     @ViewDebug.ExportedProperty(category = "progress")
-    public synchronized boolean isIndeterminate() {
+    public synchronized boolean isIndeterminate()
+    {
         return mIndeterminate;
     }
 
@@ -467,7 +484,8 @@ public class IcsProgressBar extends View {
      *
      * @param indeterminate true to enable the indeterminate mode
      */
-    public synchronized void setIndeterminate(boolean indeterminate) {
+    public synchronized void setIndeterminate(boolean indeterminate)
+    {
         if ((!mOnlyIndeterminate || !mIndeterminate) && indeterminate != mIndeterminate) {
             mIndeterminate = indeterminate;
 
@@ -491,6 +509,7 @@ public class IcsProgressBar extends View {
      * @see #setIndeterminateDrawable(android.graphics.drawable.Drawable)
      * @see #setIndeterminate(boolean)
      */
+    @Nullable
     public Drawable getIndeterminateDrawable() {
         return mIndeterminateDrawable;
     }
@@ -504,7 +523,7 @@ public class IcsProgressBar extends View {
      * @see #getIndeterminateDrawable()
      * @see #setIndeterminate(boolean)
      */
-    public void setIndeterminateDrawable(Drawable d) {
+    public void setIndeterminateDrawable(@Nullable Drawable d) {
         if (d != null) {
             d.setCallback(this);
         }
@@ -524,6 +543,7 @@ public class IcsProgressBar extends View {
      * @see #setProgressDrawable(android.graphics.drawable.Drawable)
      * @see #setIndeterminate(boolean)
      */
+    @Nullable
     public Drawable getProgressDrawable() {
         return mProgressDrawable;
     }
@@ -537,7 +557,7 @@ public class IcsProgressBar extends View {
      * @see #getProgressDrawable()
      * @see #setIndeterminate(boolean)
      */
-    public void setProgressDrawable(Drawable d) {
+    public void setProgressDrawable(@Nullable Drawable d) {
         boolean needUpdate;
         if (mProgressDrawable != null && d != mProgressDrawable) {
             mProgressDrawable.setCallback(null);
@@ -573,6 +593,7 @@ public class IcsProgressBar extends View {
     /**
      * @return The drawable currently used to draw the progress bar
      */
+    @Nullable
     Drawable getCurrentDrawable() {
         return mCurrentDrawable;
     }
@@ -876,7 +897,7 @@ public class IcsProgressBar extends View {
      * @param context The application environment
      * @param resID The resource identifier of the interpolator to load
      */
-    public void setInterpolator(Context context, int resID) {
+    public void setInterpolator(@NotNull Context context, int resID) {
         setInterpolator(AnimationUtils.loadInterpolator(context, resID));
     }
 
@@ -893,7 +914,7 @@ public class IcsProgressBar extends View {
     /**
      * Gets the acceleration curve type for the indeterminate animation.
      *
-     * @return the {@link Interpolator} associated to this animation
+     * @return the {@link android.view.animation.Interpolator} associated to this animation
      */
     public Interpolator getInterpolator() {
         return mInterpolator;
@@ -916,7 +937,7 @@ public class IcsProgressBar extends View {
     }
 
     @Override
-    protected void onVisibilityChanged(View changedView, int visibility) {
+    protected void onVisibilityChanged(@NotNull View changedView, int visibility) {
         super.onVisibilityChanged(changedView, visibility);
 
         if (mIndeterminate) {
@@ -930,7 +951,7 @@ public class IcsProgressBar extends View {
     }
 
     @Override
-    public void invalidateDrawable(Drawable dr) {
+    public void invalidateDrawable(@NotNull Drawable dr) {
         if (!mInDrawing) {
             if (verifyDrawable(dr)) {
                 final Rect dirty = dr.getBounds();
@@ -1001,7 +1022,7 @@ public class IcsProgressBar extends View {
     }
 
     @Override
-    protected synchronized void onDraw(Canvas canvas) {
+    protected synchronized void onDraw(@NotNull Canvas canvas) {
         super.onDraw(canvas);
 
         Drawable d = mCurrentDrawable;
@@ -1080,7 +1101,7 @@ public class IcsProgressBar extends View {
         int secondaryProgress;
 
         /**
-         * Constructor called from {@link IcsProgressBar#onSaveInstanceState()}
+         * Constructor called from {@link com.actionbarsherlock.internal.widget.IcsProgressBar#onSaveInstanceState()}
          */
         SavedState(Parcelable superState) {
             super(superState);
@@ -1089,33 +1110,39 @@ public class IcsProgressBar extends View {
         /**
          * Constructor called from {@link #CREATOR}
          */
-        private SavedState(Parcel in) {
+        private SavedState(@NotNull Parcel in) {
             super(in);
             progress = in.readInt();
             secondaryProgress = in.readInt();
         }
 
         @Override
-        public void writeToParcel(Parcel out, int flags) {
+        public void writeToParcel(@NotNull Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeInt(progress);
             out.writeInt(secondaryProgress);
         }
 
-        public static final Parcelable.Creator<SavedState> CREATOR
-                = new Parcelable.Creator<SavedState>() {
-            public SavedState createFromParcel(Parcel in) {
+        public static final Creator<SavedState> CREATOR
+            = new Creator<SavedState>()
+        {
+            public SavedState createFromParcel(@NotNull Parcel in)
+            {
                 return new SavedState(in);
             }
 
-            public SavedState[] newArray(int size) {
+            @NotNull
+            public SavedState[] newArray(int size)
+            {
                 return new SavedState[size];
             }
         };
     }
 
+    @NotNull
     @Override
-    public Parcelable onSaveInstanceState() {
+    public Parcelable onSaveInstanceState()
+    {
         // Force our ancestor class to save its state
         Parcelable superState = super.onSaveInstanceState();
         SavedState ss = new SavedState(superState);
@@ -1127,7 +1154,8 @@ public class IcsProgressBar extends View {
     }
 
     @Override
-    public void onRestoreInstanceState(Parcelable state) {
+    public void onRestoreInstanceState(Parcelable state)
+    {
         SavedState ss = (SavedState) state;
         super.onRestoreInstanceState(ss.getSuperState());
 
@@ -1136,7 +1164,8 @@ public class IcsProgressBar extends View {
     }
 
     @Override
-    protected void onAttachedToWindow() {
+    protected void onAttachedToWindow()
+    {
         super.onAttachedToWindow();
         if (mIndeterminate) {
             startAnimation();
@@ -1144,11 +1173,12 @@ public class IcsProgressBar extends View {
     }
 
     @Override
-    protected void onDetachedFromWindow() {
+    protected void onDetachedFromWindow()
+    {
         if (mIndeterminate) {
             stopAnimation();
         }
-        if(mRefreshProgressRunnable != null) {
+        if (mRefreshProgressRunnable != null) {
             removeCallbacks(mRefreshProgressRunnable);
         }
         if (mAccessibilityEventSender != null) {
@@ -1160,7 +1190,8 @@ public class IcsProgressBar extends View {
     }
 
     @Override
-    public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
+    public void onInitializeAccessibilityEvent(@NotNull AccessibilityEvent event)
+    {
         super.onInitializeAccessibilityEvent(event);
         event.setItemCount(mMax);
         event.setCurrentItemIndex(mProgress);
@@ -1173,10 +1204,12 @@ public class IcsProgressBar extends View {
      *       are sent at most one in a given time frame to save
      *       system resources while the progress changes quickly.
      */
-    private void scheduleAccessibilityEventSender() {
+    private void scheduleAccessibilityEventSender()
+    {
         if (mAccessibilityEventSender == null) {
             mAccessibilityEventSender = new AccessibilityEventSender();
-        } else {
+        }
+        else {
             removeCallbacks(mAccessibilityEventSender);
         }
         postDelayed(mAccessibilityEventSender, TIMEOUT_SEND_ACCESSIBILITY_EVENT);
@@ -1185,8 +1218,10 @@ public class IcsProgressBar extends View {
     /**
      * Command for sending an accessibility event.
      */
-    private class AccessibilityEventSender implements Runnable {
-        public void run() {
+    private class AccessibilityEventSender implements Runnable
+    {
+        public void run()
+        {
             sendAccessibilityEvent(AccessibilityEvent.TYPE_VIEW_SELECTED);
         }
     }

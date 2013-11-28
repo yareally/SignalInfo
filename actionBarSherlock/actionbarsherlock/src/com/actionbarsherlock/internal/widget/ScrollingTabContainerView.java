@@ -37,6 +37,8 @@ import com.actionbarsherlock.app.ActionBar;
 import com.actionbarsherlock.internal.nineoldandroids.animation.Animator;
 import com.actionbarsherlock.internal.nineoldandroids.animation.ObjectAnimator;
 import com.actionbarsherlock.internal.nineoldandroids.widget.NineHorizontalScrollView;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * This widget implements the dynamic action bar tab behavior that can change
@@ -45,12 +47,15 @@ import com.actionbarsherlock.internal.nineoldandroids.widget.NineHorizontalScrol
 public class ScrollingTabContainerView extends NineHorizontalScrollView
         implements IcsAdapterView.OnItemSelectedListener {
     //UNUSED private static final String TAG = "ScrollingTabContainerView";
-    Runnable mTabSelector;
+    @Nullable
+            Runnable         mTabSelector;
     private TabClickListener mTabClickListener;
 
+    @Nullable
     private IcsLinearLayout mTabLayout;
-    private IcsSpinner mTabSpinner;
-    private boolean mAllowCollapse;
+    @Nullable
+    private IcsSpinner      mTabSpinner;
+    private boolean         mAllowCollapse;
 
     private LayoutInflater mInflater;
 
@@ -58,19 +63,21 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
     private int mContentHeight;
     private int mSelectedTabIndex;
 
+    @Nullable
     protected Animator mVisibilityAnim;
     protected final VisibilityAnimListener mVisAnimListener = new VisibilityAnimListener();
 
-    private static final /*Time*/Interpolator sAlphaInterpolator = new DecelerateInterpolator();
+    private static final /*Time*/ Interpolator sAlphaInterpolator = new DecelerateInterpolator();
 
     private static final int FADE_DURATION = 200;
 
-    public ScrollingTabContainerView(Context context) {
+    public ScrollingTabContainerView(@NotNull Context context)
+    {
         super(context);
         setHorizontalScrollBarEnabled(false);
 
         TypedArray a = getContext().obtainStyledAttributes(null, R.styleable.SherlockActionBar,
-                R.attr.actionBarStyle, 0);
+            R.attr.actionBarStyle, 0);
         setContentHeight(a.getLayoutDimension(R.styleable.SherlockActionBar_height, 0));
         a.recycle();
 
@@ -78,24 +85,27 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
 
         mTabLayout = createTabLayout();
         addView(mTabLayout, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
+            ViewGroup.LayoutParams.MATCH_PARENT));
     }
 
     @Override
-    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+    public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+    {
         final int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         final boolean lockedExpanded = widthMode == MeasureSpec.EXACTLY;
         setFillViewport(lockedExpanded);
 
         final int childCount = mTabLayout.getChildCount();
         if (childCount > 1 &&
-                (widthMode == MeasureSpec.EXACTLY || widthMode == MeasureSpec.AT_MOST)) {
+            (widthMode == MeasureSpec.EXACTLY || widthMode == MeasureSpec.AT_MOST)) {
             if (childCount > 2) {
                 mMaxTabWidth = (int) (MeasureSpec.getSize(widthMeasureSpec) * 0.4f);
-            } else {
+            }
+            else {
                 mMaxTabWidth = MeasureSpec.getSize(widthMeasureSpec) / 2;
             }
-        } else {
+        }
+        else {
             mMaxTabWidth = -1;
         }
 
@@ -108,10 +118,12 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
             mTabLayout.measure(MeasureSpec.UNSPECIFIED, heightMeasureSpec);
             if (mTabLayout.getMeasuredWidth() > MeasureSpec.getSize(widthMeasureSpec)) {
                 performCollapse();
-            } else {
+            }
+            else {
                 performExpand();
             }
-        } else {
+        }
+        else {
             performExpand();
         }
 
@@ -185,6 +197,7 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
         requestLayout();
     }
 
+    @Nullable
     private IcsLinearLayout createTabLayout() {
         final TabsLinearLayout tabLayout = (TabsLinearLayout) LayoutInflater.from(getContext())
                 .inflate(R.layout.abs__action_bar_tab_bar_view, null);
@@ -194,6 +207,7 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
         return tabLayout;
     }
 
+    @Nullable
     private IcsSpinner createSpinner() {
         final IcsSpinner spinner = new IcsSpinner(getContext(), null,
                 R.attr.actionDropDownStyle);
@@ -271,6 +285,7 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
         }
     }
 
+    @Nullable
     private TabView createTabView(ActionBar.Tab tab, boolean forAdapter) {
         //Workaround for not being able to pass a defStyle on pre-3.0
         final TabView tabView = (TabView)mInflater.inflate(R.layout.abs__action_bar_tab, null);
@@ -363,17 +378,22 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
 
     public static class TabView extends LinearLayout {
         private ScrollingTabContainerView mParent;
-        private ActionBar.Tab mTab;
-        private CapitalizingTextView mTextView;
-        private ImageView mIconView;
-        private View mCustomView;
+        private ActionBar.Tab             mTab;
+        @Nullable
+        private CapitalizingTextView      mTextView;
+        @Nullable
+        private ImageView                 mIconView;
+        @Nullable
+        private View                      mCustomView;
 
-        public TabView(Context context, AttributeSet attrs) {
+        public TabView(@NotNull Context context, AttributeSet attrs)
+        {
             //TODO super(context, null, R.attr.actionBarTabStyle);
             super(context, attrs);
         }
 
-        public void init(ScrollingTabContainerView parent, ActionBar.Tab tab, boolean forList) {
+        public void init(ScrollingTabContainerView parent, ActionBar.Tab tab, boolean forList)
+        {
             mParent = parent;
             mTab = tab;
 
@@ -384,23 +404,26 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
             update();
         }
 
-        public void bindTab(ActionBar.Tab tab) {
+        public void bindTab(ActionBar.Tab tab)
+        {
             mTab = tab;
             update();
         }
 
         @Override
-        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        public void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
+        {
             super.onMeasure(widthMeasureSpec, heightMeasureSpec);
 
             // Re-measure if we went beyond our maximum size.
             if (mParent.mMaxTabWidth > 0 && getMeasuredWidth() > mParent.mMaxTabWidth) {
                 super.onMeasure(MeasureSpec.makeMeasureSpec(mParent.mMaxTabWidth, MeasureSpec.EXACTLY),
-                        heightMeasureSpec);
+                    heightMeasureSpec);
             }
         }
 
-        public void update() {
+        public void update()
+        {
             final ActionBar.Tab tab = mTab;
             final View custom = tab.getCustomView();
             if (custom != null) {
@@ -415,7 +438,8 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
                     mIconView.setVisibility(GONE);
                     mIconView.setImageDrawable(null);
                 }
-            } else {
+            }
+            else {
                 if (mCustomView != null) {
                     removeView(mCustomView);
                     mCustomView = null;
@@ -428,7 +452,7 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
                     if (mIconView == null) {
                         ImageView iconView = new ImageView(getContext());
                         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT);
+                            LayoutParams.WRAP_CONTENT);
                         lp.gravity = Gravity.CENTER_VERTICAL;
                         iconView.setLayoutParams(lp);
                         addView(iconView, 0);
@@ -436,7 +460,8 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
                     }
                     mIconView.setImageDrawable(icon);
                     mIconView.setVisibility(VISIBLE);
-                } else if (mIconView != null) {
+                }
+                else if (mIconView != null) {
                     mIconView.setVisibility(GONE);
                     mIconView.setImageDrawable(null);
                 }
@@ -444,10 +469,10 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
                 if (text != null) {
                     if (mTextView == null) {
                         CapitalizingTextView textView = new CapitalizingTextView(getContext(), null,
-                                R.attr.actionBarTabTextStyle);
+                            R.attr.actionBarTabTextStyle);
                         textView.setEllipsize(TruncateAt.END);
                         LayoutParams lp = new LayoutParams(LayoutParams.WRAP_CONTENT,
-                                LayoutParams.WRAP_CONTENT);
+                            LayoutParams.WRAP_CONTENT);
                         lp.gravity = Gravity.CENTER_VERTICAL;
                         textView.setLayoutParams(lp);
                         addView(textView);
@@ -455,7 +480,8 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
                     }
                     mTextView.setTextCompat(text);
                     mTextView.setVisibility(VISIBLE);
-                } else if (mTextView != null) {
+                }
+                else if (mTextView != null) {
                     mTextView.setVisibility(GONE);
                     mTextView.setText(null);
                 }
@@ -466,40 +492,49 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
             }
         }
 
-        public ActionBar.Tab getTab() {
+        public ActionBar.Tab getTab()
+        {
             return mTab;
         }
     }
 
-    private class TabAdapter extends BaseAdapter {
+    private class TabAdapter extends BaseAdapter
+    {
         @Override
-        public int getCount() {
+        public int getCount()
+        {
             return mTabLayout.getChildCount();
         }
 
         @Override
-        public Object getItem(int position) {
+        public Object getItem(int position)
+        {
             return ((TabView) mTabLayout.getChildAt(position)).getTab();
         }
 
         @Override
-        public long getItemId(int position) {
+        public long getItemId(int position)
+        {
             return position;
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, @Nullable View convertView, ViewGroup parent)
+        {
             if (convertView == null) {
                 convertView = createTabView((ActionBar.Tab) getItem(position), true);
-            } else {
+            }
+            else {
                 ((TabView) convertView).bindTab((ActionBar.Tab) getItem(position));
             }
             return convertView;
         }
     }
 
-    private class TabClickListener implements OnClickListener {
-        public void onClick(View view) {
+    private class TabClickListener implements OnClickListener
+    {
+        public void onClick(View view)
+        {
             TabView tabView = (TabView) view;
             tabView.getTab().select();
             final int tabCount = mTabLayout.getChildCount();
@@ -510,24 +545,29 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
         }
     }
 
-    protected class VisibilityAnimListener implements Animator.AnimatorListener {
+    protected class VisibilityAnimListener implements Animator.AnimatorListener
+    {
         private boolean mCanceled = false;
         private int mFinalVisibility;
 
-        public VisibilityAnimListener withFinalVisibility(int visibility) {
+        @NotNull
+        public VisibilityAnimListener withFinalVisibility(int visibility)
+        {
             mFinalVisibility = visibility;
             return this;
         }
 
         @Override
-        public void onAnimationStart(Animator animation) {
+        public void onAnimationStart(Animator animation)
+        {
             setVisibility(VISIBLE);
             mVisibilityAnim = animation;
             mCanceled = false;
         }
 
         @Override
-        public void onAnimationEnd(Animator animation) {
+        public void onAnimationEnd(Animator animation)
+        {
             if (mCanceled) return;
 
             mVisibilityAnim = null;
@@ -535,12 +575,14 @@ public class ScrollingTabContainerView extends NineHorizontalScrollView
         }
 
         @Override
-        public void onAnimationCancel(Animator animation) {
+        public void onAnimationCancel(Animator animation)
+        {
             mCanceled = true;
         }
 
         @Override
-        public void onAnimationRepeat(Animator animation) {
+        public void onAnimationRepeat(Animator animation)
+        {
         }
     }
 }

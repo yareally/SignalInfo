@@ -29,19 +29,23 @@ import com.actionbarsherlock.view.ActionMode;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class StandaloneActionMode extends ActionMode implements MenuBuilder.Callback {
-    private Context mContext;
+    private Context              mContext;
     private ActionBarContextView mContextView;
-    private ActionMode.Callback mCallback;
-    private WeakReference<View> mCustomView;
-    private boolean mFinished;
-    private boolean mFocusable;
+    private ActionMode.Callback  mCallback;
+    @Nullable
+    private WeakReference<View>  mCustomView;
+    private boolean              mFinished;
+    private boolean              mFocusable;
 
     private MenuBuilder mMenu;
 
-    public StandaloneActionMode(Context context, ActionBarContextView view,
-            ActionMode.Callback callback, boolean isFocusable) {
+    public StandaloneActionMode(@NotNull Context context, ActionBarContextView view,
+                                ActionMode.Callback callback, boolean isFocusable)
+    {
         mContext = context;
         mContextView = view;
         mCallback = callback;
@@ -52,38 +56,45 @@ public class StandaloneActionMode extends ActionMode implements MenuBuilder.Call
     }
 
     @Override
-    public void setTitle(CharSequence title) {
+    public void setTitle(CharSequence title)
+    {
         mContextView.setTitle(title);
     }
 
     @Override
-    public void setSubtitle(CharSequence subtitle) {
+    public void setSubtitle(CharSequence subtitle)
+    {
         mContextView.setSubtitle(subtitle);
     }
 
     @Override
-    public void setTitle(int resId) {
+    public void setTitle(int resId)
+    {
         setTitle(mContext.getString(resId));
     }
 
     @Override
-    public void setSubtitle(int resId) {
+    public void setSubtitle(int resId)
+    {
         setSubtitle(mContext.getString(resId));
     }
 
     @Override
-    public void setCustomView(View view) {
+    public void setCustomView(@Nullable View view)
+    {
         mContextView.setCustomView(view);
         mCustomView = view != null ? new WeakReference<View>(view) : null;
     }
 
     @Override
-    public void invalidate() {
+    public void invalidate()
+    {
         mCallback.onPrepareActionMode(this, mMenu);
     }
 
     @Override
-    public void finish() {
+    public void finish()
+    {
         if (mFinished) {
             return;
         }
@@ -108,11 +119,13 @@ public class StandaloneActionMode extends ActionMode implements MenuBuilder.Call
         return mContextView.getSubtitle();
     }
 
+    @Nullable
     @Override
     public View getCustomView() {
         return mCustomView != null ? mCustomView.get() : null;
     }
 
+    @NotNull
     @Override
     public MenuInflater getMenuInflater() {
         return new MenuInflater(mContext);
@@ -125,7 +138,7 @@ public class StandaloneActionMode extends ActionMode implements MenuBuilder.Call
     public void onCloseMenu(MenuBuilder menu, boolean allMenusAreClosing) {
     }
 
-    public boolean onSubMenuSelected(SubMenuBuilder subMenu) {
+    public boolean onSubMenuSelected(@NotNull SubMenuBuilder subMenu) {
         if (!subMenu.hasVisibleItems()) {
             return true;
         }

@@ -60,19 +60,19 @@ public interface SubMenu extends Menu {
 
     /**
      * Sets the submenu header's icon to the icon given in <var>icon</var>
-     * {@link Drawable}.
+     * {@link android.graphics.drawable.Drawable}.
      *
-     * @param icon The {@link Drawable} used for the icon.
+     * @param icon The {@link android.graphics.drawable.Drawable} used for the icon.
      * @return This SubMenu so additional setters can be called.
      */
     public SubMenu setHeaderIcon(Drawable icon);
 
     /**
-     * Sets the header of the submenu to the {@link View} given in
+     * Sets the header of the submenu to the {@link android.view.View} given in
      * <var>view</var>. This replaces the header title and icon (and those
      * replace this).
      *
-     * @param view The {@link View} used for the header.
+     * @param view The {@link android.view.View} used for the header.
      * @return This SubMenu so additional setters can be called.
      */
     public SubMenu setHeaderView(View view);
@@ -94,7 +94,7 @@ public interface SubMenu extends Menu {
     /**
      * Change the icon associated with this submenu's item in its parent menu.
      *
-     * @see MenuItem#setIcon(Drawable)
+     * @see MenuItem#setIcon(android.graphics.drawable.Drawable)
      * @param icon The new icon (as a Drawable) to be displayed.
      * @return This SubMenu so additional setters can be called.
      */

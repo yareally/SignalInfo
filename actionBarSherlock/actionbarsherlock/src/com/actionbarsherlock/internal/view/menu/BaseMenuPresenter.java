@@ -22,6 +22,8 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Base class for MenuPresenters that have a consistent container view and item
@@ -31,16 +33,17 @@ import android.view.ViewGroup;
 public abstract class BaseMenuPresenter implements MenuPresenter {
     private static final boolean IS_HONEYCOMB = Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB;
 
-    protected Context mSystemContext;
-    protected Context mContext;
-    protected MenuBuilder mMenu;
+    protected Context        mSystemContext;
+    protected Context        mContext;
+    protected MenuBuilder    mMenu;
     protected LayoutInflater mSystemInflater;
     protected LayoutInflater mInflater;
-    private Callback mCallback;
+    private   Callback       mCallback;
 
     private int mMenuLayoutRes;
     private int mItemLayoutRes;
 
+    @Nullable
     protected MenuView mMenuView;
 
     private int mId;
@@ -52,7 +55,8 @@ public abstract class BaseMenuPresenter implements MenuPresenter {
      * @param menuLayoutRes Layout resource ID for the menu container view
      * @param itemLayoutRes Layout resource ID for a single item view
      */
-    public BaseMenuPresenter(Context context, int menuLayoutRes, int itemLayoutRes) {
+    public BaseMenuPresenter(@NotNull Context context, int menuLayoutRes, int itemLayoutRes)
+    {
         mSystemContext = context;
         mSystemInflater = LayoutInflater.from(context);
         mMenuLayoutRes = menuLayoutRes;
@@ -60,14 +64,17 @@ public abstract class BaseMenuPresenter implements MenuPresenter {
     }
 
     @Override
-    public void initForMenu(Context context, MenuBuilder menu) {
+    public void initForMenu(Context context, MenuBuilder menu)
+    {
         mContext = context;
         mInflater = LayoutInflater.from(mContext);
         mMenu = menu;
     }
 
+    @Nullable
     @Override
-    public MenuView getMenuView(ViewGroup root) {
+    public MenuView getMenuView(ViewGroup root)
+    {
         if (mMenuView == null) {
             mMenuView = (MenuView) mSystemInflater.inflate(mMenuLayoutRes, root, false);
             mMenuView.initialize(mMenu);
@@ -80,7 +87,8 @@ public abstract class BaseMenuPresenter implements MenuPresenter {
     /**
      * Reuses item views when it can
      */
-    public void updateMenuView(boolean cleared) {
+    public void updateMenuView(boolean cleared)
+    {
         final ViewGroup parent = (ViewGroup) mMenuView;
         if (parent == null) return;
 
@@ -123,7 +131,7 @@ public abstract class BaseMenuPresenter implements MenuPresenter {
      * @param itemView View to add
      * @param childIndex Index within the parent to insert at
      */
-    protected void addItemView(View itemView, int childIndex) {
+    protected void addItemView(@NotNull View itemView, int childIndex) {
         final ViewGroup currentParent = (ViewGroup) itemView.getParent();
         if (currentParent != null) {
             currentParent.removeView(itemView);
@@ -137,7 +145,7 @@ public abstract class BaseMenuPresenter implements MenuPresenter {
      * @param childIndex Index to filter
      * @return true if the child view at index was removed
      */
-    protected boolean filterLeftoverView(ViewGroup parent, int childIndex) {
+    protected boolean filterLeftoverView(@NotNull ViewGroup parent, int childIndex) {
         parent.removeViewAt(childIndex);
         return true;
     }
@@ -151,6 +159,7 @@ public abstract class BaseMenuPresenter implements MenuPresenter {
      *
      * @return The new item view
      */
+    @Nullable
     public MenuView.ItemView createItemView(ViewGroup parent) {
         return (MenuView.ItemView) mSystemInflater.inflate(mItemLayoutRes, parent, false);
     }
@@ -166,6 +175,7 @@ public abstract class BaseMenuPresenter implements MenuPresenter {
      * @param parent Intended parent view - use for inflation.
      * @return View that presents the requested menu item
      */
+    @Nullable
     public View getItemView(MenuItemImpl item, View convertView, ViewGroup parent) {
         MenuView.ItemView itemView;
         if (convertView instanceof MenuView.ItemView) {

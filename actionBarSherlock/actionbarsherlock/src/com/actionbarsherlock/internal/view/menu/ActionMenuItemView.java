@@ -38,6 +38,8 @@ import com.actionbarsherlock.internal.view.View_HasStateListenerSupport;
 import com.actionbarsherlock.internal.view.View_OnAttachStateChangeListener;
 import com.actionbarsherlock.internal.widget.CapitalizingButton;
 import com.actionbarsherlock.internal.widget.IcsToast;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import static com.actionbarsherlock.internal.ResourcesCompat.getResources_getBoolean;
 
@@ -61,15 +63,15 @@ public class ActionMenuItemView extends LinearLayout
 
     private final Set<View_OnAttachStateChangeListener> mListeners = new HashSet<View_OnAttachStateChangeListener>();
 
-    public ActionMenuItemView(Context context) {
+    public ActionMenuItemView(@NotNull Context context) {
         this(context, null);
     }
 
-    public ActionMenuItemView(Context context, AttributeSet attrs) {
+    public ActionMenuItemView(@NotNull Context context, @NotNull AttributeSet attrs) {
         this(context, attrs, 0);
     }
 
-    public ActionMenuItemView(Context context, AttributeSet attrs, int defStyle) {
+    public ActionMenuItemView(@NotNull Context context, @NotNull AttributeSet attrs, int defStyle) {
         //TODO super(context, attrs, defStyle);
         super(context, attrs);
         mAllowTextWithIcon = getResources_getBoolean(context,
@@ -123,7 +125,7 @@ public class ActionMenuItemView extends LinearLayout
         return mItemData;
     }
 
-    public void initialize(MenuItemImpl itemData, int menuType) {
+    public void initialize(@NotNull MenuItemImpl itemData, int menuType) {
         mItemData = itemData;
 
         setIcon(itemData.getIcon());
@@ -180,7 +182,7 @@ public class ActionMenuItemView extends LinearLayout
         mTextButton.setVisibility(visible ? VISIBLE : GONE);
     }
 
-    public void setIcon(Drawable icon) {
+    public void setIcon(@Nullable Drawable icon) {
         mImageButton.setImageDrawable(icon);
         if (icon != null) {
             mImageButton.setVisibility(VISIBLE);
@@ -209,13 +211,13 @@ public class ActionMenuItemView extends LinearLayout
     }
 
     @Override
-    public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
+    public boolean dispatchPopulateAccessibilityEvent(@NotNull AccessibilityEvent event) {
         onPopulateAccessibilityEvent(event);
         return true;
     }
 
     @Override
-    public void onPopulateAccessibilityEvent(AccessibilityEvent event) {
+    public void onPopulateAccessibilityEvent(@NotNull AccessibilityEvent event) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             super.onPopulateAccessibilityEvent(event);
         }
@@ -226,7 +228,7 @@ public class ActionMenuItemView extends LinearLayout
     }
 
     @Override
-    public boolean dispatchHoverEvent(MotionEvent event) {
+    public boolean dispatchHoverEvent(@NotNull MotionEvent event) {
         // Don't allow children to hover; we want this to be treated as a single component.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
             return onHoverEvent(event);

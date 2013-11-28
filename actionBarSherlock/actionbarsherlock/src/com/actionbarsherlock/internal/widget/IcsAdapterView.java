@@ -32,13 +32,14 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.Adapter;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
- * An AdapterView is a view whose children are determined by an {@link Adapter}.
+ * An AdapterView is a view whose children are determined by an {@link android.widget.Adapter}.
  *
  * <p>
- * See {@link ListView}, {@link GridView}, {@link Spinner} and
+ * See {@link android.widget.ListView}, {@link GridView}, {@link Spinner} and
  *      {@link Gallery} for commonly used subclasses of AdapterView.
  *
  * <div class="special reference">
@@ -50,13 +51,13 @@ import android.widget.ListView;
 public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
 
     /**
-     * The item view type returned by {@link Adapter#getItemViewType(int)} when
+     * The item view type returned by {@link android.widget.Adapter#getItemViewType(int)} when
      * the adapter does not want the item's view recycled.
      */
     public static final int ITEM_VIEW_TYPE_IGNORE = -1;
 
     /**
-     * The item view type returned by {@link Adapter#getItemViewType(int)} when
+     * The item view type returned by {@link android.widget.Adapter#getItemViewType(int)} when
      * the item is a header or footer.
      */
     public static final int ITEM_VIEW_TYPE_HEADER_OR_FOOTER = -2;
@@ -224,15 +225,18 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      */
     boolean mBlockLayoutRequests = false;
 
-    public IcsAdapterView(Context context) {
+    public IcsAdapterView(Context context)
+    {
         super(context);
     }
 
-    public IcsAdapterView(Context context, AttributeSet attrs) {
+    public IcsAdapterView(@NotNull Context context, AttributeSet attrs)
+    {
         super(context, attrs);
     }
 
-    public IcsAdapterView(Context context, AttributeSet attrs, int defStyle) {
+    public IcsAdapterView(@NotNull Context context, AttributeSet attrs, int defStyle)
+    {
         super(context, attrs, defStyle);
     }
 
@@ -242,7 +246,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      *
      * @param listener The callback that will be invoked.
      */
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(OnItemClickListener listener)
+    {
         mOnItemClickListener = listener;
     }
 
@@ -250,7 +255,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      * @return The callback to be invoked with an item in this AdapterView has
      *         been clicked, or null id no callback has been set.
      */
-    public final OnItemClickListener getOnItemClickListener() {
+    public final OnItemClickListener getOnItemClickListener()
+    {
         return mOnItemClickListener;
     }
 
@@ -263,7 +269,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      * @return True if there was an assigned OnItemClickListener that was
      *         called, false otherwise is returned.
      */
-    public boolean performItemClick(View view, int position, long id) {
+    public boolean performItemClick(@Nullable View view, int position, long id)
+    {
         if (mOnItemClickListener != null) {
             playSoundEffect(SoundEffectConstants.CLICK);
             if (view != null) {
@@ -368,7 +375,7 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
 
     /**
      * Extra menu information provided to the
-     * {@link android.view.View.OnCreateContextMenuListener#onCreateContextMenu(ContextMenu, View, ContextMenuInfo) }
+     * {@link android.view.View.OnCreateContextMenuListener#onCreateContextMenu(android.view.ContextMenu, android.view.View, ContextMenuInfo) }
      * callback when a context menu is brought up for this AdapterView.
      *
      */
@@ -529,12 +536,14 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      * @return The view corresponding to the currently selected item, or null
      * if nothing is selected
      */
+    @Nullable
     public abstract View getSelectedView();
 
     /**
      * @return The data corresponding to the currently selected item, or
      * null if there is nothing selected.
      */
+    @Nullable
     public Object getSelectedItem() {
         T adapter = getAdapter();
         int selection = getSelectedItemPosition();
@@ -725,6 +734,7 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      * @param position Which data to get
      * @return The data associated with the specified position in the list
      */
+    @Nullable
     public Object getItemAtPosition(int position) {
         T adapter = getAdapter();
         return (adapter == null || position < 0) ? null : adapter.getItem(position);
@@ -745,7 +755,7 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      * Override to prevent freezing of any views created by the adapter.
      */
     @Override
-    protected void dispatchSaveInstanceState(SparseArray<Parcelable> container) {
+    protected void dispatchSaveInstanceState(@NotNull SparseArray<Parcelable> container) {
         dispatchFreezeSelfOnly(container);
     }
 
@@ -753,16 +763,18 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      * Override to prevent thawing of any views created by the adapter.
      */
     @Override
-    protected void dispatchRestoreInstanceState(SparseArray<Parcelable> container) {
+    protected void dispatchRestoreInstanceState(@NotNull SparseArray<Parcelable> container) {
         dispatchThawSelfOnly(container);
     }
 
     class AdapterDataSetObserver extends DataSetObserver {
 
+        @Nullable
         private Parcelable mInstanceState = null;
 
         @Override
-        public void onChanged() {
+        public void onChanged()
+        {
             mDataChanged = true;
             mOldItemCount = mItemCount;
             mItemCount = getAdapter().getCount();
@@ -770,10 +782,11 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
             // Detect the case where a cursor that was previously invalidated has
             // been repopulated with new data.
             if (IcsAdapterView.this.getAdapter().hasStableIds() && mInstanceState != null
-                    && mOldItemCount == 0 && mItemCount > 0) {
+                && mOldItemCount == 0 && mItemCount > 0) {
                 IcsAdapterView.this.onRestoreInstanceState(mInstanceState);
                 mInstanceState = null;
-            } else {
+            }
+            else {
                 rememberSyncState();
             }
             checkFocus();
@@ -781,7 +794,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
         }
 
         @Override
-        public void onInvalidated() {
+        public void onInvalidated()
+        {
             mDataChanged = true;
 
             if (IcsAdapterView.this.getAdapter().hasStableIds()) {
@@ -803,19 +817,23 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
             requestLayout();
         }
 
-        public void clearSavedState() {
+        public void clearSavedState()
+        {
             mInstanceState = null;
         }
     }
 
     @Override
-    protected void onDetachedFromWindow() {
+    protected void onDetachedFromWindow()
+    {
         super.onDetachedFromWindow();
         removeCallbacks(mSelectionNotifier);
     }
 
-    private class SelectionNotifier implements Runnable {
-        public void run() {
+    private class SelectionNotifier implements Runnable
+    {
+        public void run()
+        {
             if (mDataChanged) {
                 // Data has changed between when this SelectionNotifier
                 // was posted and now. We need to wait until the AdapterView
@@ -823,13 +841,15 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
                 if (getAdapter() != null) {
                     post(this);
                 }
-            } else {
+            }
+            else {
                 fireOnSelected();
             }
         }
     }
 
-    void selectionChanged() {
+    void selectionChanged()
+    {
         if (mOnItemSelectedListener != null) {
             if (mInLayout || mBlockLayoutRequests) {
                 // If we are in a layout traversal, defer notification
@@ -840,7 +860,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
                     mSelectionNotifier = new SelectionNotifier();
                 }
                 post(mSelectionNotifier);
-            } else {
+            }
+            else {
                 fireOnSelected();
             }
         }
@@ -851,7 +872,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
         }
     }
 
-    private void fireOnSelected() {
+    private void fireOnSelected()
+    {
         if (mOnItemSelectedListener == null)
             return;
 
@@ -859,24 +881,27 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
         if (selection >= 0) {
             View v = getSelectedView();
             mOnItemSelectedListener.onItemSelected(this, v, selection,
-                    getAdapter().getItemId(selection));
-        } else {
+                getAdapter().getItemId(selection));
+        }
+        else {
             mOnItemSelectedListener.onNothingSelected(this);
         }
     }
 
     @Override
-    public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event) {
+    public boolean dispatchPopulateAccessibilityEvent(AccessibilityEvent event)
+    {
         View selectedView = getSelectedView();
         if (selectedView != null && selectedView.getVisibility() == VISIBLE
-                && selectedView.dispatchPopulateAccessibilityEvent(event)) {
+            && selectedView.dispatchPopulateAccessibilityEvent(event)) {
             return true;
         }
         return false;
     }
 
     @Override
-    public boolean onRequestSendAccessibilityEvent(View child, AccessibilityEvent event) {
+    public boolean onRequestSendAccessibilityEvent(@NotNull View child, @NotNull AccessibilityEvent event)
+    {
         if (super.onRequestSendAccessibilityEvent(child, event)) {
             // Add a record for ourselves as well.
             AccessibilityEvent record = AccessibilityEvent.obtain();
@@ -890,7 +915,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
     }
 
     @Override
-    public void onInitializeAccessibilityNodeInfo(AccessibilityNodeInfo info) {
+    public void onInitializeAccessibilityNodeInfo(@NotNull AccessibilityNodeInfo info)
+    {
         super.onInitializeAccessibilityNodeInfo(info);
         info.setScrollable(isScrollableForAccessibility());
         View selectedView = getSelectedView();
@@ -900,7 +926,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
     }
 
     @Override
-    public void onInitializeAccessibilityEvent(AccessibilityEvent event) {
+    public void onInitializeAccessibilityEvent(@NotNull AccessibilityEvent event)
+    {
         super.onInitializeAccessibilityEvent(event);
         event.setScrollable(isScrollableForAccessibility());
         View selectedView = getSelectedView();
@@ -913,7 +940,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
         event.setItemCount(getCount());
     }
 
-    private boolean isScrollableForAccessibility() {
+    private boolean isScrollableForAccessibility()
+    {
         T adapter = getAdapter();
         if (adapter != null) {
             final int itemCount = adapter.getCount();
@@ -924,11 +952,13 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
     }
 
     @Override
-    protected boolean canAnimate() {
+    protected boolean canAnimate()
+    {
         return super.canAnimate() && mItemCount > 0;
     }
 
-    void handleDataChanged() {
+    void handleDataChanged()
+    {
         final int count = mItemCount;
         boolean found = false;
 
@@ -991,7 +1021,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
         }
     }
 
-    void checkSelectionChanged() {
+    void checkSelectionChanged()
+    {
         if ((mSelectedPosition != mOldSelectedPosition) || (mSelectedRowId != mOldSelectedRowId)) {
             selectionChanged();
             mOldSelectedPosition = mSelectedPosition;
@@ -1007,7 +1038,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      * @return Position of the row that matches mSyncRowId, or {@link #INVALID_POSITION} if it can't
      *         be found
      */
-    int findSyncPosition() {
+    int findSyncPosition()
+    {
         int count = mItemCount;
 
         if (count == 0) {
@@ -1073,14 +1105,14 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
                 seed = last;
                 // Try going up next time
                 next = false;
-            } else if (hitLast || (!next && !hitFirst)) {
+            }
+            else if (hitLast || (!next && !hitFirst)) {
                 // Either we hit the bottom, or we are trying to move up
                 first--;
                 seed = first;
                 // Try going down next time
                 next = true;
             }
-
         }
 
         return INVALID_POSITION;
@@ -1094,7 +1126,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      * @return The next selectable position starting at position and then searching either up or
      *         down. Returns {@link #INVALID_POSITION} if nothing can be found.
      */
-    int lookForSelectablePosition(int position, boolean lookDown) {
+    int lookForSelectablePosition(int position, boolean lookDown)
+    {
         return position;
     }
 
@@ -1102,7 +1135,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      * Utility to keep mSelectedPosition and mSelectedRowId in sync
      * @param position Our current position
      */
-    void setSelectedPositionInt(int position) {
+    void setSelectedPositionInt(int position)
+    {
         mSelectedPosition = position;
         mSelectedRowId = getItemIdAtPosition(position);
     }
@@ -1112,7 +1146,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      * @param position Intended value for mSelectedPosition the next time we go
      * through layout
      */
-    void setNextSelectedPositionInt(int position) {
+    void setNextSelectedPositionInt(int position)
+    {
         mNextSelectedPosition = position;
         mNextSelectedRowId = getItemIdAtPosition(position);
         // If we are trying to sync to the selection, update that too
@@ -1127,7 +1162,8 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
      * changed.
      *
      */
-    void rememberSyncState() {
+    void rememberSyncState()
+    {
         if (getChildCount() > 0) {
             mNeedSync = true;
             mSyncHeight = mLayoutHeight;
@@ -1140,13 +1176,15 @@ public abstract class IcsAdapterView<T extends Adapter> extends ViewGroup {
                     mSpecificTop = v.getTop();
                 }
                 mSyncMode = SYNC_SELECTED_POSITION;
-            } else {
+            }
+            else {
                 // Sync the based on the offset of the first view
                 View v = getChildAt(0);
                 T adapter = getAdapter();
                 if (mFirstPosition >= 0 && mFirstPosition < adapter.getCount()) {
                     mSyncRowId = adapter.getItemId(mFirstPosition);
-                } else {
+                }
+                else {
                     mSyncRowId = NO_ID;
                 }
                 mSyncPosition = mFirstPosition;

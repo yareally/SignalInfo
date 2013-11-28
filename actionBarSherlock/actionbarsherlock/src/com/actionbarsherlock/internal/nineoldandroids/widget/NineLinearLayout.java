@@ -5,21 +5,27 @@ import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
 import com.actionbarsherlock.internal.nineoldandroids.view.animation.AnimatorProxy;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class NineLinearLayout extends LinearLayout {
+    @Nullable
     private final AnimatorProxy mProxy;
 
-    public NineLinearLayout(Context context, AttributeSet attrs) {
+    public NineLinearLayout(@NotNull Context context, AttributeSet attrs)
+    {
         super(context, attrs);
         mProxy = AnimatorProxy.NEEDS_PROXY ? AnimatorProxy.wrap(this) : null;
     }
 
     @Override
-    public void setVisibility(int visibility) {
+    public void setVisibility(int visibility)
+    {
         if (mProxy != null) {
             if (visibility == GONE) {
                 clearAnimation();
-            } else if (visibility == VISIBLE) {
+            }
+            else if (visibility == VISIBLE) {
                 setAnimation(mProxy);
             }
         }

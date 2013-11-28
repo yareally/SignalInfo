@@ -6,6 +6,8 @@ import android.content.res.TypedArray;
 import android.os.Build;
 import android.util.AttributeSet;
 import android.widget.Button;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class CapitalizingButton extends Button {
     private static final boolean SANS_ICE_CREAM = Build.VERSION.SDK_INT < Build.VERSION_CODES.ICE_CREAM_SANDWICH;
@@ -23,7 +25,7 @@ public class CapitalizingButton extends Button {
 
     private boolean mAllCaps;
 
-    public CapitalizingButton(Context context, AttributeSet attrs) {
+    public CapitalizingButton(@NotNull Context context, @NotNull AttributeSet attrs) {
         super(context, attrs);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R_styleable_Button);
@@ -38,7 +40,7 @@ public class CapitalizingButton extends Button {
         }
     }
 
-    public void setTextCompat(CharSequence text) {
+    public void setTextCompat(@Nullable CharSequence text) {
         if (SANS_ICE_CREAM && mAllCaps && text != null) {
             if (IS_GINGERBREAD) {
                 try {
