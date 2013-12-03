@@ -19,6 +19,7 @@ import com.actionbarsherlock.view.{Menu, MenuItem}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.fragments.SettingsFragment
 import com.actionbarsherlock.app.{SherlockFragmentActivity, ActionBar}
+import android.R.layout
 
 /**
  * @author Wes Lanning
@@ -45,11 +46,6 @@ class BaseActivity extends SherlockFragmentActivity
         enableStrictMode()
         actionBar = getSupportActionBar
         actionBar.setHomeButtonEnabled(true)
-
-        if (!BuildConfig.DEBUG) {
-            val ad: AdView = findViewById(R.id.adView).asInstanceOf[AdView]
-            ad.loadAd(new AdRequest)
-        }
     }
 
     /**
@@ -61,6 +57,11 @@ class BaseActivity extends SherlockFragmentActivity
     protected def onCreate(layout: Int, savedInstanceState: Bundle) {
         this.onCreateApp(savedInstanceState)
         setContentView(layout)
+
+        if (!BuildConfig.DEBUG) {
+            val ad: AdView = findViewById(R.id.adView).asInstanceOf[AdView]
+            ad.loadAd(new AdRequest)
+        }
         formatFooter()
     }
 

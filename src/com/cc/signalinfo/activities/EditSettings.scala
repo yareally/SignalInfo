@@ -36,6 +36,8 @@ import com.actionbarsherlock.view.MenuItem
 import com.cc.signalinfo.R
 import java.util.{List ⇒ Jlist, Map ⇒ Jmap, EnumMap ⇒ Emap, Collections}
 import android.preference.PreferenceActivity
+import java.lang.String
+import com.cc.signalinfo.fragments.SettingsFragment
 
 /**
  * Routes to the specified preference screen based on user input
@@ -68,6 +70,13 @@ class EditSettings extends SherlockPreferenceActivity
     @TargetApi(11)
     override def onBuildHeaders(target: Jlist[PreferenceActivity.Header]) {
         loadHeadersFromResource(R.xml.preference_headers, target)
+    }
+
+    override protected def isValidFragment (fragmentName: String): Boolean = {
+        if (classOf[SettingsFragment].getClass.getName == fragmentName) {
+            return true
+        }
+        false
     }
 
     /**

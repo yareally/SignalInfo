@@ -82,7 +82,7 @@ class MainActivity
      * @param savedInstanceState - umm... the saved instance state
      */
     override def onCreate(savedInstanceState: Bundle) {
-        onCreate(R.layout.radio_signal_fragment, savedInstanceState)
+        super.onCreate(R.layout.radio_signal_fragment, savedInstanceState)
 
         val listener: SignalListener = new SignalListener(this)
         sigInfoIds = getResources.obtainTypedArray(R.array.sigInfoIds)

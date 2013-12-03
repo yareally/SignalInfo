@@ -15,6 +15,7 @@
             android:id="@+id/adView"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:layout_above="@id/deviceInfoGrid"
             ads:adSize="BANNER"
             ads:adUnitId="a150a0f996cbdbd" />
 
@@ -27,7 +28,6 @@
             android:paddingRight="10dp"
             android:paddingStart="10dp"
             android:paddingTop="5dp"
-            android:orientation="vertical"
             grid:columnCount="6">
 
 
@@ -163,13 +163,12 @@
             android:id="@+id/signalGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_below="@id/deviceInfoGrid"
             android:paddingEnd="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingStart="10dp"
             android:paddingTop="5dp"
-            android:layout_below="@id/deviceInfoGrid"
             grid:columnCount="6">
 
             <TextView
@@ -500,12 +499,12 @@
             android:id="@+id/debugGrid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_below="@id/signalGrid"
             android:paddingEnd="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:paddingStart="10dp"
             android:paddingTop="5dp"
-            android:layout_below="@id/signalGrid"
             grid:columnCount="6">
 
             <TextView
