@@ -66,16 +66,15 @@ class SignalListener(listener: SignalListener.UpdateSignal) extends PhoneStateLi
     {
         super.onSignalStrengthsChanged(signalStrength)
         if (signalStrength != null) {
-
             Log.d(TAG, "getting sig strength")
             Log.d(TAG, signalStrength.toString)
 
             if (signalWrapper == null) {
                 signalWrapper = new SignalArrayWrapper(signalStrength.toString)
             }
-            else {
-                signalWrapper.filterSignals(signalStrength.toString)
-            }
+            // TODO: make filterSignals only accessible to this class
+            signalWrapper.filterSignals(signalStrength.toString)
+            listener.setData(signalWrapper)
         }
     }
 

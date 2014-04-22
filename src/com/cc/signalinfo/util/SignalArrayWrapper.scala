@@ -65,7 +65,6 @@ class SignalArrayWrapper(signalArray: String)
     private val rawData: String = signalArray
     private var filteredArray: Array[String] = EMPTY_SIGNAL_ARRAY
 
-
     /**
      * Wraps the raw signal data array produced by the system in order
 
@@ -90,6 +89,12 @@ class SignalArrayWrapper(signalArray: String)
         return arrayCopy
     }
 
+    /**
+     * Parses, filters and returns a copy (not a reference) of the signal array after
+     * being reformatted to meet ICS+ expectations.
+     *
+     * @return the processed signal array in the form one expects in ICS+
+     */
     def filterSignals(rawData: String): Array[String] = {
         // remove all invalid signals and put in our default string instead to make life easier
 
