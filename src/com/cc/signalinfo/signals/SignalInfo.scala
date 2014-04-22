@@ -7,7 +7,6 @@ import com.cc.signalinfo.util.StringUtils
 import android.telephony.TelephonyManager._
 import android.telephony.TelephonyManager
 import java.util.{LinkedHashMap ⇒ Lmap, Map ⇒ Jmap, Set ⇒ Jset, EnumMap ⇒ Emap, EnumSet ⇒ Eset, LinkedHashSet ⇒ Lset, List ⇒ Jlist, ArrayList ⇒ Alist, Collections}
-import android.util.Log
 import org.jetbrains.annotations.Nullable
 
 /**
@@ -73,7 +72,7 @@ object SignalInfo
     def cb2db(centibels: String): String = {
         var centibelCopy: String = centibels
 
-        if (!StringUtils.isNullOrEmpty(centibelCopy) && !(DEFAULT_TXT == centibelCopy)) {
+        if (!StringUtils.isNullOrEmpty(centibelCopy) && DEFAULT_TXT != centibelCopy) {
             centibelCopy = String.valueOf(Integer.parseInt(centibelCopy) / 10)
         }
         centibelCopy
@@ -173,10 +172,20 @@ abstract class SignalInfo(protected val networkType: NetworkType,
             }
 
         if (signalValue == -1) {
-            return ""
+            return "" // no value set
         }
+        // ex: LTE RSRP = 80db, best = 0, worst = 76, normalized = -44db
+        // normalize the reading to align to zero
         signalValue += name.norm
-        val fudgeValue = if (name.best > name.worst) 0 else (name.worst - signalValue) / 100.00f
+
+        // 80db - 44db = 36db
+        val fudgeValue =
+            if (name.best > name.worst) {
+                0
+            }
+            else {
+                (name.worst - signalValue) / 100.00f
+            }
 
         val result: Float =
             if (name.best > name.worst) {
@@ -205,7 +214,7 @@ abstract class SignalInfo(protected val networkType: NetworkType,
         import scala.collection.JavaConversions.mapAsScalaMap
         val readings = new Lmap[String, String]
 
-        for ((signalKey, signalValue) <- signals) {
+        for ((signalKey, signalValue) ← signals) {
             readings(signalKey.name) = getRelativeEfficiency(signalKey, fudgeReading)
         }
         readings
@@ -249,7 +258,7 @@ abstract class SignalInfo(protected val networkType: NetworkType,
      * @return true if network type contains this type of signal
      */
     def containsSignalType(networkType: Signal): Boolean = {
-        possibleValues.contains(networkType)
+        possibleValues contains networkType
     }
 
     /**
@@ -338,7 +347,12 @@ abstract class SignalInfo(protected val networkType: NetworkType,
      *         specified type or null if there was no signal already added.
      */
     def addSignalValue(`type`: Signal, value: String): String = {
-        signals.put(`type`, value)
+        var valueCpy = value
+
+        if (decibelsPreferred(`type`)) {
+            valueCpy = SignalInfo.cb2db(valueCpy)
+        }
+        signals.put(`type`, valueCpy)
     }
 
     /**
@@ -348,6 +362,10 @@ abstract class SignalInfo(protected val networkType: NetworkType,
      */
     def size: Int = {
         signals.size
+    }
+
+    def decibelsPreferred(`type`: Signal): Boolean = {
+        return (`type` == Signal.CDMA_ECIO || `type` == Signal.EVDO_ECIO || `type` == Signal.LTE_SNR) && preferDb
     }
 }
 

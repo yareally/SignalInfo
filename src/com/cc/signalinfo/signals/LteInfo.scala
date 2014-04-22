@@ -20,7 +20,7 @@ import java.lang.Integer.parseInt
 class LteInfo(tm: TelephonyManager, pSignals: Jmap[Signal, String]) extends SignalInfo(NetworkType.LTE, tm, pSignals)
 {
     possibleValues = Eset.range(Signal.LTE_SIG_STRENGTH, Signal.LTE_RSSI)
-    val rssiConstant = 17
+    private final val RSSI_CONSTANT = 17
 
     /**
      * Instantiates a new Lte info.
@@ -70,9 +70,6 @@ class LteInfo(tm: TelephonyManager, pSignals: Jmap[Signal, String]) extends Sign
                 valueCopy = '-' + valueCopy
             }
         }
-        else if (signalType == Signal.LTE_SNR && preferDb) {
-            valueCopy = SignalInfo.cb2db(valueCopy)
-        }
         val oldValue: String = super.addSignalValue(signalType, valueCopy)
 
         if (hasLteRssi) {
@@ -104,7 +101,7 @@ class LteInfo(tm: TelephonyManager, pSignals: Jmap[Signal, String]) extends Sign
      */
     private def computeRssi: Int = {
         // 17 + (-108) - (-8)
-        rssiConstant + parseInt(signals.get(Signal.LTE_RSRP)) - parseInt(signals.get(Signal.LTE_RSRQ))
+        RSSI_CONSTANT + parseInt(signals.get(Signal.LTE_RSRP)) - parseInt(signals.get(Signal.LTE_RSRQ))
     }
 }
 

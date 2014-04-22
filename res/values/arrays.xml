@@ -5,7 +5,7 @@
 
     <!-- not currently used, but holds the titles for each signal reading -->
     <string-array name="sigInfoTitles">
-<!--        <item>@string/na</item>-->
+        <!--        <item>@string/na</item>-->
         <item>@string/gsmSigStrength</item>
         <item>@string/gsmBitError</item>
         <item>@string/cdmaRSSI</item>
@@ -20,6 +20,7 @@
         <item>@string/lteCQI</item>
         <item>@string/lteRSSI</item>
         <item>@string/gsmRSSI</item>
+        <item>@string/gsmECIO</item>
     </string-array>
 
     <!-- Holds the related ids for the signal textviews, since I can't use tags on < Android 3.0 -_- -->
@@ -38,6 +39,7 @@
         <item>@id/lteCQI</item>
         <item>@id/lteRSSI</item>
         <item>@id/gsmRSSI</item>
+        <item>@id/gsmECIO</item>
     </array>
 
     <!-- === Settings related arrays === -->

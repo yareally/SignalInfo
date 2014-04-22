@@ -18,9 +18,9 @@
         displayed.
     </string>
 
-    <string name="title_section1">Section 1</string>
-    <string name="title_section2">Section 2</string>
-    <string name="title_section3">Section 3</string>
-    <string name="action_settings">Settings</string>
+    <!-- Title to show on the warning dialog popup for the "advanced settings area" -->
+    <string name="dialogWarningTitle">Warning</string>
 
+    <!-- Shown when there's an exception trying to get the version number for this app -->
+    <string name="APP_VERS_EXCEPT_MSG">Could not display app version number!</string>
 </resources>

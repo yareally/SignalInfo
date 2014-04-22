@@ -55,6 +55,7 @@ object SignalListener
 class SignalListener(listener: SignalListener.UpdateSignal) extends PhoneStateListener
 {
     private final val TAG     : String                      = getClass.getSimpleName
+    private var signalWrapper: SignalArrayWrapper = null
 
     /**
      * Get the Signal strength from the provider, each time there is an update
@@ -65,9 +66,16 @@ class SignalListener(listener: SignalListener.UpdateSignal) extends PhoneStateLi
     {
         super.onSignalStrengthsChanged(signalStrength)
         if (signalStrength != null) {
-            listener.setData(new SignalArrayWrapper(signalStrength))
+
             Log.d(TAG, "getting sig strength")
             Log.d(TAG, signalStrength.toString)
+
+            if (signalWrapper == null) {
+                signalWrapper = new SignalArrayWrapper(signalStrength.toString)
+            }
+            else {
+                signalWrapper.filterSignals(signalStrength.toString)
+            }
         }
     }
 

@@ -144,7 +144,7 @@ class BaseActivity extends SherlockFragmentActivity
                     appVersion))
         } catch {
             case e: PackageManager.NameNotFoundException ⇒
-                Log.wtf(TAG, "Could not display app version number!")
+                Log.wtf(TAG, getString(R.string.APP_VERS_EXCEPT_MSG))
         }
     }
 }

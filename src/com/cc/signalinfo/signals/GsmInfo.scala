@@ -7,6 +7,7 @@ import com.cc.signalinfo.enums.Signal
 import com.cc.signalinfo.util.StringUtils
 import java.util.{Map ⇒ Jmap, EnumSet ⇒ Eset, EnumMap ⇒ Emap}
 import android.util.Log
+import com.cc.signalinfo.config.AppSetup
 
 /**
  * Stores all signal info related to 3G and below GSM
@@ -19,7 +20,7 @@ import android.util.Log
  */
 class GsmInfo(tm: TelephonyManager, pSignals: Emap[Signal, String]) extends SignalInfo(NetworkType.GSM, tm, pSignals)
 {
-    possibleValues = Eset.of(Signal.GSM_SIG_STRENGTH, Signal.GSM_RSSI, Signal.GSM_ASU, Signal.GSM_BIT_ERROR)
+    possibleValues = Eset.of(Signal.GSM_SIG_STRENGTH, Signal.GSM_RSSI, Signal.GSM_BIT_ERROR, Signal.GSM_ECIO)
 
     /**
      * Instantiates a new Gsm info.
@@ -50,15 +51,8 @@ class GsmInfo(tm: TelephonyManager, pSignals: Emap[Signal, String]) extends Sign
      * @return true if RSSI possible, false if not
      */
     private def hasGsmRssi: Boolean = {
-        var default: String = DEFAULT_TXT
-        var gsmStrValue = Signal.GSM_SIG_STRENGTH
-        if (signals == null) Log.d("Signal", "signals map is null") else Log.d("Signal", "signals map is NOT null")
-        if (Signal.GSM_SIG_STRENGTH == null) Log.d("Signal", "Signal.GSM_SIG_STRENGTH enum is null") else Log.d("Signal", "Signal.GSM_SIG_STRENGTH enum is NOT null")
-        val key = signals.containsKey(gsmStrValue)
-        var gsmStrength = signals.get(Signal.GSM_SIG_STRENGTH)
-        var hasGsm = !StringUtils.isNullOrEmpty(signals.get(Signal.GSM_SIG_STRENGTH))
-        hasGsm &= !(DEFAULT_TXT == signals.get(Signal.GSM_SIG_STRENGTH))
-        hasGsm
+        return (!StringUtils.isNullOrEmpty(signals.get(Signal.GSM_SIG_STRENGTH))
+            && AppSetup.DEFAULT_TXT != signals.get(Signal.GSM_SIG_STRENGTH))
     }
 
     /**

@@ -1,6 +1,9 @@
 CWAC LoaderEx: Taking Loaders to the Next Level
 ===============================================
 
+**THIS PROJECT IS DISCONTINUED. Use it at your own risk. If you are maintaining a public fork that you would
+like others to consider using, add an issue asking for a link to your fork from this `README`**.
+
 Android 3.0 introduced the `Loader` framework, and the
 Android Compatibility Library allows you to use that
 framework going back to Android 1.6. However, the only
@@ -19,12 +22,9 @@ database inserts and deletes in the background. It also supplies:
 
 - `SQLCipherCursorLoader`, for operations with
 [SQLCipher for Android](http://sqlcipher.net/sqlcipher-for-android/)
-- `SharedPreferencesLoader`, for retrieving the default
-`SharedPreferences` object without tying up the main
-application thread.
 
 This is packaged as an Android library project, though a simple
-JAR [is also available](https://github.com/commonsguy/downloads). If you are working on a native Honeycomb
+JAR [is also available](https://github.com/commonsguy/cwac-loaderex/releases). If you are working on a native Honeycomb
 application (i.e., not using the Android Compatibility
 Library), please use the JAR &mdash; putting it in your project's
 `libs/` directory should be sufficient.
@@ -88,6 +88,17 @@ out. You are welcome to make your own subclasses of
 other sources. Just override `buildCursor()` and have it
 return the `Cursor` &mdash; this method is called on a
 background thread and therefore is not time-limited.
+
+### Doing More with the Tasks
+
+You can tailor the work that is done during the
+`insert()`, `update()`, `delete()`, `replace()`, and
+`execSQL()` methods on `SQLiteCursorLoader`. What each of those
+do is delegate to a specific `ContentChangingTask` subclass
+(`InsertTask`, `UpdateTask`, etc.). You can subclass those
+classes, or create your own, and return an instance of them
+from the corresponding `build...()` methods (e.g., `buildInsertTask()`,
+`buildUpdateTask()`).
 
 Usage: SQLite*Task
 ------------------
@@ -172,6 +183,10 @@ and the passphrase to use for encryption.
 
 Usage: SharedPreferencesLoader
 ------------------------------
+**WARNING**: `SharedPreferencesLoader` is deprecated. Changes in the implementation
+of the loader framework mean that `SharedPreferencesLoader` can no longer fulfill
+the `Loader` contract.
+
 `SharedPreferencesLoader` largely mirrors `SQLiteCursorLoader`:
 
 - There are two implementations, one for native API Level 11+
@@ -208,7 +223,7 @@ that do not work on API Level 7 and are not noted as requiring a higher version.
 
 Version
 -------
-This is version v0.7.1 of this module, meaning that its author
+This is version v0.7.3 of this module, meaning that its author
 really should consider formalizing v1.0.0 before too long...
 
 Demo
@@ -249,6 +264,8 @@ Do not ask for help via Twitter.
 
 Release Notes
 -------------
+- v0.7.3: added hooks for extending asynchronous functionality, updated to SQLCipher 3.0.0
+- v0.7.2: updated for SQLCipher 2.2.1
 - v0.7.1: bug fix
 - v0.7.0: added SQLCipher for Android support
 - v0.6.0: added `replace()` (by request)

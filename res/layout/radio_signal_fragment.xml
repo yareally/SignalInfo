@@ -11,14 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <com.google.ads.AdView
-            android:id="@+id/adView"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_above="@id/deviceInfoGrid"
-            ads:adSize="BANNER"
-            ads:adUnitId="a150a0f996cbdbd" />
-
         <android.support.v7.widget.GridLayout
             android:id="@+id/deviceInfoGrid"
             android:layout_width="match_parent"
@@ -28,134 +20,96 @@
             android:paddingRight="10dp"
             android:paddingStart="10dp"
             android:paddingTop="5dp"
-            grid:columnCount="6">
+            grid:columnCount="2">
 
+            <com.google.ads.AdView
+                android:id="@+id/adView"
+                ads:adSize="BANNER"
+                ads:adUnitId="a150a0f996cbdbd"
+                grid:layout_columnSpan="2"
+                grid:layout_gravity="center" />
 
             <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/deviceInfoDescription"
                 android:text="@string/deviceInfoTitle"
                 android:textSize="20sp"
-                grid:layout_column="0"
-                grid:layout_columnSpan="6"
-                grid:layout_row="1" />
+                grid:layout_columnSpan="2" />
 
-            <android.support.v7.widget.Space
-                android:layout_width="5dp"
-                android:layout_height="1dp"
-                grid:layout_column="0"
-                grid:layout_gravity="fill_horizontal"
-                grid:layout_row="2" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
+                android:paddingStart="5dp"
                 android:text="@string/deviceNameLabel"
-                grid:layout_column="1"
-                grid:layout_row="2" />
+                grid:layout_gravity="start" />
 
             <TextView
                 android:id="@+id/deviceName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/deviceNameDescription"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="2" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/deviceModelLabel"
-                grid:layout_column="1"
-                grid:layout_row="3" />
+                android:paddingStart="5dp"
+                android:text="@string/deviceModelLabel" />
 
             <TextView
                 android:id="@+id/deviceModel"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/deviceModelDescription"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="3" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/androidVersionLabel"
-                grid:layout_column="1"
-                grid:layout_row="4" />
+                android:paddingStart="5dp"
+                android:text="@string/androidVersionLabel" />
 
             <TextView
                 android:id="@+id/androidVersion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+
                 android:contentDescription="@string/androidVersionDescription"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="4" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/carrierNameLabel"
-                grid:layout_column="1"
-                grid:layout_row="5" />
+                android:paddingStart="5dp"
+                android:text="@string/carrierNameLabel" />
 
             <TextView
                 android:id="@+id/carrierName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/carrierNameDescription"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="5" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/buildHostLabel"
-                grid:layout_column="1"
-                grid:layout_row="6" />
+                android:paddingStart="5dp"
+                android:text="@string/buildHostLabel" />
 
             <TextView
                 android:id="@+id/buildHost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/buildHostDescription"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="6" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/networkTypeLabel"
-                grid:layout_column="1"
-                grid:layout_row="7" />
+                android:paddingStart="5dp"
+                android:text="@string/networkTypeLabel" />
 
             <TextView
                 android:id="@+id/networkType"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/networkTypeDescription"
                 android:tag="13"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="7" />
+                android:text="@string/na" />
 
         </android.support.v7.widget.GridLayout>
 
@@ -169,329 +123,228 @@
             android:paddingRight="10dp"
             android:paddingStart="10dp"
             android:paddingTop="5dp"
-            grid:columnCount="6">
+            grid:columnCount="2">
 
             <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/cdmaTitleDescription"
                 android:paddingTop="10dp"
                 android:text="@string/cdmaTitle"
                 android:textSize="20sp"
-                grid:layout_column="0"
-                grid:layout_columnSpan="6"
-                grid:layout_row="0" />
+                grid:layout_columnSpan="2" />
 
-            <android.support.v7.widget.Space
-                android:layout_width="5dp"
-                android:layout_height="1dp"
-                grid:layout_column="0"
-                grid:layout_gravity="fill_horizontal"
-                grid:layout_row="1" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/cdmaRSSI"
-                grid:layout_column="1"
-                grid:layout_row="2" />
+                android:paddingStart="5dp"
+                android:text="@string/cdmaRSSI" />
 
             <TextView
                 android:id="@+id/cdmaRSSI"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/cdmaRssiDescription"
                 android:tag="3"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="2" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/evdoRSSI"
-                grid:layout_column="1"
-                grid:layout_row="3" />
+                android:paddingStart="5dp"
+                android:text="@string/evdoRSSI" />
 
             <TextView
                 android:id="@+id/evdoRSSI"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/evdoRssiDescription"
                 android:tag="5"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="3" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/cdmaECIO"
-                grid:layout_column="1"
-                grid:layout_row="4" />
+                android:paddingStart="5dp"
+                android:text="@string/cdmaECIO" />
 
             <TextView
                 android:id="@+id/cdmaECIO"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/cdmaEcioDescription"
                 android:tag="4"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="4" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/evdoECIO"
-                grid:layout_column="1"
-                grid:layout_row="5" />
+                android:paddingStart="5dp"
+                android:text="@string/evdoECIO" />
 
             <TextView
                 android:id="@+id/evdoECIO"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/evdoEcioDescription"
                 android:tag="6"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="5" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/evdoSNR"
-                grid:layout_column="1"
-                grid:layout_row="6" />
+                android:paddingStart="5dp"
+                android:text="@string/evdoSNR" />
 
             <TextView
 
                 android:id="@+id/evdoSNR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/evdoSnrDescription"
                 android:tag="7"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="6" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/gsmTitleDescription"
                 android:paddingTop="10dp"
                 android:text="@string/gsmTitle"
                 android:textSize="20sp"
-                grid:layout_column="0"
-                grid:layout_columnSpan="6"
-                grid:layout_row="7" />
+                grid:layout_columnSpan="2" />
 
-            <android.support.v7.widget.Space
-                android:layout_width="5dp"
-                android:layout_height="1dp"
-                grid:layout_column="0"
-                grid:layout_gravity="fill_horizontal"
-                grid:layout_row="8" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/gsmRSSI"
-                grid:layout_column="1"
-                grid:layout_row="9" />
+                android:paddingStart="5dp"
+                android:text="@string/gsmRSSI" />
 
             <TextView
                 android:id="@+id/gsmRSSI"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/gsmRssiDescription"
                 android:tag="15"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="9" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/gsmSigStrength"
-                grid:layout_column="1"
-                grid:layout_row="10" />
+                android:paddingStart="5dp"
+                android:text="@string/gsmSigStrength" />
 
             <TextView
                 android:id="@+id/gsmSigStrength"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/gsmSigStrengthDescription"
                 android:tag="1"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="10" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/gsmBitError"
-                grid:layout_column="1"
-                grid:layout_row="11" />
+                android:paddingStart="5dp"
+                android:text="@string/gsmECIO" />
+
+            <TextView
+                android:id="@+id/gsmECIO"
+                android:contentDescription="@string/gsmEcioDescription"
+                android:tag="1"
+                android:text="@string/na" />
+
+            <TextView
+                android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:paddingStart="5dp"
+                android:text="@string/gsmBitError" />
 
             <TextView
                 android:id="@+id/gsmBitError"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/gsmBitErrorDescription"
                 android:tag="2"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="11" />
+                android:text="@string/na" />
 
 
             <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/lteTitleDescription"
                 android:paddingTop="10dp"
                 android:text="@string/lteTitle"
                 android:textSize="20sp"
-                grid:layout_column="0"
-                grid:layout_columnSpan="6"
-                grid:layout_row="12" />
+                grid:layout_columnSpan="2" />
 
-            <android.support.v7.widget.Space
-                android:layout_width="5dp"
-                android:layout_height="1dp"
-                grid:layout_column="0"
-                grid:layout_gravity="fill_horizontal"
-                grid:layout_row="13" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/lteRSRP"
-                grid:layout_column="1"
-                grid:layout_row="14" />
+                android:paddingStart="5dp"
+                android:text="@string/lteRSRP" />
 
             <TextView
                 android:id="@+id/lteRSRP"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/lteRsrpDescription"
                 android:tag="9"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="14" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/lteRSSI"
-                grid:layout_column="1"
-                grid:layout_row="15" />
+                android:paddingStart="5dp"
+                android:text="@string/lteRSSI" />
 
             <TextView
                 android:id="@+id/lteRSSI"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/lteRssiDescription"
                 android:tag="14"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="15" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/lteRSRQ"
-                grid:layout_column="1"
-                grid:layout_row="16" />
+                android:paddingStart="5dp"
+                android:text="@string/lteRSRQ" />
 
             <TextView
                 android:id="@+id/lteRSRQ"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/lteRsrqDescription"
                 android:tag="10"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="16" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/lteSNR"
-                grid:layout_column="1"
-                grid:layout_row="17" />
+                android:paddingStart="5dp"
+                android:text="@string/lteSNR" />
 
             <TextView
                 android:id="@+id/lteSNR"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/lteSnrDescription"
                 android:tag="11"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="17" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/lteCQI"
-                grid:layout_column="1"
-                grid:layout_row="18" />
+                android:paddingStart="5dp"
+                android:text="@string/lteCQI" />
 
             <TextView
                 android:id="@+id/lteCQI"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/lteCqiDescription"
                 android:tag="12"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="18" />
+                android:text="@string/na" />
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:text="@string/lteSigStrength"
-                grid:layout_column="1"
-                grid:layout_row="19" />
+                android:paddingStart="5dp"
+                android:text="@string/lteSigStrength" />
 
             <TextView
                 android:id="@+id/lteSigStrength"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/lteSigStrengthDescription"
                 android:tag="8"
-                android:text="@string/na"
-                grid:layout_column="2"
-                grid:layout_row="19" />
+                android:text="@string/na" />
 
         </android.support.v7.widget.GridLayout>
 
@@ -505,73 +358,43 @@
             android:paddingRight="10dp"
             android:paddingStart="10dp"
             android:paddingTop="5dp"
-            grid:columnCount="6">
+            grid:columnCount="1">
 
             <TextView
                 android:id="@+id/debugInfo"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/debugInfoDescription"
                 android:enabled="false"
                 android:paddingTop="10dp"
                 android:text="@string/debugInfo"
                 android:textSize="20sp"
-                android:visibility="gone"
-                grid:layout_column="0"
-                grid:layout_columnSpan="6"
-                grid:layout_row="0" />
-
-            <android.support.v7.widget.Space
-                android:layout_width="5dp"
-                android:layout_height="1dp"
-                grid:layout_column="0"
-                grid:layout_gravity="fill_horizontal"
-                grid:layout_row="1" />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/debugArray"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/debugArrayDescription"
                 android:enabled="false"
                 android:paddingEnd="5dp"
+                android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:visibility="gone"
-                grid:layout_column="1"
-                grid:layout_columnSpan="5"
-                grid:layout_row="2" />
+                android:paddingStart="5dp"
+                android:visibility="gone" />
 
             <TextView
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
+                android:paddingBottom="5dp"
                 android:paddingTop="10dp"
                 android:text="@string/additionalInfoLbl"
-                android:textSize="16sp"
-                grid:layout_column="1"
-                grid:layout_columnSpan="5"
-                grid:layout_row="3" />
+                android:textSize="16sp" />
 
             <Button
                 android:id="@+id/additionalInfo"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
                 android:contentDescription="@string/additionalInfoDescription"
-                android:text="@string/additionalInfoBtnTxt"
-                grid:layout_column="1"
-                grid:layout_columnSpan="5"
-                grid:layout_row="4" />
+                android:text="@string/additionalInfoBtnTxt" />
 
             <TextView
                 android:id="@+id/copyright"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:contentDescription="@string/copyrightDescription"
-                android:gravity="center_horizontal|bottom"
                 android:text="@string/copyright"
-                grid:layout_column="0"
-                grid:layout_columnSpan="6"
-                grid:layout_row="5" />
-
+                grid:layout_gravity="center_horizontal|bottom" />
 
         </android.support.v7.widget.GridLayout>
     </RelativeLayout>

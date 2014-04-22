@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ /*
   ~ Copyright (c) 2013 Wes Lanning, http://codingcreation.com
   ~
@@ -45,7 +44,9 @@
 
     <string name="noAdditionalSettingSupport">The manufacturer of your device
         either did not include access to this feature in the OS version used or
-        restricts access to it (Permission denial) :(
+        restricts access to it (Permission denial) :(.
+        If your device is rooted, you should not see this message unless you denied
+        or disabled SuperUser (enable it if you want access to the advanced settings area).
     </string>
 
     <!-- **************** /End Dialog related stuff **************** -->

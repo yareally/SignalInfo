@@ -21,9 +21,10 @@
         <option name="continuations" value="true" />
         <option name="deprecationWarnings" value="true" />
         <option name="explainTypeErrors" value="true" />
+        <option name="languageLevel" value="Scala 2.11" />
         <option name="pluginPaths">
           <array>
-            <option value="D:\Program Files (x86)\scala\misc\scala-devel\plugins\continuations.jar" />
+            <option value="D:\Program Files (x86)\scala\lib\scala-continuations-plugin_2.11.0-RC4-1.0.1.jar" />
           </array>
         </option>
         <option name="uncheckedWarnings" value="true" />
@@ -37,7 +38,6 @@
       <sourceFolder url="file://$MODULE_DIR$/gen" isTestSource="false" generated="true" />
     </content>
     <orderEntry type="inheritedJdk" />
-    <orderEntry type="library" name="android-support-v7-appcompat" level="project" />
     <orderEntry type="library" name="android-support-v4" level="project" />
     <orderEntry type="library" name="android-support-v7-gridlayout" level="project" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -47,6 +47,7 @@
     <orderEntry type="module" module-name="cwac-loaderex" />
     <orderEntry type="module" module-name="actionbarsherlock" />
     <orderEntry type="library" name="annotations" level="project" />
+    <orderEntry type="library" name="scala-async" level="project" />
   </component>
 </module>
 

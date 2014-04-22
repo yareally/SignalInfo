@@ -1,3 +1,4 @@
+/*
 package com.cc.signalinfo.activities
 
 import java.util.Locale
@@ -148,4 +149,4 @@ object NewMainActivity
         }
     }
 
-}
+}*/

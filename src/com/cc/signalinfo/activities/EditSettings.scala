@@ -34,7 +34,7 @@ import com.actionbarsherlock.app.ActionBar
 import com.actionbarsherlock.app.SherlockPreferenceActivity
 import com.actionbarsherlock.view.MenuItem
 import com.cc.signalinfo.R
-import java.util.{List ⇒ Jlist, Map ⇒ Jmap, EnumMap ⇒ Emap, Collections}
+import java.util.{List ⇒ Jlist}
 import android.preference.PreferenceActivity
 import java.lang.String
 import com.cc.signalinfo.fragments.SettingsFragment
@@ -72,8 +72,14 @@ class EditSettings extends SherlockPreferenceActivity
         loadHeadersFromResource(R.xml.preference_headers, target)
     }
 
-    override protected def isValidFragment (fragmentName: String): Boolean = {
-        if (classOf[SettingsFragment].getClass.getName == fragmentName) {
+    /**
+     * Android 4.4+ requires this
+     *
+     * @param fragmentName - frag to validate
+     * @return
+     */
+    override def isValidFragment (fragmentName: String): Boolean = {
+        if (classOf[SettingsFragment].getName.equals(fragmentName)) {
             return true
         }
         false
@@ -93,6 +99,5 @@ class EditSettings extends SherlockPreferenceActivity
                 startActivity(intent)
                 return true
         }
-        super.onOptionsItemSelected(item)
     }
 }

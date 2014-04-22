@@ -54,26 +54,5 @@ class CdmaInfo(tm: TelephonyManager, pSignals: Jmap[Signal, String])
         (!StringUtils.isNullOrEmpty(signals.get(Signal.CDMA_RSSI))
             || !StringUtils.isNullOrEmpty(signals.get(Signal.EVDO_RSSI)))
     }
-
-    /**
-     * Add a signal value to the current network type collection.
-     *
-     * @param signalType the type (like RSSI, RSRP, SNR, etc)
-     * @param value the value (the current reading from the tower for the signal)
-     * @return the value of any previous signal value with the
-     *         specified type or null if there was no signal already added.
-     */
-    override def addSignalValue(signalType: Signal, value: String): String = {
-        var valueCopy: String = value
-
-        if (decibelsPreferred(signalType)) {
-            valueCopy = SignalInfo.cb2db(valueCopy)
-        }
-        super.addSignalValue(signalType, valueCopy)
-    }
-
-    private def decibelsPreferred(signalType: Signal): Boolean = {
-        (signalType == Signal.CDMA_ECIO || signalType == Signal.EVDO_ECIO) && preferDb
-    }
 }
 

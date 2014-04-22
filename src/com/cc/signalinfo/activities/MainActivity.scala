@@ -66,15 +66,15 @@ class MainActivity
     with SignalListener.UpdateSignal
     with LoaderCallbacks[SharedPreferences]
 {
-    private var dbOnly           : Boolean               = false
-    private var enableDebug      : Boolean               = false
-    private var filteredSignals  : Array[String]         = null
-    private var fudgeSignal      : Boolean               = true
-    private val listener         : SignalListener        = null
-    private var preferences      : SharedPreferences     = null
-    private var sigInfoIds       : TypedArray            = null
-    private val signalTextViewMap                        = new Emap[Signal, TextView](classOf[Signal])
-    private var tm: TelephonyManager = null
+    private var dbOnly         : Boolean           = false
+    private var enableDebug    : Boolean           = false
+    private var filteredSignals: Array[String]     = null
+    private var fudgeSignal    : Boolean           = true
+    private val listener       : SignalListener    = null
+    private var preferences    : SharedPreferences = null
+    private var sigInfoIds     : TypedArray        = null
+    private val signalTextViewMap                  = new Emap[Signal, TextView](classOf[Signal])
+    private var tm             : TelephonyManager  = null
 
     /**
      * Initialize the app.
@@ -114,7 +114,7 @@ class MainActivity
                 }
             }
         }
-        return Collections.unmodifiableMap(signalTextViewMap)
+        Collections.unmodifiableMap(signalTextViewMap)
     }
 
     /**
@@ -247,8 +247,8 @@ class MainActivity
      * Set the phone model, OS version, carrier name on the screen
      */
     private def setPhoneInfo() {
-        setTextViewText(R.id.deviceName, s"${Build.MANUFACTURER } ${Build.MODEL }")
-        setTextViewText(R.id.deviceModel, s"${Build.PRODUCT }/${Build.DEVICE } (${Build.ID }) ")
+        setTextViewText(R.id.deviceName, s"${Build.MANUFACTURER} ${Build.MODEL}")
+        setTextViewText(R.id.deviceModel, s"${Build.PRODUCT}/${Build.DEVICE} (${Build.ID}) ")
         setTextViewText(R.id.androidVersion,
             String.format(getString(R.string.androidVersion),
                 Build.VERSION.RELEASE,
@@ -276,16 +276,21 @@ class MainActivity
         val signalDataMap: Jmap[Signal, TextView] = getSignalTextViewMap(sigInfoIds, refreshMap = false)
         val unit: String = getString(R.string.dBm)
 
-        for (data <- signalDataMap.entrySet) {
+        for (data ← signalDataMap.entrySet) {
             val currentTextView: TextView = data.getValue
             try {
                 val signal: ISignal = networkTypes.get(data.getKey.`type`)
                 val sigValue: String = signal.getSignalString(data.getKey)
-                if (!StringUtils.isNullOrEmpty(sigValue) && !(DEFAULT_TXT == sigValue)) {
+
+                if (!StringUtils.isNullOrEmpty(sigValue) && DEFAULT_TXT != sigValue) {
                     // should be show the percentage along with the dBm?
                     val signalPercent: String =
-                        if (dbOnly) ""
-                        else s"(${signal.getRelativeEfficiency(data.getKey, fudgeSignal) })"
+                        if (dbOnly) {
+                            ""
+                        }
+                        else {
+                            s"(${signal.getRelativeEfficiency(data.getKey, fudgeSignal)})"
+                        }
                     currentTextView.setText(s"$sigValue $unit $signalPercent")
                 }
             }
@@ -319,10 +324,10 @@ class MainActivity
                 new SignalMapWrapper(debugInfo.getFilteredArray, tm).getPercentSignalMap(adjustReadings = false)
 
             setTextViewText(R.id.debugArray,
-                s"${debugInfo.getRawData }" +
-                    s"\n\n ${debugInfo.getFilteredArray.mkString(",") }" +
-                    s"\n\n ${debugMapRelative.toString }" +
-                    s"\n\n ${debugMapStrict.toString }")
+                s"${debugInfo.getRawData}" +
+                    s"\n\n ${debugInfo.getFilteredArray.mkString(",")}" +
+                    s"\n\n ${debugMapRelative.toString}" +
+                    s"\n\n ${debugMapStrict.toString}")
         }
     }
 }

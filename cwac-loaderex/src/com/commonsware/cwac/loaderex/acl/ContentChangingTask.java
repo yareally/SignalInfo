@@ -17,21 +17,17 @@ package com.commonsware.cwac.loaderex.acl;
 
 import android.os.AsyncTask;
 import android.support.v4.content.Loader;
-import org.jetbrains.annotations.Nullable;
 
-public abstract class ContentChangingTask<T1, T2, T3> extends
-    AsyncTask<T1, T2, T3> {
-    @Nullable
-    private Loader<?> loader = null;
+public abstract class ContentChangingTask extends
+    AsyncTask<Object, Void, Void> {
+  private Loader<?> loader=null;
 
-    ContentChangingTask(Loader<?> loader)
-    {
-        this.loader = loader;
-    }
+  public ContentChangingTask(Loader<?> loader) {
+    this.loader=loader;
+  }
 
-    @Override
-    protected void onPostExecute(T3 param)
-    {
-        loader.onContentChanged();
-    }
+  @Override
+  protected void onPostExecute(Void param) {
+    loader.onContentChanged();
+  }
 }

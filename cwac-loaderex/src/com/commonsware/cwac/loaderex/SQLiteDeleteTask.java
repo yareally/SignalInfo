@@ -17,7 +17,6 @@ package com.commonsware.cwac.loaderex;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-import org.jetbrains.annotations.Nullable;
 
 @Deprecated
 public class SQLiteDeleteTask
@@ -26,7 +25,7 @@ public class SQLiteDeleteTask
   String table;
   String selection;
   String[] args;
-
+  
   public SQLiteDeleteTask(SQLiteDatabase db, String table,
                            String selection,
                            String[] args) {
@@ -35,8 +34,7 @@ public class SQLiteDeleteTask
     this.selection=selection;
     this.args=args;
   }
-
-  @Nullable
+  
   @Override
   protected Exception doInBackground(Void... params) {
     try {
@@ -45,7 +43,7 @@ public class SQLiteDeleteTask
     catch (Exception e) {
       return(e);
     }
-
+    
     return(null);
   }
 }
