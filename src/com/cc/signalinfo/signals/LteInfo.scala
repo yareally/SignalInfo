@@ -86,11 +86,10 @@ class LteInfo(tm: TelephonyManager, pSignals: Jmap[Signal, String]) extends Sign
      * @return true if RSSI possible, false if not
      */
     private def hasLteRssi: Boolean = {
-
         (!isNullOrEmpty(signals.get(Signal.LTE_RSRP))
             && !isNullOrEmpty(signals.get(Signal.LTE_RSRQ))
-            && !(DEFAULT_TXT == signals.get(Signal.LTE_RSRP))
-            && !(DEFAULT_TXT == signals.get(Signal.LTE_RSRQ)))
+            && DEFAULT_TXT != signals.get(Signal.LTE_RSRP)
+            && DEFAULT_TXT != signals.get(Signal.LTE_RSRQ))
     }
 
     /**
