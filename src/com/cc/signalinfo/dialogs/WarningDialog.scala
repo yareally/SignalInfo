@@ -32,11 +32,10 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
-import android.widget.CheckBox
-import android.widget.CompoundButton
+import android.widget.{Toast, CheckBox, CompoundButton}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.config.AppSetup
-import com.cc.signalinfo.util.AppHelpers
+import com.cc.signalinfo.util.{TerminalCommands, AppHelpers}
 
 /**
  * @author Wes Lanning
@@ -69,7 +68,18 @@ class WarningDialog
 
     def onClick(dialogInterface: DialogInterface, i: Int) {
         if (AppHelpers.userConsent(getActivity.getPreferences(Context.MODE_PRIVATE))) {
-            startActivity(AppHelpers.getAdditionalSettings)
+            try {
+                startActivity(AppHelpers.getAdditionalSettings)
+            }
+            catch {
+                case ignored: Any =>
+                    try
+                        TerminalCommands.launchActivity("com.android.settings", "TestingSettings")
+                     catch {
+                        case ignored: Exception =>
+                            Toast.makeText(getActivity, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show()
+                    }
+            }
         }
     }
 

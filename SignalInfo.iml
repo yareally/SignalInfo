@@ -48,6 +48,7 @@
     <orderEntry type="module" module-name="actionbarsherlock" />
     <orderEntry type="library" name="annotations" level="project" />
     <orderEntry type="library" name="scala-async" level="project" />
+    <orderEntry type="library" name="scaloid" level="project" />
   </component>
 </module>
 

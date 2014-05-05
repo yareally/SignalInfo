@@ -50,7 +50,8 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks
 import android.view.View.OnClickListener
 import com.cc.signalinfo.config.AppSetup.DEFAULT_TXT
 import com.cc.signalinfo.dialogs.WarningDialog
-
+import android.util.Log
+import BaseActivity.TAG
 
 // ↑ Because the over verbosity on the constants will probably give me brain damage...
 /**
@@ -156,7 +157,12 @@ class MainActivity
             }
             catch {
                 case ignored: Any =>
-                    Toast.makeText(this, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show()
+                    try {
+                        TerminalCommands.launchActivity("com.android.settings", "TestingSettings")
+                    } catch {
+                        case ignored: Exception =>
+                            Toast.makeText(this, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show()
+                    }
             }
         }
         else {

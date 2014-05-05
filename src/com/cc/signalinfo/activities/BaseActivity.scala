@@ -27,7 +27,7 @@ import android.R.layout
  */
 object BaseActivity
 {
-    private final val TAG: String = BaseActivity.getClass.getSimpleName
+    final val TAG: String = BaseActivity.getClass.getSimpleName
 }
 
 class BaseActivity extends SherlockFragmentActivity

@@ -38,6 +38,10 @@
 
 -dontwarn android.support.v4.util.MapCollections
 
+# disables annoying message about the compatibility library
+# http://stackoverflow.com/questions/22441366/note-android-support-v4-text-icucompatics-cant-find-dynamically-referenced-cl
+-dontnote android.support.**
+
 ## Fixes ==> Warning: ... can't find referenced class sun.misc.Unsafe
 #-libraryjars "libs\scala-actors.jar";"libs\scala-library.jar"
 -dontwarn sun.misc.Unsafe
@@ -98,4 +102,9 @@
 
 -keepclassmembers class * extends com.actionbarsherlock.ActionBarSherlock {
     <init>(android.app.Activity, int);
+}
+
+# fixes https://issues.scala-lang.org/browse/SI-5397
+-keep class scala.collection.SeqLike {
+    public protected *;
 }
