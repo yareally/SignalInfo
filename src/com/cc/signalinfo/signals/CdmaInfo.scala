@@ -18,9 +18,7 @@ import java.util.{Map ⇒ Jmap, EnumSet ⇒ Eset}
 class CdmaInfo(tm: TelephonyManager, pSignals: Jmap[Signal, String])
     extends SignalInfo(NetworkType.CDMA, tm, pSignals)
 {
-
     possibleValues = Eset.range(Signal.CDMA_RSSI, Signal.EVDO_SNR)
-
 
     /**
      * Instantiates a new Cdma info.

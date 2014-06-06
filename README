@@ -18,3 +18,7 @@ on some of the Java noise by using techniques such as implicits for anonymous Ja
     mViewPager.setOnPageChangeListener {
         (position: Int) => actionBar.setSelectedNavigationItem(position)
     }
+
+Anyone interested in translating, create an account at Transifex (https://www.transifex.com/projects/p/advanced-signal-info/).
+From the project I created there, you can see what needs translated and add it there so I can update it in the code. If the language
+you wish to translate to is not listed, just let me know and I can add it.

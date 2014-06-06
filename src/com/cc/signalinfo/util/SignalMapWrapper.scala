@@ -72,7 +72,7 @@ class SignalMapWrapper(pNetworkMap: Jmap[NetworkType, ISignal])
      */
     def this(filteredSignalData: Array[String], tm: TelephonyManager) {
         this(null)
-        this.networkMap = createSignalDataMap(tm, filteredSignalData)
+        networkMap = createSignalDataMap(tm, filteredSignalData)
     }
 
     /**
@@ -81,7 +81,7 @@ class SignalMapWrapper(pNetworkMap: Jmap[NetworkType, ISignal])
      * @return true if we already have at least one signal data reading collected.
      */
     def hasData: Boolean = {
-        return !networkMap.isEmpty && networkMap.entrySet.iterator.hasNext
+        !networkMap.isEmpty && networkMap.entrySet.iterator.hasNext
     }
 
     /**
@@ -90,7 +90,7 @@ class SignalMapWrapper(pNetworkMap: Jmap[NetworkType, ISignal])
      * @return network signal info organized by gsm, cdma, lte, etc
      */
     def getNetworkMap: Jmap[NetworkType, ISignal] = {
-        return Collections.unmodifiableMap(networkMap)
+        Collections.unmodifiableMap(networkMap)
     }
 
     /**
@@ -104,10 +104,10 @@ class SignalMapWrapper(pNetworkMap: Jmap[NetworkType, ISignal])
         import scala.collection.JavaConversions._
         val percentSignalMap = new Lmap[String, String]
 
-        for (network <- networkMap.entrySet) {
+        for (network ← networkMap.entrySet) {
             percentSignalMap.putAll(network.getValue.getRelativeEfficiencyMap(adjustReadings))
         }
-        return percentSignalMap
+        percentSignalMap
     }
 
     /**
@@ -130,7 +130,7 @@ class SignalMapWrapper(pNetworkMap: Jmap[NetworkType, ISignal])
         Log.d("Signal Map CDMA: ", networkMapCopy.get(NetworkType.CDMA).getSignals.toString)
         Log.d("Signal Map GSM: ", networkMapCopy.get(NetworkType.GSM).getSignals.toString)
         Log.d("Signal Map LTE: ", networkMapCopy.get(NetworkType.LTE).getSignals.toString)
-        return networkMapCopy
+        networkMapCopy
     }
 
 

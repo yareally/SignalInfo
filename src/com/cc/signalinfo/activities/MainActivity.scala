@@ -26,32 +26,25 @@ package com.cc.signalinfo.activities
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.content.res.Resources
-import android.content.res.TypedArray
+import android.content.res.{Resources, TypedArray}
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.app.LoaderManager.LoaderCallbacks
 import android.support.v4.content.Loader
 import android.telephony.PhoneStateListener
 import android.telephony.TelephonyManager
-import android.view.View
-import android.view.WindowManager
-import android.widget.TextView
-import android.widget.Toast
+import android.view.View.OnClickListener
+import android.view.{View, WindowManager}
+import android.widget.{Toast, TextView}
 import com.cc.signalinfo.R
-import com.cc.signalinfo.enums.NetworkType
-import com.cc.signalinfo.enums.Signal
+import com.cc.signalinfo.config.AppSetup.DEFAULT_TXT
+import com.cc.signalinfo.dialogs.WarningDialog
+import com.cc.signalinfo.enums.{NetworkType, Signal}
 import com.cc.signalinfo.listeners.SignalListener
-import com.cc.signalinfo.signals.ISignal
-import com.cc.signalinfo.signals.SignalInfo
+import com.cc.signalinfo.signals.{SignalInfo, ISignal}
 import com.cc.signalinfo.util._
 import com.commonsware.cwac.loaderex.acl.SharedPreferencesLoader
 import java.util.{Map ⇒ Jmap, EnumMap ⇒ Emap, Collections}
-import android.support.v4.app.LoaderManager.LoaderCallbacks
-import android.view.View.OnClickListener
-import com.cc.signalinfo.config.AppSetup.DEFAULT_TXT
-import com.cc.signalinfo.dialogs.WarningDialog
-import android.util.Log
-import BaseActivity.TAG
 
 // ↑ Because the over verbosity on the constants will probably give me brain damage...
 /**
@@ -161,7 +154,9 @@ class MainActivity
                         TerminalCommands.launchActivity("com.android.settings", "TestingSettings")
                     } catch {
                         case ignored: Exception =>
-                            Toast.makeText(this, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show()
+                            Toast.makeText(this,
+                                getString(R.string.noAdditionalSettingSupport),
+                                Toast.LENGTH_LONG).show()
                     }
             }
         }
@@ -209,7 +204,7 @@ class MainActivity
      * @param filteredSignals - the filtered signals ready to display
      */
     private def displaySignalInfo(filteredSignals: Array[String]) {
-        val signalMapWrapper: SignalMapWrapper = new SignalMapWrapper(filteredSignals, tm)
+        val signalMapWrapper = new SignalMapWrapper(filteredSignals, tm)
 
         if (signalMapWrapper.hasData) {
             displaySignalInfo(signalMapWrapper)
@@ -225,11 +220,11 @@ class MainActivity
      * @param sharedPreferences - preferences to load
      */
     private def setPreferences(sharedPreferences: SharedPreferences) {
-        val signalMeasure: String = sharedPreferences.getString(
-            getString(R.string.signalFormatKey),
-            getString(R.string.relativeReading))
+        val relativeReadings = getString(R.string.relativeReading)
 
-        val keepScreenOn: Boolean = sharedPreferences.getBoolean(
+        val signalMeasure = sharedPreferences.getString(getString(R.string.signalFormatKey), relativeReadings)
+
+        val keepScreenOn = sharedPreferences.getBoolean(
             getString(R.string.keepScreenOnKey),
             getResources.getBoolean(R.bool.keepScreenOnDefault))
 
@@ -244,7 +239,7 @@ class MainActivity
             dbOnly = true
         }
         else {
-            fudgeSignal = signalMeasure == getString(R.string.relativeReading)
+            fudgeSignal = signalMeasure == relativeReadings
             dbOnly = false
         }
     }
@@ -280,16 +275,17 @@ class MainActivity
 
         val networkTypes: Jmap[NetworkType, ISignal] = signalMapWrapper.getNetworkMap
         val signalDataMap: Jmap[Signal, TextView] = getSignalTextViewMap(sigInfoIds, refreshMap = false)
-        val unit: String = getString(R.string.dBm)
+        val unit = getString(R.string.dBm)
 
         for (data ← signalDataMap.entrySet) {
             val currentTextView: TextView = data.getValue
+
             try {
                 val signal: ISignal = networkTypes.get(data.getKey.`type`)
-                val sigValue: String = signal.getSignalString(data.getKey)
+                val sigValue = signal.getSignalString(data.getKey)
 
                 if (!StringUtils.isNullOrEmpty(sigValue) && DEFAULT_TXT != sigValue) {
-                    // should be show the percentage along with the dBm?
+                    // should we show the percentage along with the dBm?
                     val signalPercent: String =
                         if (dbOnly) {
                             ""

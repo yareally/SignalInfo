@@ -3,23 +3,19 @@ package com.cc.signalinfo.activities
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.os.Bundle
 import android.preference.PreferenceActivity
 import android.util.Log
 import android.widget.TextView
-
+import com.actionbarsherlock.app.{SherlockFragmentActivity, ActionBar}
+import com.actionbarsherlock.view.{Menu, MenuItem}
 import com.cc.signalinfo.BuildConfig
-
+import com.cc.signalinfo.R
+import com.cc.signalinfo.config.AppSetup.enableStrictMode
+import com.cc.signalinfo.fragments.SettingsFragment
 import com.google.ads.AdRequest
 import com.google.ads.AdView
 import java.util.Calendar
-import com.cc.signalinfo.config.AppSetup.enableStrictMode
-
-import android.os.Bundle
-import com.actionbarsherlock.view.{Menu, MenuItem}
-import com.cc.signalinfo.R
-import com.cc.signalinfo.fragments.SettingsFragment
-import com.actionbarsherlock.app.{SherlockFragmentActivity, ActionBar}
-import android.R.layout
 
 /**
  * @author Wes Lanning
@@ -32,6 +28,7 @@ object BaseActivity
 
 class BaseActivity extends SherlockFragmentActivity
 {
+
     import BaseActivity.TAG
 
     protected var actionBar: ActionBar = null
@@ -84,7 +81,7 @@ class BaseActivity extends SherlockFragmentActivity
      */
     override def onCreateOptionsMenu(menu: Menu): Boolean = {
         getSupportMenuInflater.inflate(R.menu.options, menu)
-        return super.onCreateOptionsMenu(menu)
+        super.onCreateOptionsMenu(menu)
     }
 
     /**
@@ -100,14 +97,14 @@ class BaseActivity extends SherlockFragmentActivity
                 return true
             case _ ⇒
         }
-        return super.onOptionsItemSelected(item)
+        super.onOptionsItemSelected(item)
     }
 
     /**
      * Loads up the preferences screen in the action bar.
      */
     protected def loadPrefsScreen() {
-        val intent: Intent = new Intent(this, classOf[EditSettings])
+        val intent = new Intent(this, classOf[EditSettings])
         // if using Android 3.0+ and only using one preference screen, default load it
         // instead of using the big ass selection header area for preferences.
 
@@ -117,7 +114,7 @@ class BaseActivity extends SherlockFragmentActivity
             intent.putExtra(PreferenceActivity.EXTRA_NO_HEADERS, true)
             intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT, classOf[SettingsFragment].getName)
 
-            val bundle: Bundle = new Bundle
+            val bundle = new Bundle()
             bundle.putString("resource", "main_prefs")
             intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, bundle)
         }

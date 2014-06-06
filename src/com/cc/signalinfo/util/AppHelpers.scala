@@ -9,7 +9,7 @@ import com.cc.signalinfo.config.AppSetup
  */
 object AppHelpers
 {
-    private final val TAG: String = AppHelpers.getClass.getSimpleName
+    private final val TAG = AppHelpers.getClass.getSimpleName
 
     /**
      * Get the intent that launches the additional radio settings screen
@@ -20,8 +20,8 @@ object AppHelpers
      */
     def getAdditionalSettings: Intent =
     {
-        val intent: Intent = new Intent(Intent.ACTION_VIEW)
-        val showSettings: ComponentName = new ComponentName("com.android.settings", "com.android.settings.TestingSettings")
+        val intent = new Intent(Intent.ACTION_VIEW)
+        val showSettings = new ComponentName("com.android.settings", "com.android.settings.TestingSettings")
         intent.setComponent(showSettings)
     }
 

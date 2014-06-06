@@ -1,11 +1,11 @@
 package com.cc.signalinfo.signals
 
+import android.telephony.TelephonyManager
+import android.telephony.TelephonyManager._
 import com.cc.signalinfo.config.AppSetup.DEFAULT_TXT
 import com.cc.signalinfo.enums.NetworkType
 import com.cc.signalinfo.enums.Signal
 import com.cc.signalinfo.util.StringUtils
-import android.telephony.TelephonyManager._
-import android.telephony.TelephonyManager
 import java.util.{LinkedHashMap ⇒ Lmap, Map ⇒ Jmap, Set ⇒ Jset, EnumMap ⇒ Emap, EnumSet ⇒ Eset, LinkedHashSet ⇒ Lset, List ⇒ Jlist, ArrayList ⇒ Alist, Collections}
 import org.jetbrains.annotations.Nullable
 
@@ -70,7 +70,7 @@ object SignalInfo
      * @return the signal reading in dB
      */
     def cb2db(centibels: String): String = {
-        var centibelCopy: String = centibels
+        var centibelCopy = centibels
 
         if (!StringUtils.isNullOrEmpty(centibelCopy) && DEFAULT_TXT != centibelCopy) {
             centibelCopy = String.valueOf(Integer.parseInt(centibelCopy) / 10)
@@ -91,14 +91,13 @@ abstract class SignalInfo(protected val networkType: NetworkType,
                           @Nullable protected val pSignals: Jmap[Signal, String])
     extends ISignal
 {
+    protected val signals = if (pSignals == null) {
+        new Emap[Signal, String](classOf[Signal])
+    }
+    else {
+        new Emap[Signal, String](pSignals)
+    }
 
-    protected val signals =
-        if (pSignals == null) {
-            new Emap[Signal, String](classOf[Signal])
-        }
-        else {
-            new Emap[Signal, String](pSignals)
-        }
 
     /**
      * Screw Android for using centibels when they should
@@ -106,11 +105,11 @@ abstract class SignalInfo(protected val networkType: NetworkType,
      *
      * if true, convert all non-decibel readings (centibels) to decibels
      */
-    protected var preferDb: Boolean = true
+    protected var preferDb       = true
     /**
      * The Possible values for the current network type
      */
-    protected var possibleValues    = Eset.noneOf(classOf[Signal])
+    protected var possibleValues = Eset.noneOf(classOf[Signal])
 
 
     /**
@@ -195,11 +194,11 @@ abstract class SignalInfo(protected val networkType: NetworkType,
                 (name.worst - signalValue) / name.worst + fudgeValue
             }
 
-        var percentSignal: Int = Math.round(result * 100)
-
+        var percentSignal = Math.round(result * 100)
         percentSignal = if (percentSignal < 0) 0 else Math.abs(percentSignal)
         percentSignal = if (percentSignal > 100) 100 else percentSignal
-        return s"$percentSignal%"
+
+        s"$percentSignal%"
     }
 
     /**
@@ -365,7 +364,10 @@ abstract class SignalInfo(protected val networkType: NetworkType,
     }
 
     def decibelsPreferred(`type`: Signal): Boolean = {
-        return (`type` == Signal.CDMA_ECIO || `type` == Signal.EVDO_ECIO || `type` == Signal.LTE_SNR) && preferDb
+        ((`type` == Signal.CDMA_ECIO
+            || `type` == Signal.EVDO_ECIO
+            || `type` == Signal.LTE_SNR)
+            && preferDb)
     }
 }
 

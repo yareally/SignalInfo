@@ -63,7 +63,7 @@ class LteInfo(tm: TelephonyManager, pSignals: Jmap[Signal, String]) extends Sign
      *         specified type or null if there was no signal already added.
      */
     override def addSignalValue(signalType: Signal, value: String): String = {
-        var valueCopy: String = value
+        var valueCopy = value
 
         if (signalType == Signal.LTE_RSRQ && !safeEquals(valueCopy, DEFAULT_TXT)) {
             if (valueCopy.charAt(0) != '-') {

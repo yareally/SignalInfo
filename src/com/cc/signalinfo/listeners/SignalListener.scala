@@ -54,7 +54,7 @@ object SignalListener
 
 class SignalListener(listener: SignalListener.UpdateSignal) extends PhoneStateListener
 {
-    private final val TAG     : String                      = getClass.getSimpleName
+    private final val TAG                      = getClass.getSimpleName
     private var signalWrapper: SignalArrayWrapper = null
 
     /**

@@ -45,7 +45,9 @@ class SettingsFragment extends PreferenceFragment
     override def onCreate(savedInstanceState: Bundle) {
         super.onCreate(savedInstanceState)
         val resourceId: Int = getActivity.getResources.getIdentifier(
-            getArguments.getString("resource"), "xml", getActivity.getPackageName)
+            getArguments.getString("resource"),
+            "xml",
+            getActivity.getPackageName)
         addPreferencesFromResource(resourceId)
     }
 }

@@ -1,13 +1,11 @@
 package com.cc.signalinfo.signals
 
 import android.telephony.TelephonyManager
-import com.cc.signalinfo.config.AppSetup.DEFAULT_TXT
+import com.cc.signalinfo.config.AppSetup
 import com.cc.signalinfo.enums.NetworkType
 import com.cc.signalinfo.enums.Signal
 import com.cc.signalinfo.util.StringUtils
-import java.util.{Map ⇒ Jmap, EnumSet ⇒ Eset, EnumMap ⇒ Emap}
-import android.util.Log
-import com.cc.signalinfo.config.AppSetup
+import java.util.{EnumSet ⇒ Eset, EnumMap ⇒ Emap}
 
 /**
  * Stores all signal info related to 3G and below GSM
@@ -51,7 +49,7 @@ class GsmInfo(tm: TelephonyManager, pSignals: Emap[Signal, String]) extends Sign
      * @return true if RSSI possible, false if not
      */
     private def hasGsmRssi: Boolean = {
-        return (!StringUtils.isNullOrEmpty(signals.get(Signal.GSM_SIG_STRENGTH))
+        (!StringUtils.isNullOrEmpty(signals.get(Signal.GSM_SIG_STRENGTH))
             && AppSetup.DEFAULT_TXT != signals.get(Signal.GSM_SIG_STRENGTH))
     }
 
@@ -61,7 +59,7 @@ class GsmInfo(tm: TelephonyManager, pSignals: Emap[Signal, String]) extends Sign
      * @return the RSSI signal
      */
     private def computeRssi: Int = {
-        val gsmSignalStrength: Int = Integer.parseInt(signals.get(Signal.GSM_SIG_STRENGTH))
+        val gsmSignalStrength = Integer.parseInt(signals.get(Signal.GSM_SIG_STRENGTH))
         -113 + (2 * gsmSignalStrength)
     }
 
@@ -75,6 +73,7 @@ class GsmInfo(tm: TelephonyManager, pSignals: Emap[Signal, String]) extends Sign
      */
     override def addSignalValue(signalType: Signal, value: String): String = {
         val oldValue: String = super.addSignalValue(signalType, value)
+
         if (hasGsmRssi) {
             super.addSignalValue(Signal.GSM_RSSI, String.valueOf(computeRssi))
         }

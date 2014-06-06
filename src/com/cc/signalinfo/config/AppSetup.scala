@@ -1,8 +1,8 @@
 package com.cc.signalinfo.config
 
+import android.annotation.TargetApi
 import android.os.{StrictMode, Build}
 import com.cc.signalinfo.BuildConfig
-import android.annotation.TargetApi
 
 /**
  * @author Wes Lanning
@@ -95,17 +95,17 @@ object AppSetup
      * Calculated from the GSM ASU (the signal strength really)
      * Range is from -51dB (good) to -113dB (bad) or -1 for n/a
      */
-    final val GSM_RSSI        : Int    = 15
+    final val GSM_RSSI         = 15
     /**
      * Same as the GSM signal strength, unless GSM signal strength equals 99dB.
      * If GSM signal strength equals 99dB, then ASU is -1dB.
      */
-    final val GSM_ASU         : Int    = 16
+    final val GSM_ASU          = 16
     /**
      * 0dB (best) to 31dB (highest) or 99dB (n/a).
      * Reference: TS 27.007 8.5
      */
-    final val GSM_SIG_STRENGTH: Int    = 1
+    final val GSM_SIG_STRENGTH = 1
     /**
      * 0 (lowest) to 7 (highest [worst]) or 99 (n/a) likelihood that a given
      * bit will be erroneous but will not be detected as such
@@ -113,61 +113,61 @@ object AppSetup
      *
      * @see <a href="http://en.wikipedia.org/wiki/Residual_bit_error_rate></a>
      */
-    final val GSM_BIT_ERROR   : Int    = 2
+    final val GSM_BIT_ERROR    = 2
     /**
      * Defined in dBm. Range varies, but probably -40dB to -140dB (really -120 on devices)
      */
-    final val CDMA_RSSI       : Int    = 3
+    final val CDMA_RSSI        = 3
     /**
      * Valid values are positive integers.  This value is the actual Ec/Io multiplied
      * by -10.  Example: If the actual Ec/Io is -12.5 dB, then this response value
      * will be 125. Range is 0 (best) to -160 (worst, though really goes to -200)
      */
-    final val CDMA_ECIO       : Int    = 4
+    final val CDMA_ECIO        = 4
     /**
      * Defined in dBm. Range varies, but probably -40dB to -140dB (really -120 on devices)
      */
-    final val EVDO_RSSI       : Int    = 5
+    final val EVDO_RSSI        = 5
     /**
      * Valid values are positive integers.  This value is the actual Ec/Io multiplied
      * by -10.  Example: If the actual Ec/Io is -12.5 dB, then this response value
      * will be 125. Range is 0 (best) to -160 (worst, though really goes to -200)
      */
-    final val EVDO_ECIO       : Int    = 6
+    final val EVDO_ECIO        = 6
     /**
      * EVDO_SNR: 0dB (worst) to 8dB (best)
      */
-    final val EVDO_SNR        : Int    = 7
+    final val EVDO_SNR         = 7
     /**
      * 0 (lowest) to 31dB (highest/best) or 99dB (n/a).
      * Reference: TS 27.007 8.5
      */
-    final val LTE_SIG_STRENGTH: Int    = 8
+    final val LTE_SIG_STRENGTH = 8
     /**
      * The current Reference Signal Receive Power in dBm multiplied by -1.
      * Range: 44dBm (best) to 140 dBm (really 120dBm on devices). 2147483647 denotes invalid value.
      * Reference: 3GPP TS 36.133 9.1.4
      */
-    final val LTE_RSRP        : Int    = 9
+    final val LTE_RSRP         = 9
     /**
      * The current Reference Signal Receive Quality in dB multiplied by -1.
      * Range: 20dB (worst) to 3 dB (best). 2147483647 denotes invalid value.
      * Reference: 3GPP TS 36.133 9.1.7
      */
-    final val LTE_RSRQ        : Int    = 10
+    final val LTE_RSRQ         = 10
     /**
      * The current reference signal signal-to-noise ratio in 0.1 dB units.
      * Range: -200 to +300 (best) (-200 = -20.0 dB, +300 = 30dB). 2147483647 denotes invalid value.
      * Reference: 3GPP TS 36.101 8.1.1
      */
-    final val LTE_SNR         : Int    = 11
+    final val LTE_SNR          = 11
     /**
      * The current Channel Quality Indicator.
      * Range: 0 (best) to 15. 2147483647 denotes invalid value.
      * Reference: 3GPP TS 36.101 9.2, 9.3, A.4
      */
-    final val LTE_CQI         : Int    = 12
-    final val IS_GSM          : Int    = 13
+    final val LTE_CQI          = 12
+    final val IS_GSM           = 13
     /**
      * RSSI compute value = (carrier bandwidth) * log (# resource blocks)
      * Example RSSI (for verizon) = -(-17 + RSRP + RSRQ) (assuming RSRP and RSRQ are positive) (result should be positive)
@@ -175,33 +175,32 @@ object AppSetup
      * RSSI is estimated to be to 27dBm to 143dBm (by verizon calculations).
      * The 17 derived from 10 log 50
      */
-    final val LTE_RSSI        : Int    = 14
+    final val LTE_RSSI         = 14
     /**
      * Since it's a pain to use the xml string representation in a static context, redefining
      * n/a here. see strings.xml#na
      */
-    final val DEFAULT_TXT     : String = "n/a"
+    final val DEFAULT_TXT      = "n/a"
     /**
      * GSM RSSI = Level index of CPICH Received Signal Code Power in UMTS
      */
     /**
      * Key name for the stored preference that checks if a user agreed to warning prompt screen
      */
-    final val PROMPT_SETTING                : String = "promptWarningDialog"
+    final val PROMPT_SETTING                 = "promptWarningDialog"
     /**
      * Yeah dude, you really need to update your device because the LTE api settings have been there for 3+ years.
      * Making me have to work around your super old device with unneeded settings and code >:(
      */
-    final val OLD_FUCKING_DEVICE            : String = "hasNoLteApiSettings"
-    final val FILTERED_SIGNAL_ARRAY_KEY     : String = "signalArrayKey"
-    final val FILTERED_SIGNAL_ARRAY_SIZE_KEY: String = "signalArraySize"
+    final val OLD_FUCKING_DEVICE             = "hasNoLteApiSettings"
+    final val FILTERED_SIGNAL_ARRAY_KEY      = "signalArrayKey"
+    final val FILTERED_SIGNAL_ARRAY_SIZE_KEY = "signalArraySize"
 
     /**
      * Enable strict mode for the activity
      */
     @TargetApi(Build.VERSION_CODES.GINGERBREAD)
-    def enableStrictMode()
-    {
+    def enableStrictMode() {
         if (BuildConfig.DEBUG && Build.VERSION.SDK_INT >= 11) {
             StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll.penaltyLog.build)
             StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectLeakedSqlLiteObjects.detectLeakedClosableObjects.penaltyLog.penaltyDeath.build)
