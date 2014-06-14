@@ -1,6 +1,7 @@
 package com.cc.signalinfo.signals
 
 import android.telephony.TelephonyManager
+import com.cc.signalinfo.config.AppSetup
 import com.cc.signalinfo.enums.NetworkType
 import com.cc.signalinfo.enums.Signal
 import com.cc.signalinfo.util.StringUtils
@@ -39,6 +40,20 @@ class CdmaInfo(tm: TelephonyManager, pSignals: Jmap[Signal, String])
      */
     def this(tm: TelephonyManager) {
         this(tm, null)
+    }
+
+    /**
+     * Add a signal value to the current network type collection.
+     *
+     * @param signalType the type (like RSSI, RSRP, SNR, etc)
+     * @param value the value (the current reading from the tower for the signal)
+     * @return the value of any previous signal value with the
+     *         specified type or null if there was no signal already added.
+     */
+    override def addSignalValue(signalType: Signal, value: String): String = {
+        // if the device is not using CDMA for voice, then don't show any system radio signal value
+        val signalValue = if (getDeviceType != TelephonyManager.PHONE_TYPE_CDMA) AppSetup.DEFAULT_TXT else value
+        super.addSignalValue(signalType, signalValue)
     }
 
     /**
