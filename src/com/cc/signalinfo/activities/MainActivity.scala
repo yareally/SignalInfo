@@ -50,8 +50,8 @@ import com.commonsware.cwac.loaderex.acl.SharedPreferencesLoader
  * @version 1.0
  */
 class MainActivity extends BaseActivity {
-  private lazy val signalTextViewMap                  = new Emap[Signal, TextView](classOf[Signal])
-  private lazy val signalStr                          = onSignalChanged((signalStrength: SignalStrength) ⇒ {
+  private lazy val signalTextViewMap                   = new Emap[Signal, TextView](classOf[Signal])
+  private lazy val signalStr      : PhoneStateListener = onSignalChanged((signalStrength: SignalStrength) ⇒ {
     if (signalStrength != null) {
       lazy val signalWrapper = new SignalArrayWrapper(signalStrength.toString)
       filteredSignals = signalWrapper.filterSignals(signalStrength.toString)
@@ -59,13 +59,13 @@ class MainActivity extends BaseActivity {
       displaySignalInfo(filteredSignals)
     }
   })
-  private      var dbOnly         : Boolean           = false
-  private      var enableDebug    : Boolean           = false
-  private      var filteredSignals: Array[String]     = null
-  private      var fudgeSignal    : Boolean           = true
-  private      var preferences    : SharedPreferences = null
-  private      var sigInfoIds     : TypedArray        = null
-  private      var tm             : TelephonyManager  = null
+  private      var dbOnly         : Boolean            = false
+  private      var enableDebug    : Boolean            = false
+  private      var filteredSignals: Array[String]      = null
+  private      var fudgeSignal    : Boolean            = true
+  private      var preferences    : SharedPreferences  = null
+  private      var sigInfoIds     : TypedArray         = null
+  private      var tm             : TelephonyManager   = null
 
   /**
    * Initialize the app.
@@ -132,6 +132,40 @@ class MainActivity extends BaseActivity {
     setNetworkTypeText()
   }
 
+  private def setNetworkTypeText() {
+    setTextViewText(R.id.networkType, SignalInfo.getConnectedNetworkString(tm))
+  }
+
+  /**
+   * Sets the preferences for the activity (pretty obvious)
+   *
+   * @param sharedPreferences - preferences to load
+   */
+  private def setPreferences(sharedPreferences: SharedPreferences) {
+    val relativeReadings = getString(R.string.relativeReading)
+
+    val signalMeasure = sharedPreferences.getString(getString(R.string.signalFormatKey), relativeReadings)
+
+    val keepScreenOn = sharedPreferences.getBoolean(
+      getString(R.string.keepScreenOnKey),
+      getResources.getBoolean(R.bool.keepScreenOnDefault))
+
+    if (keepScreenOn) {
+      getWindow.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
+    }
+    enableDebug = sharedPreferences.getBoolean(
+      getString(R.string.enableDebugKey),
+      getResources.getBoolean(R.bool.enableDebugDefault))
+
+    if (signalMeasure == getString(R.string.dB)) {
+      dbOnly = true
+    }
+    else {
+      fudgeSignal = signalMeasure == relativeReadings
+      dbOnly = false
+    }
+  }
+
   override def onResume() {
     super.onResume()
     if (preferences != null) {
@@ -194,10 +228,6 @@ class MainActivity extends BaseActivity {
     setNetworkTypeText()
   }
 
-  private def setNetworkTypeText() {
-    setTextViewText(R.id.networkType, SignalInfo.getConnectedNetworkString(tm))
-  }
-
   /**
    * Gets the TextViews that map to the signal info data in the code for binding.
    *
@@ -219,36 +249,6 @@ class MainActivity extends BaseActivity {
       }
     }
     Collections.unmodifiableMap(signalTextViewMap)
-  }
-
-  /**
-   * Sets the preferences for the activity (pretty obvious)
-   *
-   * @param sharedPreferences - preferences to load
-   */
-  private def setPreferences(sharedPreferences: SharedPreferences) {
-    val relativeReadings = getString(R.string.relativeReading)
-
-    val signalMeasure = sharedPreferences.getString(getString(R.string.signalFormatKey), relativeReadings)
-
-    val keepScreenOn = sharedPreferences.getBoolean(
-      getString(R.string.keepScreenOnKey),
-      getResources.getBoolean(R.bool.keepScreenOnDefault))
-
-    if (keepScreenOn) {
-      getWindow.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
-    }
-    enableDebug = sharedPreferences.getBoolean(
-      getString(R.string.enableDebugKey),
-      getResources.getBoolean(R.bool.enableDebugDefault))
-
-    if (signalMeasure == getString(R.string.dB)) {
-      dbOnly = true
-    }
-    else {
-      fudgeSignal = signalMeasure == relativeReadings
-      dbOnly = false
-    }
   }
 
   override def onPause() {
