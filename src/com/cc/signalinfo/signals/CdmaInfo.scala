@@ -2,8 +2,7 @@ package com.cc.signalinfo.signals
 
 import android.telephony.TelephonyManager
 import com.cc.signalinfo.config.AppSetup
-import com.cc.signalinfo.enums.NetworkType
-import com.cc.signalinfo.enums.Signal
+import com.cc.signalinfo.enums.{Signal, NetworkType}
 import com.cc.signalinfo.util.StringUtils
 import java.util.{Map ⇒ Jmap, EnumSet ⇒ Eset}
 
@@ -52,8 +51,8 @@ class CdmaInfo(tm: TelephonyManager, pSignals: Jmap[Signal, String])
      */
     override def addSignalValue(signalType: Signal, value: String): String = {
         // if the device is not using CDMA for voice, then don't show any system radio signal value
-        val signalValue = if (getDeviceType != TelephonyManager.PHONE_TYPE_CDMA) AppSetup.DEFAULT_TXT else value
-        super.addSignalValue(signalType, signalValue)
+        val valueCopy = if (getDeviceType != TelephonyManager.PHONE_TYPE_CDMA) AppSetup.DEFAULT_TXT else value
+        super.addSignalValue(signalType, valueCopy)
     }
 
     /**

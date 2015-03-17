@@ -14,22 +14,6 @@
         </resOverlayFolders>
       </configuration>
     </facet>
-    <facet type="scala" name="Scala">
-      <configuration>
-        <option name="compilerLibraryLevel" value="Global" />
-        <option name="compilerLibraryName" value="scala-compiler" />
-        <option name="continuations" value="true" />
-        <option name="deprecationWarnings" value="true" />
-        <option name="explainTypeErrors" value="true" />
-        <option name="languageLevel" value="Scala 2.11" />
-        <option name="pluginPaths">
-          <array>
-            <option value="D:\Program Files (x86)\scala\lib\scala-continuations-plugin_2.11.0-RC4-1.0.1.jar" />
-          </array>
-        </option>
-        <option name="uncheckedWarnings" value="true" />
-      </configuration>
-    </facet>
   </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
@@ -42,13 +26,12 @@
     <orderEntry type="library" name="android-support-v7-gridlayout" level="project" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="gridlayout" />
-    <orderEntry type="library" name="scala-library" level="application" />
     <orderEntry type="library" name="GoogleAdMobAdsSdk-6.4.1" level="project" />
     <orderEntry type="module" module-name="cwac-loaderex" />
     <orderEntry type="module" module-name="actionbarsherlock" />
     <orderEntry type="library" name="annotations" level="project" />
     <orderEntry type="library" name="scala-async" level="project" />
-    <orderEntry type="library" name="scaloid" level="project" />
+    <orderEntry type="library" name="scala-sdk" level="project" />
   </component>
 </module>
 

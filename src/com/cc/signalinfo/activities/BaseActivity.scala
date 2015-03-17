@@ -73,6 +73,10 @@ class BaseActivity extends SherlockFragmentActivity
         findViewById(txtViewId).asInstanceOf[TextView].setText(text)
     }
 
+    def test(): Unit = {
+
+    }
+
     /**
      * Called to populate the ActionBar.
      *

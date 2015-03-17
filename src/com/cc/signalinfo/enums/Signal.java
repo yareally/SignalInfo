@@ -114,3 +114,4 @@ public enum Signal implements SignalEnumMethods
         return fudged;
     }
 }
+

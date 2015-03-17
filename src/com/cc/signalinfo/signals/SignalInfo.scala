@@ -1,12 +1,12 @@
 package com.cc.signalinfo.signals
 
+import java.util.{Collections, ArrayList => Alist, EnumMap => Emap, EnumSet => Eset, LinkedHashMap => Lmap, LinkedHashSet => Lset, List => Jlist, Map => Jmap, Set => Jset}
+
 import android.telephony.TelephonyManager
 import android.telephony.TelephonyManager._
 import com.cc.signalinfo.config.AppSetup.DEFAULT_TXT
-import com.cc.signalinfo.enums.NetworkType
-import com.cc.signalinfo.enums.Signal
+import com.cc.signalinfo.enums.{NetworkType, Signal}
 import com.cc.signalinfo.util.StringUtils
-import java.util.{LinkedHashMap ⇒ Lmap, Map ⇒ Jmap, Set ⇒ Jset, EnumMap ⇒ Emap, EnumSet ⇒ Eset, LinkedHashSet ⇒ Lset, List ⇒ Jlist, ArrayList ⇒ Alist, Collections}
 import org.jetbrains.annotations.Nullable
 
 /**
@@ -98,7 +98,6 @@ abstract class SignalInfo(protected val networkType: NetworkType,
         new Emap[Signal, String](pSignals)
     }
 
-
     /**
      * Screw Android for using centibels when they should
      * be using decibels for things like SNR.
@@ -110,7 +109,6 @@ abstract class SignalInfo(protected val networkType: NetworkType,
      * The Possible values for the current network type
      */
     protected var possibleValues = Eset.noneOf(classOf[Signal])
-
 
     /**
      * Instantiates a new Signal info.

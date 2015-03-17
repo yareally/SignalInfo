@@ -36,7 +36,6 @@ import com.actionbarsherlock.view.MenuItem
 import com.cc.signalinfo.R
 import java.util.{List ⇒ Jlist}
 import android.preference.PreferenceActivity
-import java.lang.String
 import com.cc.signalinfo.fragments.SettingsFragment
 
 /**
@@ -97,7 +96,7 @@ class EditSettings extends SherlockPreferenceActivity
                 val intent: Intent = new Intent(this, classOf[MainActivity])
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
-                return true
         }
+        true
     }
 }
