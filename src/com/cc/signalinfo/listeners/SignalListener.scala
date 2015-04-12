@@ -36,7 +36,6 @@ import com.cc.signalinfo.util.SignalArrayWrapper
  */
 object SignalListener
 {
-
     /**
      * Notifies activities and fragments of signal changes.
      */
@@ -49,5 +48,4 @@ object SignalListener
          */
         def setData(signalStrength: SignalArrayWrapper)
     }
-
 }
