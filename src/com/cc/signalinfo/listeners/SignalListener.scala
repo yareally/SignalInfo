@@ -51,33 +51,3 @@ object SignalListener
     }
 
 }
-
-class SignalListener(listener: SignalListener.UpdateSignal) extends PhoneStateListener
-{
-    private final val TAG                      = getClass.getSimpleName
-    private var signalWrapper: SignalArrayWrapper = null
-
-    /**
-     * Get the Signal strength from the provider, each time there is an update
-     *
-     * @param signalStrength - has all the useful signal stuff in it.
-     */
-    override def onSignalStrengthsChanged(signalStrength: SignalStrength)
-    {
-        super.onSignalStrengthsChanged(signalStrength)
-        if (signalStrength != null) {
-            Log.d(TAG, "getting sig strength")
-            Log.d(TAG, signalStrength.toString)
-
-            if (signalWrapper == null) {
-                signalWrapper = new SignalArrayWrapper(signalStrength.toString)
-            }
-            // TODO: make filterSignals only accessible to this class
-            signalWrapper.filterSignals(signalStrength.toString)
-            listener.setData(signalWrapper)
-        }
-    }
-
-
-}
-
