@@ -4,6 +4,9 @@
     <facet type="android" name="Android">
       <configuration>
         <option name="LIBRARY_PROJECT" value="true" />
+        <proGuardCfgFiles>
+          <file>file://D:/Program Files (x86)/Android/android-sdk/tools/proguard/proguard-android.txt</file>
+        </proGuardCfgFiles>
         <option name="UPDATE_PROPERTY_FILES" value="true" />
       </configuration>
     </facet>
@@ -20,4 +23,3 @@
     <orderEntry type="library" name="annotations" level="project" />
   </component>
 </module>
-

@@ -221,7 +221,7 @@ class MainActivity extends BaseActivity {
         }
       }
       catch {
-        case ignored: Resources.NotFoundException =>
+        case ignored: Resources.NotFoundException ⇒
           v.setText(DEFAULT_TXT)
       }
     }

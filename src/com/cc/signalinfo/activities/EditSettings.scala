@@ -56,6 +56,7 @@ class EditSettings extends SherlockPreferenceActivity
 
         // for crappy old devices, load them without headers
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+            //noinspection ScalaDeprecation
             addPreferencesFromResource(R.xml.main_prefs)
         }
 
@@ -92,7 +93,7 @@ class EditSettings extends SherlockPreferenceActivity
      */
     override def onOptionsItemSelected(item: MenuItem): Boolean = {
         item.getItemId match {
-            case android.R.id.home =>
+            case android.R.id.home ⇒
                 val intent: Intent = new Intent(this, classOf[MainActivity])
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                 startActivity(intent)
