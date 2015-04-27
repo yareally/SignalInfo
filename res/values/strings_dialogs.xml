@@ -30,10 +30,10 @@
 
     <!-- ====== Strings related to showing the additional info area warning dialog ====== -->
 
-    <string name="warningDialogTitle">Continuez avec Soin! Ici, il ya Dragons.</string>
-    <string name="warningDialogText">Les paramètres sur l\'écran suivant sont normalement cachés des utilisateurs. Une mauvaise configuration de ces paramètres peut perturber votre connexion réseau. En cas de doute, ne plaisante pas avec eux ou sauvegarde de votre appareil.
+    <string name="warningDialogTitle">Proceed with Caution!</string>
+    <string name="warningDialogText">The settings found on the next screen are normally hidden from users. Misconfiguration of these settings may disrupt your network connection. If in doubt, do not mess with them or back up your device.
     </string>
-    <string name="dialogNoPromptTxt">J\'ai ete prevenu des consequences possibles si je bousille ces preferences.  Je promis que je ne ferais aucun des choses suivantes: \n\nBlamer au promoteur. \n\nDonner un mauvais commentaire. \n\nFaire du promoteur mon soutien technique personal. ☺
+    <string name="dialogNoPromptTxt">I promise I will not blame the developer, give him a bad review or make him my personal tech support if I screw up these settings since I was warned ☺
     </string>
 
     <!-- ====== Messages shown if the user cannot access the additional setting area ====== -->
