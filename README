@@ -2,7 +2,11 @@ Creator: Wes Lanning
 Requires: Android 2.3+
 License: MIT
 
+<<<<<<< HEAD
 NOTE: Contacting me without reading the BUILDING file first will result in being ignored. Especially if it's about building the project in any IDE other than Intellij IDEA (especially Eclipse).
+=======
+Java branch is no longer updated. Use the Scala branch.
+>>>>>>> 6c0d03268351a1b6ac33e649ce142f899ed1ecd4
 
 Gives you all the available information for the CMDA/GSM/LTE Signal on your
 Android Device. Not all information may be available depending on the OEM/OS
@@ -27,6 +31,7 @@ on some of the Java noise by using techniques such as implicits for anonymous Ja
 I do accept pull requests if you ask nicely. Also translations to other languages
 are welcomed if you want to commit the files to me replacing the strings. All
 strings for the user interface are abstracted out of the design, so easy to change.
+<<<<<<< HEAD
 
 Anyone interested in translating, create an account at Transifex (https://www.transifex.com/projects/p/advanced-signal-info/).
 From the project I created there, you can see what needs translated and add it there so I can update it in the code. If the language
@@ -35,3 +40,5 @@ you wish to translate to is not listed, just let me know and I can add it.
 Actual app can be found on the market: https://play.google.com/store/apps/details?id=com.cc.signalinfo
 
 Sometimes I will update it in the repo here under the root, but don't count on it being up to date.
+=======
+>>>>>>> 6c0d03268351a1b6ac33e649ce142f899ed1ecd4
