@@ -24,88 +24,93 @@ http://www.opensource.org/licenses/mit-license.php
 */
 package com.cc.signalinfo.dialogs
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.content.Context
-import android.content.DialogInterface
-import android.content.SharedPreferences
+import android.app.{AlertDialog, Dialog}
+import android.content.{Context, DialogInterface, SharedPreferences}
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
-import android.widget.{Toast, CheckBox, CompoundButton}
+import android.widget.{CheckBox, CompoundButton, Toast}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.config.AppSetup
-import com.cc.signalinfo.util.{TerminalCommands, AppHelpers}
+import com.cc.signalinfo.util.{AppHelpers, TerminalCommands}
+
+import scala.concurrent.Await
+import scala.concurrent.duration._
+
 
 /**
  * @author Wes Lanning
  * @version 2012-12-21
  */
 class WarningDialog
-    extends DialogFragment
-    with DialogInterface.OnShowListener
-    with DialogInterface.OnClickListener
-    with CompoundButton.OnCheckedChangeListener
-{
-    private var form: View = null
+  extends DialogFragment
+          with DialogInterface.OnShowListener
+          with DialogInterface.OnClickListener
+          with CompoundButton.OnCheckedChangeListener {
+  private var form: View = null
 
-    override def onCreateDialog(savedInstanceState: Bundle): Dialog = {
-        super.onCreateDialog(savedInstanceState)
-        form = getActivity.getLayoutInflater.inflate(R.layout.warning_dialog, null)
-        val builder: AlertDialog.Builder = new AlertDialog.Builder(getActivity)
-        form.findViewById(R.id.dialogNoPrompt).asInstanceOf[CheckBox].setOnCheckedChangeListener(this)
+  override def onCreateDialog(savedInstanceState: Bundle): Dialog = {
+    super.onCreateDialog(savedInstanceState)
+    form = getActivity.getLayoutInflater.inflate(R.layout.warning_dialog, null)
+    val builder: AlertDialog.Builder = new AlertDialog.Builder(getActivity)
+    form.findViewById(R.id.dialogNoPrompt).asInstanceOf[CheckBox].setOnCheckedChangeListener(this)
 
-        builder.setTitle(R.string.warningDialogTitle)
-            .setView(form)
-            .setPositiveButton(android.R.string.ok, this)
-            .setNegativeButton(android.R.string.cancel, null)
-            .create
+    builder.setTitle(R.string.warningDialogTitle)
+    .setView(form)
+    .setPositiveButton(android.R.string.ok, this)
+    .setNegativeButton(android.R.string.cancel, null)
+    .create
 
-        val ad: AlertDialog = builder.show
-        ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false)
-        return ad
+    val ad: AlertDialog = builder.show
+    ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false)
+    ad
+  }
+
+  def onClick(dialogInterface: DialogInterface, i: Int) {
+    if (AppHelpers.userConsent(getActivity.getPreferences(Context.MODE_PRIVATE))) {
+      try {
+        startActivity(AppHelpers.getAdditionalSettings)
+      }
+      catch {
+        case ignored: Any =>
+          try {
+            val result = Await.result(TerminalCommands.launchActivity("com.android.settings", "TestingSettings"), 10.seconds)
+
+            if (result != 0) Toast.makeText(getActivity,
+              getString(R.string.noAdditionalSettingSupport),
+              Toast.LENGTH_LONG).show()
+          }
+          catch {
+            case ignored: Exception =>
+              Toast.makeText(getActivity, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show()
+          }
+      }
     }
+  }
 
-    def onClick(dialogInterface: DialogInterface, i: Int) {
-        if (AppHelpers.userConsent(getActivity.getPreferences(Context.MODE_PRIVATE))) {
-            try {
-                startActivity(AppHelpers.getAdditionalSettings)
-            }
-            catch {
-                case ignored: Any =>
-                    try
-                        TerminalCommands.launchActivity("com.android.settings", "TestingSettings")
-                     catch {
-                        case ignored: Exception =>
-                            Toast.makeText(getActivity, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show()
-                    }
-            }
-        }
-    }
+  def onShow(dialog: DialogInterface) {
+    this.getDialog.asInstanceOf[AlertDialog]
+    .getButton(DialogInterface.BUTTON_POSITIVE)
+    .setEnabled(false)
+  }
 
-    def onShow(dialog: DialogInterface) {
-        this.getDialog.asInstanceOf[AlertDialog]
-            .getButton(DialogInterface.BUTTON_POSITIVE)
-            .setEnabled(false)
-    }
+  override def onDismiss(unused: DialogInterface) {
+    super.onDismiss(unused)
+  }
 
-    override def onDismiss(unused: DialogInterface) {
-        super.onDismiss(unused)
-    }
+  override def onCancel(unused: DialogInterface) {
+    super.onCancel(unused)
+  }
 
-    override def onCancel(unused: DialogInterface) {
-        super.onCancel(unused)
-    }
+  def onCheckedChanged(compoundButton: CompoundButton, checkState: Boolean) {
+    this.getDialog.asInstanceOf[AlertDialog]
+    .getButton(DialogInterface.BUTTON_POSITIVE)
+    .setEnabled(checkState)
 
-    def onCheckedChanged(compoundButton: CompoundButton, checkState: Boolean) {
-        this.getDialog.asInstanceOf[AlertDialog]
-            .getButton(DialogInterface.BUTTON_POSITIVE)
-            .setEnabled(checkState)
-
-        val settings: SharedPreferences = getActivity.getPreferences(Context.MODE_PRIVATE)
-        val editor: SharedPreferences.Editor = settings.edit
-        editor.putBoolean(AppSetup.PROMPT_SETTING, checkState).commit
-    }
+    val settings: SharedPreferences = getActivity.getPreferences(Context.MODE_PRIVATE)
+    val editor: SharedPreferences.Editor = settings.edit
+    editor.putBoolean(AppSetup.PROMPT_SETTING, checkState).commit
+  }
 
 
 }

@@ -13,8 +13,7 @@ import com.cc.signalinfo.BuildConfig
 import com.cc.signalinfo.R
 import com.cc.signalinfo.config.AppSetup.enableStrictMode
 import com.cc.signalinfo.fragments.SettingsFragment
-import com.google.ads.AdRequest
-import com.google.ads.AdView
+import com.google.android.gms.ads.{AdRequest, AdView}
 import java.util.Calendar
 
 /**
@@ -57,7 +56,8 @@ class BaseActivity extends SherlockFragmentActivity
 
         if (!BuildConfig.DEBUG) {
             val ad: AdView = findViewById(R.id.adView).asInstanceOf[AdView]
-            ad.loadAd(new AdRequest)
+            val adRequest = new AdRequest.Builder().build()
+            ad.loadAd(adRequest)
         }
         formatFooter()
     }

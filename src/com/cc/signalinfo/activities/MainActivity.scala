@@ -41,6 +41,8 @@ import com.cc.signalinfo.signals.{ISignal, SignalInfo}
 import com.cc.signalinfo.util.PimpMyAndroid._
 import com.cc.signalinfo.util._
 import com.commonsware.cwac.loaderex.acl.SharedPreferencesLoader
+import scala.concurrent.{Await}
+import scala.concurrent.duration._
 
 /**
  * Make sure to add "android.permission.CHANGE_NETWORK_STATE"
@@ -101,7 +103,11 @@ class MainActivity extends BaseActivity {
         catch {
           case ignored: Any ⇒
             try {
-              TerminalCommands.launchActivity("com.android.settings", "TestingSettings")
+              val result = Await.result(TerminalCommands.launchActivity("com.android.settings", "TestingSettings"), 10.seconds)
+
+              if (result != 0) Toast.makeText(this,
+                getString(R.string.noAdditionalSettingSupport),
+                Toast.LENGTH_LONG).show()
             } catch {
               case ignored: Exception ⇒
                 Toast.makeText(this,

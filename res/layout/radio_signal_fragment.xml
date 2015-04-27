@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+<ScrollView xmlns:ads="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:grid="http://schemas.android.com/apk/res/com.cc.signalinfo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fillViewport="true"
+    tools:context=".MainActivity"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -18,14 +20,13 @@
             android:paddingEnd="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingStart="10dp"
             android:paddingTop="5dp"
             grid:columnCount="2">
 
-            <com.google.ads.AdView
+            <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
                 ads:adSize="BANNER"
-                ads:adUnitId="a150a0f996cbdbd"
+                ads:adUnitId="@string/banner_ad_unit_id"
                 grid:layout_columnSpan="2"
                 grid:layout_gravity="center" />
 
@@ -40,7 +41,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/deviceNameLabel"
                 grid:layout_gravity="start" />
 
@@ -53,7 +53,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/deviceModelLabel" />
 
             <TextView
@@ -65,7 +64,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/androidVersionLabel" />
 
             <TextView
@@ -78,7 +76,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/carrierNameLabel" />
 
             <TextView
@@ -90,7 +87,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/buildHostLabel" />
 
             <TextView
@@ -102,7 +98,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/networkTypeLabel" />
 
             <TextView
@@ -121,7 +116,6 @@
             android:paddingEnd="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingStart="10dp"
             android:paddingTop="5dp"
             grid:columnCount="2">
 
@@ -137,7 +131,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/cdmaRSSI" />
 
             <TextView
@@ -150,7 +143,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/evdoRSSI" />
 
             <TextView
@@ -163,7 +155,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/cdmaECIO" />
 
             <TextView
@@ -176,7 +167,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/evdoECIO" />
 
             <TextView
@@ -189,7 +179,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/evdoSNR" />
 
             <TextView
@@ -211,7 +200,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/gsmRSSI" />
 
             <TextView
@@ -224,7 +212,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/gsmSigStrength" />
 
             <TextView
@@ -237,7 +224,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/gsmECIO" />
 
             <TextView
@@ -250,7 +236,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/gsmBitError" />
 
             <TextView
@@ -272,7 +257,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/lteRSRP" />
 
             <TextView
@@ -285,7 +269,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/lteRSSI" />
 
             <TextView
@@ -298,7 +281,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/lteRSRQ" />
 
             <TextView
@@ -311,7 +293,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/lteSNR" />
 
             <TextView
@@ -324,7 +305,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/lteCQI" />
 
             <TextView
@@ -337,7 +317,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:text="@string/lteSigStrength" />
 
             <TextView
@@ -356,7 +335,6 @@
             android:paddingEnd="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingStart="10dp"
             android:paddingTop="5dp"
             grid:columnCount="1">
 
@@ -376,7 +354,6 @@
                 android:paddingEnd="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
-                android:paddingStart="5dp"
                 android:visibility="gone" />
 
             <TextView
