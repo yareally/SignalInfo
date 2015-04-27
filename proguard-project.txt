@@ -76,8 +76,8 @@
 -keep public class com.android.vending.licensing.ILicensingService
 
 # admob stuff
--keep class com.google.ads.** # Don't proguard AdMob classes
--dontwarn com.google.ads.** # Temporary workaround for v6.2.1. It gives a warning that you can ignore
+-keep class com.google.android.gms.ads.** # Don't proguard AdMob classes
+-dontwarn com.google.android.gms.ads.** # Temporary workaround for v6.2.1. It gives a warning that you can ignore
 
 -keepclasseswithmembernames class * {
     native <methods>;

@@ -72,17 +72,15 @@ class WarningDialog
         startActivity(AppHelpers.getAdditionalSettings)
       }
       catch {
-        case ignored: Any =>
+        case ignored: Any ⇒
           try {
             val result = Await.result(TerminalCommands.launchActivity("com.android.settings", "TestingSettings"), 10.seconds)
 
-            if (result != 0) Toast.makeText(getActivity,
-              getString(R.string.noAdditionalSettingSupport),
-              Toast.LENGTH_LONG).show()
+            if (result != 0) new NoSupportDialog().show(getActivity.getSupportFragmentManager, "Sorry")
           }
           catch {
-            case ignored: Exception =>
-              Toast.makeText(getActivity, getString(R.string.noAdditionalSettingSupport), Toast.LENGTH_LONG).show()
+            case ignored: Exception ⇒
+              new NoSupportDialog().show(getActivity.getSupportFragmentManager, "Sorry")
           }
       }
     }

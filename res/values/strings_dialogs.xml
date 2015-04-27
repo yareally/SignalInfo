@@ -30,23 +30,17 @@
 
     <!-- ====== Strings related to showing the additional info area warning dialog ====== -->
 
-    <string name="warningDialogTitle">Proceed with Caution!</string>
-    <string name="warningDialogText">The settings found on the next screen are
-        normally hidden from users. Misconfiguration of these settings may disrupt
-        your network connection.
+    <string name="warningDialogTitle">Continuez avec Soin! Ici, il ya Dragons.</string>
+    <string name="warningDialogText">Les paramètres sur l\'écran suivant sont normalement cachés des utilisateurs. Une mauvaise configuration de ces paramètres peut perturber votre connexion réseau. En cas de doute, ne plaisante pas avec eux ou sauvegarde de votre appareil.
     </string>
-    <string name="dialogNoPromptTxt">I promise I will not blame the developer,
-        give him a bad review or make him my personal tech support
-        if I screw up these settings since I was warned ☺
+    <string name="dialogNoPromptTxt">J\'ai ete prevenu des consequences possibles si je bousille ces preferences.  Je promis que je ne ferais aucun des choses suivantes: \n\nBlamer au promoteur. \n\nDonner un mauvais commentaire. \n\nFaire du promoteur mon soutien technique personal. ☺
     </string>
 
     <!-- ====== Messages shown if the user cannot access the additional setting area ====== -->
 
-    <string name="noAdditionalSettingSupport">The manufacturer of your device
-        either did not include access to this feature in the OS version used or
-        restricts access to it (Permission denial) :(.
-        If your device is rooted, you should not see this message unless you denied
-        or disabled SuperUser (enable it if you want access to the advanced settings area).
+    <string name="noSupportDialogTitle">Device Locked</string>
+
+    <string name="noAdditionalSettingSupport"><![CDATA[Your device manufacturer (probably Samsung) decided to lock down your device model beyond what Google recommends by default. Unfortunately that means I cannot include access to the network settings shortcut for users without root and rooted devices with SELinux restrictions. \n\nSome rooted devices (probably Samsung once again) running Android 5.0 (Lollipop) or later are additionally locked out due to SELinux restrictions that cannot be bypassed without a custom or modified kernel. For example, if other rooted apps work on your device, but you cannot access this shortcut in my app, then your device is locked down by an SELinux policy that won\'t let non-system apps (like mine) launch system app activities such as the network settings shortcut. \n\nI do not currently own any Samsung devices and cannot help you directly with rooting. Instead, please find your device\'s forum on xda-developers.com for more information. \n\nIf functionality like switching the network type is important to you, I would recommend not buying devices from this manufacturer in the future, no matter how nice their devices might be.]]>
     </string>
 
     <!-- **************** /End Dialog related stuff **************** -->

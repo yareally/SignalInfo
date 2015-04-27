@@ -1,0 +1,16 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<resources>
+    <!--Strings that really have no specific use and may be used anywhere in the app should be put here-->
+    <string name="app_name">Estado de la señal avanzada</string>
+    <!--shown if there is no reading for a signal or if some other dynamic information is not available-->
+    <!--DO NOT CHANGE THIS VALUE IF TRANSLATING TO ANOTHER LANGUAGE UNLESS YOU CHANGE THE SAME VALUE IN AppSetup.java AS IT WILL CRASH THE APP (which is restated there as there is no easy way to pull it from this file for use in a static code context). Changing any other text in the String files is fine though.-->
+    <string name="na">n / a</string>
+    <!--Footer area-->
+    <string name="copyright" formatted="false">© codingcreation.com %s | v. %s</string>
+    <!--Shown if a device sucks so bad, it can't show any radio info (looking at you, shitty Android ports and lazy OEMs)-->
+  <string name="deviceNotSupported">La versión del sistema operativo de tu dispositivo/Android no parecen apoyar mostrando toda la información de red o actualmente no está conectada a una red celular. Se mostrará la información que puede ser demostrada.
+    </string>
+    <!--Title to show on the warning dialog popup for the "advanced settings area"-->
+    <string name="dialogWarningTitle">ADVERTENCIA</string>
+    <string name="APP_VERS_EXCEPT_MSG">No se puede mostrar el número de versión de la aplicación.</string>
+</resources>

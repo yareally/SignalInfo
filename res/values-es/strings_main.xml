@@ -1,0 +1,69 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ /*
+  ~ Copyright (c) 2015 Wes Lanning, http://codingcreation.com
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining
+  ~ a copy of this software and associated documentation files (the
+  ~ "Software"), to deal in the Software without restriction, including
+  ~ without limitation the rights to use, copy, modify, merge, publish,
+  ~ distribute, sublicense, and/or sell copies of the Software, and to
+  ~ permit persons to whom the Software is furnished to do so, subject to
+  ~ the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be
+  ~ included in all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  ~ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  ~ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  ~ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+  ~ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+  ~ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+  ~ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  ~
+  ~ http://www.opensource.org/licenses/mit-license.php
+  ~ */
+  -->
+<resources>
+    <!--** Strings that are used on the main activity/fragment **-->
+    <!--=== labels for the signal readings ===-->
+    <string name="cdmaTitle">Info señal CDMA (3g)</string>
+    <string name="cdmaRSSI">CDMA (voz) RSSI señal:</string>
+    <string name="cdmaECIO">ECIO CDMA:</string>
+    <string name="evdoRSSI">EVDO (datos) RSSI señal:</string>
+    <string name="evdoECIO">ECIO EVDO:</string>
+    <string name="evdoSNR">EVDO SNR:</string>
+    <string name="gsmTitle">Información de señal GSM (2G / 3G)</string>
+    <string name="lteTitle">Info señal LTE (4g)</string>
+    <string name="lteRSRP">Señal de LTE RSRP:</string>
+    <string name="lteRSSI">LTE RSSI señal:</string>
+    <string name="lteRSRQ">LTE RSRQ:</string>
+    <string name="lteSNR">LTE SNR:</string>
+    <string name="lteCQI">CQI LTE:</string>
+    <string name="lteSigStrength">Intensidad de la señal LTE:</string>
+    <string name="gsmECIO">ECIO GSM:</string>
+    <string name="gsmRSSI">RSSI GSM:</string>
+    <string name="gsmSigStrength">Intensidad de la señal GSM:</string>
+    <string name="gsmBitError">GSM Bit Error Rate:</string>
+    <!--Device related info strings-->
+    <!--Device info section Title-->
+    <string name="deviceInfoTitle">Device Info</string>
+    <!--string shown for the system android version under the device info section-->
+    <string name="androidVersion" formatted="false">%s (API versión %d)</string>
+    <!--device info section labels-->
+    <string name="deviceNameLabel">Nombre de dispositivo:</string>
+    <string name="networkTypeLabel">Tipo de red:</string>
+    <string name="buildHostLabel">Construcción de Host:</string>
+    <string name="carrierNameLabel">Portador:</string>
+    <string name="androidVersionLabel">Versión de Android:</string>
+    <string name="deviceModelLabel">El modelo:</string>
+    <!--Title above the debugging info area-->
+    <string name="debugInfo">Información de depuración</string>
+    <!--====== Strings related to showing the additional info area ======-->
+    <!--describes what the additional area is for (above the button to go to it)-->
+  <string name="additionalInfoLbl">Acceder y configurar información adicional radio ocultado en el sistema:
+    </string>
+    <!--additional info button text-->
+    <string name="additionalInfoBtnTxt">Info adicional</string>
+</resources>

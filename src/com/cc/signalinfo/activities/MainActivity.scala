@@ -35,7 +35,7 @@ import android.widget.{TextView, Toast}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.activities.MainActivity._
 import com.cc.signalinfo.config.AppSetup.DEFAULT_TXT
-import com.cc.signalinfo.dialogs.WarningDialog
+import com.cc.signalinfo.dialogs.{NoSupportDialog, WarningDialog}
 import com.cc.signalinfo.enums.{NetworkType, Signal}
 import com.cc.signalinfo.signals.{ISignal, SignalInfo}
 import com.cc.signalinfo.util.PimpMyAndroid._
@@ -98,6 +98,7 @@ class MainActivity extends BaseActivity {
     findViewById(R.id.additionalInfo).click((view: View) ⇒ {
       if (AppHelpers.userConsent(getPreferences(Context.MODE_PRIVATE))) {
         try {
+          throw new SecurityException()
           startActivity(AppHelpers.getAdditionalSettings)
         }
         catch {
@@ -105,14 +106,10 @@ class MainActivity extends BaseActivity {
             try {
               val result = Await.result(TerminalCommands.launchActivity("com.android.settings", "TestingSettings"), 10.seconds)
 
-              if (result != 0) Toast.makeText(this,
-                getString(R.string.noAdditionalSettingSupport),
-                Toast.LENGTH_LONG).show()
+              if (result != 0) new NoSupportDialog().show(getSupportFragmentManager, "Sorry")
             } catch {
               case ignored: Exception ⇒
-                Toast.makeText(this,
-                  getString(R.string.noAdditionalSettingSupport),
-                  Toast.LENGTH_LONG).show()
+                new NoSupportDialog().show(getSupportFragmentManager, "Sorry")
             }
         }
       }

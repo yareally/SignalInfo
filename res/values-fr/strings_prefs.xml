@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /*
+  ~ Copyright (c) 2015 Wes Lanning, http://codingcreation.com
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining
+  ~ a copy of this software and associated documentation files (the
+  ~ "Software"), to deal in the Software without restriction, including
+  ~ without limitation the rights to use, copy, modify, merge, publish,
+  ~ distribute, sublicense, and/or sell copies of the Software, and to
+  ~ permit persons to whom the Software is furnished to do so, subject to
+  ~ the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be
+  ~ included in all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  ~ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  ~ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  ~ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+  ~ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+  ~ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+  ~ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  ~
+  ~ http://www.opensource.org/licenses/mit-license.php
+  ~ */
+  -->
+
+<resources>
+    <!-- **************** Fragment Preferences Related Strings **************** -->
+
+    <!-- Strings for possible PreferenceActivity Back/Next buttons -->
+    <string name="back_button_label">Back</string>
+    <string name="next_button_label">Next</string>
+
+    <!-- Optional button to Skip a PreferenceActivity [CHAR LIMIT=20] -->
+    <string name="skip_button_label">Skip</string>
+
+
+    <!-- **************** App Specific Preferences Related Strings **************** -->
+    <!-- preference header screen strings -->
+    <string name="mainPreferenceHeaderTitle">Preferences Signal</string>
+    <string name="mainPreferenceHeaderSummary">Preferences lie a l\'exposition des signals</string>
+
+    <!-- === signal reading unit measurements === -->
+
+    <!-- decibel-milliwatts (also the default signal measurement) -->
+    <string name="dBm">db</string>
+    <!-- milliwatts -->
+    <string name="mW">mW</string>
+    <!-- microWatts -->
+    <string name="µW">µW</string>
+
+    <!-- Display related preferences -->
+    <string name="displayPreferencesTitle">paramètres d\'affichage</string>
+    <string name="screenOnTitle">se garder allume l\'ecran</string>
+    <string name="keepScreenOnKey">keep_screen_on</string>
+    <string name="screenOnSummary">Garder l\'écran si app se concentre</string>
+
+    <!-- Summary of what each displayed signal type does under preferences -->
+    <string formatted="false" name="signalTypeSummary">Pourcentage stricte est basée sur des plages définies par le 3GPP. Pourcentage rajusté est ajustée pour votre opérateur. 100% = le mieux, 0% = pas de signal
+    </string>
+
+    <!-- === Drop down text strings for what signal type to display === -->
+    <string name="signalFormatKey">signal_type</string>
+
+    <!-- Used for the text in the drop down list for selecting signal type to display -->
+    <string name="signalTypeTitle">choisir le format d\'affichage de signal</string>
+    <string name="dbReadingOnly">Decibels (dBm) Only (default)</string>
+    <string name="signalStrictPercentage">Décibels + pourcentage stricte</string>
+    <string name="signalAdjustPercentage">Décibels + pourcentage rajusté</string>
+
+    <!-- used for signal type value array -->
+    <string name="signalTypeDialogTitle">Sélectionnez un Type de Signal</string>
+    <string name="dB">db</string>
+    <string name="strictReading">strict</string>
+    <string name="relativeReading">relative</string>
+
+    <!-- for enable debugging preference -->
+    <string name="debugPrefsTitle">Paramètres de débogage</string>
+    <string name="enableDebugTitle">Activer la sortie de débogage</string>
+    <string name="enableDebugKey">enable_debug</string>
+    <string name="enableDebugSummary">
+        <![CDATA[Utiles si vous avez besoin de donner le développeur quelques infos supplémentaires. décharges supplémentaires d\'informations à l\'écran et logcat. je < 3 personnes qui me donnent des infos supplémentaire.]]></string>
+
+    <!-- **************** /End Preferences related strings **************** -->
+</resources>

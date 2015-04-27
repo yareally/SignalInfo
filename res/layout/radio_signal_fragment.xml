@@ -25,6 +25,7 @@
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
+                android:visibility="gone"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/banner_ad_unit_id"
                 grid:layout_columnSpan="2"

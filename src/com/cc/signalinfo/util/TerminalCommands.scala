@@ -5,6 +5,7 @@ import java.io.{FileNotFoundException, IOException}
 
 import android.os.Build
 import android.os.Build.VERSION
+import com.cc.signalinfo.BuildConfig
 
 import scala.async.Async.{async, await}
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -27,14 +28,16 @@ object TerminalCommands {
    * @param activityName - name of the activity to launch
    * @return the exit code returned after the command completes
    */
-  def launchActivity(pkgName: String, activityName: String): Future[Int] = async {
-    val rootCmd = s"am start -a android.intent.action.MAIN -n $pkgName/$pkgName.$activityName < /dev/null"
-    val cmdSeq = if (await(isSELinuxEnforcing)) {
-      Seq("su", "--context u:r:system_app:s0", "-c", rootCmd)
-    }
-    else {
-      Seq("su", "-c", rootCmd)
-    }
+  def launchActivity(pkgName: String, activityName: String, enableDebug: Boolean = false): Future[Int] = async {
+    val rootCmd = s"am start --user 0 -a android.intent.action.MAIN -n $pkgName/$pkgName.$activityName"
+
+
+    //val cmdSeq = if (await(isSELinuxEnforcing)) {
+      //Seq("su", "--context u:r:system_app:s0", "-c", rootCmd)
+   // }
+   // else {
+    val cmdSeq = Seq("su", "-c", rootCmd)
+    //}
     stringSeqToProcess(cmdSeq).!
   }
 

@@ -1,7 +1,7 @@
 package com.cc.signalinfo.util
 
 import android.app.Activity
-import android.os.Bundle
+import android.os.{CountDownTimer, Bundle}
 import android.support.v4.app.LoaderManager.LoaderCallbacks
 import android.support.v4.content.Loader
 import android.view.View
@@ -18,9 +18,20 @@ object PimpMyAndroid {
 
   implicit class PimpMyView(val view: View) extends AnyVal {
 
-    def click(funct: (View) ⇒ Unit) = view.setOnClickListener(new OnClickListener {
+    def click(funct: View ⇒ Unit) = view.setOnClickListener(new OnClickListener {
       override def onClick(v: View): Unit = funct(v)
     })
+
+    /**
+     * Generic Type method to deal with annoying conversions for views
+     *
+     * @param id - the Resource ID for the view in question
+     * @tparam T - the type associated with the widget (Button, TextView, etc)
+     * @return the found view with the desired type
+     */
+    def findView[T](id: Int): T = {
+      view.findViewById(id).asInstanceOf[T]
+    }
   }
 
   implicit class PimpMyActivity(val a: Activity) extends AnyVal {
@@ -74,10 +85,7 @@ object PimpMyAndroid {
     }
 
   }
-
 }
-
-
 
 
 

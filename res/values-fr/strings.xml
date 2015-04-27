@@ -1,0 +1,42 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  ~ /*
+  ~ Copyright (c) 2015 Wes Lanning, http://codingcreation.com
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining
+  ~ a copy of this software and associated documentation files (the
+  ~ "Software"), to deal in the Software without restriction, including
+  ~ without limitation the rights to use, copy, modify, merge, publish,
+  ~ distribute, sublicense, and/or sell copies of the Software, and to
+  ~ permit persons to whom the Software is furnished to do so, subject to
+  ~ the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be
+  ~ included in all copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+  ~ EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+  ~ MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+  ~ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
+  ~ LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+  ~ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+  ~ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+  ~
+  ~ http://www.opensource.org/licenses/mit-license.php
+  ~ */
+  -->
+<resources>
+    <!--Strings that really have no specific use and may be used anywhere in the app should be put here-->
+    <string name="app_name">État du Signal avancé</string>
+    <!--shown if there is no reading for a signal or if some other dynamic information is not available-->
+    <!--DO NOT CHANGE THIS VALUE IF TRANSLATING TO ANOTHER LANGUAGE UNLESS YOU CHANGE THE SAME VALUE IN AppSetup.java AS IT WILL CRASH THE APP (which is restated there as there is no easy way to pull it from this file for use in a static code context). Changing any other text in the String files is fine though.-->
+    <string name="na">n/a</string>
+    <!--Footer area-->
+    <string name="copyright" formatted="false">©%s codingcreation.com | v. %s</string>
+    <!--Shown if a device sucks so bad, it can't show any radio info (looking at you, shitty Android ports and lazy OEMs)-->
+  <string name="deviceNotSupported">Votre version d\'OS de périphérique/Android ne semble pas supporter montrant toutes les informations de réseau ou n\'est actuellement pas connectée à un réseau cellulaire. Info qui peut être affiché apparaît.
+    </string>
+    <!--Title to show on the warning dialog popup for the "advanced settings area"-->
+    <string name="dialogWarningTitle">Attention</string>
+    <string name="APP_VERS_EXCEPT_MSG">Impossible d\'afficher le numéro de version d\'app !</string>
+</resources>

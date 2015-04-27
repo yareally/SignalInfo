@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Bundle
 import android.preference.PreferenceActivity
 import android.util.Log
+import android.view.View
 import android.widget.TextView
 import com.actionbarsherlock.app.{SherlockFragmentActivity, ActionBar}
 import com.actionbarsherlock.view.{Menu, MenuItem}
@@ -58,6 +59,7 @@ class BaseActivity extends SherlockFragmentActivity
             val ad: AdView = findViewById(R.id.adView).asInstanceOf[AdView]
             val adRequest = new AdRequest.Builder().build()
             ad.loadAd(adRequest)
+            ad.setVisibility(View.VISIBLE)
         }
         formatFooter()
     }
@@ -123,7 +125,6 @@ class BaseActivity extends SherlockFragmentActivity
             intent.putExtra(PreferenceActivity.EXTRA_SHOW_FRAGMENT_ARGUMENTS, bundle)
         }
         startActivity(intent)
-
     }
 
     /**
