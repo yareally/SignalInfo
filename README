@@ -2,6 +2,8 @@ Creator: Wes Lanning
 Requires: Android 2.2+
 License: MIT
 
+Java branch is no longer updated. Use the Scala branch.
+
 Gives you all the available information for the CMDA/GSM/LTE Signal on your
 Android Device. Not all information may be available depending on the OEM/OS
 version of the device.
