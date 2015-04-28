@@ -196,6 +196,9 @@ object AppSetup
     final val FILTERED_SIGNAL_ARRAY_KEY      = "signalArrayKey"
     final val FILTERED_SIGNAL_ARRAY_SIZE_KEY = "signalArraySize"
 
+
+    final val DEBUG_BUILD = false
+
     /**
      * Enable strict mode for the activity
      */

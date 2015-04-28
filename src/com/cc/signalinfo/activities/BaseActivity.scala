@@ -12,6 +12,7 @@ import com.actionbarsherlock.app.{SherlockFragmentActivity, ActionBar}
 import com.actionbarsherlock.view.{Menu, MenuItem}
 import com.cc.signalinfo.BuildConfig
 import com.cc.signalinfo.R
+import com.cc.signalinfo.config.AppSetup
 import com.cc.signalinfo.config.AppSetup.enableStrictMode
 import com.cc.signalinfo.fragments.SettingsFragment
 import com.google.android.gms.ads.{AdRequest, AdView}
@@ -54,9 +55,9 @@ class BaseActivity extends SherlockFragmentActivity
     protected def onCreate(layout: Int, savedInstanceState: Bundle) {
         this.onCreateApp(savedInstanceState)
         setContentView(layout)
+        val ad: AdView = findViewById(R.id.adView).asInstanceOf[AdView]
 
-        if (!BuildConfig.DEBUG) {
-            val ad: AdView = findViewById(R.id.adView).asInstanceOf[AdView]
+        if (!AppSetup.DEBUG_BUILD) {
             val adRequest = new AdRequest.Builder().build()
             ad.loadAd(adRequest)
             ad.setVisibility(View.VISIBLE)
@@ -73,10 +74,6 @@ class BaseActivity extends SherlockFragmentActivity
      */
     protected def setTextViewText(txtViewId: java.lang.Integer, text: CharSequence) {
         findViewById(txtViewId).asInstanceOf[TextView].setText(text)
-    }
-
-    def test(): Unit = {
-
     }
 
     /**

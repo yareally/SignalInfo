@@ -19,7 +19,7 @@
 #   public *;
 #}
 -dontwarn **$$anonfun$*
--dontwarn com.cc.shortenme**
+-dontwarn com.cc.signalinfo**
 -dontwarn scala.**
 -dontwarn scala.beans.ScalaBeanInfo
 -dontwarn scala.collection.generic.GenTraversableFactory
@@ -62,8 +62,7 @@
 #(org.apache.james.mime4j.storage.StorageProvider)Class.forName(variable).newInstance()
 -dontnote org.apache.james.mime4j.storage.DefaultStorageProvider
 
--keepattributes Exceptions,InnerClasses,Signature,Deprecated,
-            SourceFile,LineNumberTable,Annotation,EnclosingMethod
+-keepattributes Exceptions,InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,Annotation,EnclosingMethod
 
 
 -keep public class * extends android.app.Activity
