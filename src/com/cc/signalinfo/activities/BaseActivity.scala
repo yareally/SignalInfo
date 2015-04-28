@@ -55,9 +55,9 @@ class BaseActivity extends SherlockFragmentActivity
     protected def onCreate(layout: Int, savedInstanceState: Bundle) {
         this.onCreateApp(savedInstanceState)
         setContentView(layout)
-        val ad: AdView = findViewById(R.id.adView).asInstanceOf[AdView]
 
         if (!AppSetup.DEBUG_BUILD) {
+            val ad: AdView = findViewById(R.id.adView).asInstanceOf[AdView]
             val adRequest = new AdRequest.Builder().build()
             ad.loadAd(adRequest)
             ad.setVisibility(View.VISIBLE)
