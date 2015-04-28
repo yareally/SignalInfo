@@ -78,7 +78,6 @@ class MainActivity extends BaseActivity {
    */
   private def Tm = {
     if (tm == null) {
-      //
       tm = this.getSysService[TelephonyManager](Context.TELEPHONY_SERVICE)
     }
     tm
@@ -122,7 +121,7 @@ class MainActivity extends BaseActivity {
 
               if (result != 0) new NoSupportDialog().show(getSupportFragmentManager, "Sorry")
             } catch {
-              case ignored: Exception ⇒
+              case ignored: Any ⇒
                 new NoSupportDialog().show(getSupportFragmentManager, "Sorry")
             }
         }
@@ -144,13 +143,13 @@ class MainActivity extends BaseActivity {
         Build.VERSION.RELEASE,
         Build.VERSION.SDK_INT.asInstanceOf[java.lang.Integer]))
 
-    setTextViewText(R.id.carrierName, tm.getNetworkOperatorName)
+    setTextViewText(R.id.carrierName, Tm.getNetworkOperatorName)
     setTextViewText(R.id.buildHost, Build.HOST)
     setNetworkTypeText()
   }
 
   private def setNetworkTypeText() {
-    setTextViewText(R.id.networkType, SignalInfo.getConnectedNetworkString(tm))
+    setTextViewText(R.id.networkType, SignalInfo.getConnectedNetworkString(Tm))
   }
 
   /**
@@ -202,7 +201,7 @@ class MainActivity extends BaseActivity {
    * @param filteredSignals - the filtered signals ready to display
    */
   private def displaySignalInfo(filteredSignals: Array[String]) {
-    val signalMapWrapper = new SignalMapWrapper(filteredSignals, tm)
+    val signalMapWrapper = new SignalMapWrapper(filteredSignals, Tm)
 
     if (signalMapWrapper.hasData) {
       displaySignalInfo(signalMapWrapper)
@@ -290,9 +289,9 @@ class MainActivity extends BaseActivity {
         view.setVisibility(View.VISIBLE)
       }
       val debugMapRelative: Jmap[String, String] =
-        new SignalMapWrapper(debugInfo.getFilteredArray, tm).getPercentSignalMap(adjustReadings = true)
+        new SignalMapWrapper(debugInfo.getFilteredArray, Tm).getPercentSignalMap(adjustReadings = true)
       val debugMapStrict: Jmap[String, String] =
-        new SignalMapWrapper(debugInfo.getFilteredArray, tm).getPercentSignalMap(adjustReadings = false)
+        new SignalMapWrapper(debugInfo.getFilteredArray, Tm).getPercentSignalMap(adjustReadings = false)
 
       setTextViewText(R.id.debugArray,
         s"${debugInfo.getRawData}" +

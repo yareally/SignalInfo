@@ -79,7 +79,7 @@ class WarningDialog
             if (result != 0) new NoSupportDialog().show(getActivity.getSupportFragmentManager, "Sorry")
           }
           catch {
-            case ignored: Exception ⇒
+            case ignored: Any ⇒
               new NoSupportDialog().show(getActivity.getSupportFragmentManager, "Sorry")
           }
       }
