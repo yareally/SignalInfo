@@ -70,14 +70,28 @@ class MainActivity extends BaseActivity {
   private      var tm             : TelephonyManager   = null
 
   /**
+   * Property for our telephony manager.
+   * Some stupid phones kill this service on resume (chinese phones...looking at you...)
+   * so in order to avoid that, we'll make sure it's never null
+   *
+   * @return
+   */
+  private def Tm = {
+    if (tm == null) {
+      //
+      tm = this.getSysService[TelephonyManager](Context.TELEPHONY_SERVICE)
+    }
+    tm
+  }
+
+  /**
    * Initialize the app.
    *
    * @param savedInstanceState - umm... the saved instance state
    */
   override def onCreate(savedInstanceState: Bundle) {
     super.onCreate(R.layout.radio_signal_fragment, savedInstanceState)
-    tm = this.getSysService[TelephonyManager](Context.TELEPHONY_SERVICE)
-    tm.listen(signalStr, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS)
+    Tm.listen(signalStr, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS)
     sigInfoIds = getResources.obtainTypedArray(R.array.sigInfoIds)
 
     val loader = this.initLoader[SharedPreferences](
@@ -178,7 +192,7 @@ class MainActivity extends BaseActivity {
         displaySignalInfo(filteredSignals)
       }
     }
-    tm.listen(signalStr, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS)
+    Tm.listen(signalStr, PhoneStateListener.LISTEN_SIGNAL_STRENGTHS)
   }
 
   /**
@@ -256,7 +270,7 @@ class MainActivity extends BaseActivity {
 
   override def onPause() {
     super.onPause()
-    tm.listen(signalStr, PhoneStateListener.LISTEN_NONE)
+    Tm.listen(signalStr, PhoneStateListener.LISTEN_NONE)
   }
 
   /**

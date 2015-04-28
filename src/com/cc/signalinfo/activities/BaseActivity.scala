@@ -131,6 +131,7 @@ class BaseActivity extends SherlockFragmentActivity
     protected def formatFooter() {
         try {
             val appVersion: String = getPackageManager.getPackageInfo(getPackageName, 0).versionName
+
             setTextViewText(R.id.copyright,
                 String.format(
                     getString(R.string.copyright),
