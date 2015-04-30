@@ -29,7 +29,8 @@ object TerminalCommands {
    * @return the exit code returned after the command completes
    */
   def launchActivity(pkgName: String, activityName: String, enableDebug: Boolean = false): Future[Int] = async {
-    val rootCmd = s"am start --user 0 -a android.intent.action.MAIN -n $pkgName/$pkgName.$activityName"
+    // val rootCmd = s"am start --user 0 -a android.intent.action.MAIN -n $pkgName/$pkgName.$activityName"
+    val rootCmd = s"am start -a android.intent.action.MAIN -n $pkgName/$pkgName.$activityName"
 
 
     //val cmdSeq = if (await(isSELinuxEnforcing)) {
