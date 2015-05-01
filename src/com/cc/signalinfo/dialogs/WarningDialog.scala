@@ -69,7 +69,7 @@ class WarningDialog
   def onClick(dialogInterface: DialogInterface, i: Int) {
     if (AppHelpers.userConsent(getActivity.getPreferences(Context.MODE_PRIVATE))) {
       try {
-        startActivity(AppHelpers.getAdditionalSettings)
+        getActivity.startActivity(AppHelpers.getAdditionalSettings)
       }
       catch {
         case ignored: Any ⇒

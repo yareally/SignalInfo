@@ -111,7 +111,6 @@ class MainActivity extends BaseActivity {
     findViewById(R.id.additionalInfo).click((view: View) ⇒ {
       if (AppHelpers.userConsent(getPreferences(Context.MODE_PRIVATE))) {
         try {
-          throw new SecurityException()
           startActivity(AppHelpers.getAdditionalSettings)
         }
         catch {
