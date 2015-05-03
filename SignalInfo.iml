@@ -32,6 +32,7 @@
     <orderEntry type="module" module-name="actionbarsherlock" />
     <orderEntry type="library" name="annotations" level="project" />
     <orderEntry type="library" name="scala-async" level="project" />
+    <orderEntry type="library" name="slick" level="project" />
     <orderEntry type="library" name="scala-sdk-2.11.6 - min" level="application" />
   </component>
 </module>

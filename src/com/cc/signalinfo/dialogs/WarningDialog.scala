@@ -87,9 +87,7 @@ class WarningDialog
   }
 
   def onShow(dialog: DialogInterface) {
-    this.getDialog.asInstanceOf[AlertDialog]
-    .getButton(DialogInterface.BUTTON_POSITIVE)
-    .setEnabled(false)
+    getDialog.asInstanceOf[AlertDialog].getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false)
   }
 
   override def onDismiss(unused: DialogInterface) {
@@ -101,7 +99,7 @@ class WarningDialog
   }
 
   def onCheckedChanged(compoundButton: CompoundButton, checkState: Boolean) {
-    this.getDialog.asInstanceOf[AlertDialog]
+    getDialog.asInstanceOf[AlertDialog]
     .getButton(DialogInterface.BUTTON_POSITIVE)
     .setEnabled(checkState)
 

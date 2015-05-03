@@ -54,7 +54,7 @@ object SignalMapWrapper
         networkMap.put(NetworkType.CDMA, new CdmaInfo(tm))
         networkMap.put(NetworkType.LTE, new LteInfo(tm))
         networkMap.put(NetworkType.GSM, new GsmInfo(tm))
-        return networkMap
+        networkMap
     }
 }
 

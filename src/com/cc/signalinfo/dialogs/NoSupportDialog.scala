@@ -83,8 +83,13 @@ class NoSupportDialog
     ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false)
 
     new CountDownTimer(5000, 1000) {
-      override def onTick(millisUntilFinished: Long) =
+      override def onTick(millisUntilFinished: Long) = try {
+        // some shitty samsung devices (or their impatient users) decide to crash here. probably due to:
+        // a) OMG TOO MUCH SHIT TO READ (100 chars == too much) ABOUT WHY I CAN'T ACCESS THIS...FUCK THIS (force out of the dialog and no longer attached)
+        // b) Samsung sucks (obvious, but some wacky shit going on when I launch a process with those devices)
+        // c) combination of a & b
         ad.getButton(DialogInterface.BUTTON_POSITIVE).setText(s"${getString(android.R.string.ok) } (${millisUntilFinished / 1000 })")
+      }
 
       override def onFinish() {
         ad.getButton(DialogInterface.BUTTON_POSITIVE).setText(android.R.string.ok)
