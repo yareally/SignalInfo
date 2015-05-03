@@ -110,20 +110,7 @@ class MainActivity extends BaseActivity {
     // for when the additional area setting button is pressed
     findViewById(R.id.additionalInfo).click((view: View) ⇒ {
       if (AppHelpers.userConsent(getPreferences(Context.MODE_PRIVATE))) {
-        try {
-          startActivity(AppHelpers.getAdditionalSettings)
-        }
-        catch {
-          case ignored: Any ⇒
-            try {
-              val result = Await.result(TerminalCommands.launchActivity("com.android.settings", "TestingSettings"), 10.seconds)
-
-              if (result != 0) new NoSupportDialog().show(getSupportFragmentManager, "Sorry")
-            } catch {
-              case ignored: Any ⇒
-                new NoSupportDialog().show(getSupportFragmentManager, "Sorry")
-            }
-        }
+        AppHelpers.launchTestingSettings(this)
       }
       else {
         new WarningDialog().show(getSupportFragmentManager, "Warning")

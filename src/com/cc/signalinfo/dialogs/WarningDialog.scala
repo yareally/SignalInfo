@@ -29,13 +29,12 @@ import android.content.{Context, DialogInterface, SharedPreferences}
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.view.View
-import android.widget.{CheckBox, CompoundButton, Toast}
+import android.widget.{CheckBox, CompoundButton}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.config.AppSetup
-import com.cc.signalinfo.util.{AppHelpers, TerminalCommands}
+import com.cc.signalinfo.util.PimpMyAndroid.PimpMyView
+import com.cc.signalinfo.util.{AppHelpers}
 
-import scala.concurrent.Await
-import scala.concurrent.duration._
 
 
 /**
@@ -53,36 +52,22 @@ class WarningDialog
     super.onCreateDialog(savedInstanceState)
     form = getActivity.getLayoutInflater.inflate(R.layout.warning_dialog, null)
     val builder: AlertDialog.Builder = new AlertDialog.Builder(getActivity)
-    form.findViewById(R.id.dialogNoPrompt).asInstanceOf[CheckBox].setOnCheckedChangeListener(this)
+    form.findView[CheckBox](R.id.dialogNoPrompt).setOnCheckedChangeListener(this)
 
-    builder.setTitle(R.string.warningDialogTitle)
-    .setView(form)
-    .setPositiveButton(android.R.string.ok, this)
-    .setNegativeButton(android.R.string.cancel, null)
-    .create
+    val ad: AlertDialog = builder.setTitle(R.string.warningDialogTitle)
+                          .setView(form)
+                          .setPositiveButton(android.R.string.ok, this)
+                          .setNegativeButton(android.R.string.cancel, null)
+                          .create
 
-    val ad: AlertDialog = builder.show
+    ad.show()
     ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false)
     ad
   }
 
   def onClick(dialogInterface: DialogInterface, i: Int) {
     if (AppHelpers.userConsent(getActivity.getPreferences(Context.MODE_PRIVATE))) {
-      try {
-        getActivity.startActivity(AppHelpers.getAdditionalSettings)
-      }
-      catch {
-        case ignored: Any ⇒
-          try {
-            val result = Await.result(TerminalCommands.launchActivity("com.android.settings", "TestingSettings"), 10.seconds)
-
-            if (result != 0) new NoSupportDialog().show(getActivity.getSupportFragmentManager, "Sorry")
-          }
-          catch {
-            case ignored: Any ⇒
-              new NoSupportDialog().show(getActivity.getSupportFragmentManager, "Sorry")
-          }
-      }
+      AppHelpers.launchTestingSettings(getActivity)
     }
   }
 

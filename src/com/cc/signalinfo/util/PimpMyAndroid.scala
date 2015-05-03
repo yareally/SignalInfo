@@ -1,12 +1,13 @@
 package com.cc.signalinfo.util
 
-import android.app.Activity
-import android.os.{CountDownTimer, Bundle}
+import android.app.{AlertDialog, Dialog, Activity}
+import android.os.Bundle
 import android.support.v4.app.LoaderManager.LoaderCallbacks
 import android.support.v4.content.Loader
 import android.view.View
 import android.view.View.OnClickListener
-import com.cc.signalinfo.R
+import android.widget.{TextView, Button}
+import com.cc.signalinfo.storage.DbHelper
 
 /**
  * Java Android is ugly. Let's pimp it out.
@@ -34,6 +35,18 @@ object PimpMyAndroid {
     }
   }
 
+  implicit class PimpMyTextView(val view: TextView) extends AnyVal {
+    def text(txt: CharSequence): TextView = {
+      view.setText(txt)
+      view
+    }
+
+    def text(txtId: Int): TextView = {
+      view.setText(txtId)
+      view
+    }
+  }
+
   implicit class PimpMyActivity(val a: Activity) extends AnyVal {
     /**
      * Generic Type method to deal with annoying conversions for views
@@ -56,10 +69,24 @@ object PimpMyAndroid {
     def getSysService[T](serviceName: String): T = {
       a.getSystemService(serviceName).asInstanceOf[T]
     }
-
-
   }
 
+  /*
+    implicit class PimpMyString(val str: StringContext) extends AnyVal {
+      def sql[T](implicit conn: DbHelper, objType: Class) {}
+    }
+
+    implicit class PimpMyDb(val dbh: DbHelper) extends AnyVal {
+      import scala.reflect.runtime.universe._
+
+      def query[T: TypeTag](sql: String, param: Object = null): Traversable = {
+        Set()
+      }
+
+      private def queryImpl(T: TypeTag) {
+        T.tpe
+      }
+    }*/
 
   implicit class PimpMyActivityLoader(val a: Activity) extends AnyVal {
     def initLoader[T](funct: (Int, Bundle) ⇒ Loader[T], funct1: (Loader[T]) ⇒ Unit, funct2: (Loader[T], T) ⇒ Unit): LoaderCallbacks[T] = new LoaderCallbacks[T] {
@@ -85,6 +112,7 @@ object PimpMyAndroid {
     }
 
   }
+
 }
 
 

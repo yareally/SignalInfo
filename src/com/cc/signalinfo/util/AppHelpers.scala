@@ -1,8 +1,14 @@
 package com.cc.signalinfo.util
 
+import android.app.Activity
 import android.content.{SharedPreferences, ComponentName, Intent}
+import android.support.v4.app.FragmentActivity
 import com.cc.signalinfo.config.AppSetup
+import com.cc.signalinfo.dialogs.NoSupportDialog
 
+
+import scala.concurrent.Await
+import scala.concurrent.duration._
 /**
  * @author Wes Lanning
  * @version 2013-11-24
@@ -46,5 +52,21 @@ object AppHelpers
     def hasLteApi(settings: SharedPreferences): Boolean =
     {
         settings.contains(AppSetup.OLD_FUCKING_DEVICE) && settings.getBoolean(AppSetup.OLD_FUCKING_DEVICE, false)
+    }
+
+    def launchTestingSettings(activity: FragmentActivity) {
+        try {
+            activity.startActivity(AppHelpers.getAdditionalSettings)
+        }
+        catch {
+            case ignored: Any ⇒ try {
+                val result = Await.result(TerminalCommands.launchActivity("com.android.settings", "TestingSettings"), 10.seconds)
+
+                if (result != 0) new NoSupportDialog().show(activity.getSupportFragmentManager, "Sorry")
+            }
+            catch {
+                case ignored: Any ⇒ new NoSupportDialog().show(activity.getSupportFragmentManager, "Sorry")
+            }
+        }
     }
 }

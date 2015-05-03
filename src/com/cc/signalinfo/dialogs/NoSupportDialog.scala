@@ -35,7 +35,7 @@ import android.widget.{CheckBox, CompoundButton, Toast}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.config.AppSetup
 import com.cc.signalinfo.util.{AppHelpers, TerminalCommands}
-
+import com.cc.signalinfo.util.PimpMyAndroid.PimpMyTextView
 
 /**
  * @author Wes Lanning
@@ -83,17 +83,16 @@ class NoSupportDialog
     ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false)
 
     new CountDownTimer(5000, 1000) {
-      override def onTick(millisUntilFinished: Long) = try {
-        // some shitty samsung devices (or their impatient users) decide to crash here. probably due to:
-        // a) OMG TOO MUCH SHIT TO READ (100 chars == too much) ABOUT WHY I CAN'T ACCESS THIS...FUCK THIS (force out of the dialog and no longer attached)
+      override def onTick(millisUntilFinished: Long) =
+        // some shitty samsung devices (or their impatient users) decide to crash here. Probably due to:
+        // a) OMG TOO MUCH SHIT TO READ (100 or so chars == too much) ABOUT WHY I CAN'T ACCESS THIS...FUCK THIS (force out of the dialog and no longer attached)
         // b) Samsung sucks (obvious, but some wacky shit going on when I launch a process with those devices)
         // c) combination of a & b
-        ad.getButton(DialogInterface.BUTTON_POSITIVE).setText(s"${getString(android.R.string.ok) } (${millisUntilFinished / 1000 })")
-      }
+        // adding getActivity to getString may have fixed, but not sure yet
+        ad.getButton(DialogInterface.BUTTON_POSITIVE).setText(s"${getActivity.getString(android.R.string.ok) } (${millisUntilFinished / 1000 })")
 
       override def onFinish() {
-        ad.getButton(DialogInterface.BUTTON_POSITIVE).setText(android.R.string.ok)
-        ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(true)
+        ad.getButton(DialogInterface.BUTTON_POSITIVE).text(android.R.string.ok).setEnabled(true)
       }
     }.start()
   }
