@@ -47,7 +47,7 @@ object StringUtils
                 return false
             }
         }
-        return true
+        true
     }
 
 

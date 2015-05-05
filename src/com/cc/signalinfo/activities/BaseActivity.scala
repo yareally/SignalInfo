@@ -6,11 +6,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.{Build, Bundle}
 import android.preference.PreferenceActivity
+import android.support.v7.app.ActionBarActivity
+import android.support.v7.app.ActionBar
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import com.actionbarsherlock.app.{ActionBar, SherlockFragmentActivity}
-import com.actionbarsherlock.view.{Menu, MenuItem}
+import android.view.Menu
+import android.view.MenuItem
 import com.cc.signalinfo.R
 import com.cc.signalinfo.config.AppSetup
 import com.cc.signalinfo.config.AppSetup.enableStrictMode
@@ -26,7 +28,7 @@ object BaseActivity {
   final val TAG: String = BaseActivity.getClass.getSimpleName
 }
 
-class BaseActivity extends SherlockFragmentActivity {
+class BaseActivity extends ActionBarActivity {
   import BaseActivity.TAG
   protected var actionBar: ActionBar = null
 
@@ -68,7 +70,7 @@ class BaseActivity extends SherlockFragmentActivity {
    * @return true on created
    */
   override def onCreateOptionsMenu(menu: Menu): Boolean = {
-    getSupportMenuInflater.inflate(R.menu.options, menu)
+    getMenuInflater.inflate(R.menu.options, menu)
     super.onCreateOptionsMenu(menu)
   }
 

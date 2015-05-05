@@ -25,27 +25,22 @@ http://www.opensource.org/licenses/mit-license.php
 package com.cc.signalinfo.activities
 
 import java.util.{Collections, EnumMap ⇒ Emap, Map ⇒ Jmap}
-
 import android.content.res.{Resources, TypedArray}
 import android.content.{Context, SharedPreferences}
 import android.os.{Build, Bundle}
-import android.support.v4.app
-import android.support.v4.app.FragmentActivity
 import android.telephony.{PhoneStateListener, SignalStrength, TelephonyManager}
 import android.view.{View, WindowManager}
 import android.widget.{TextView, Toast}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.activities.MainActivity._
 import com.cc.signalinfo.config.AppSetup.DEFAULT_TXT
-import com.cc.signalinfo.dialogs.interfaces.CallBack
-import com.cc.signalinfo.dialogs.{NoSupportDialog, WarningDialog}
+import com.cc.signalinfo.dialogs.{WarningDialog}
 import com.cc.signalinfo.enums.{NetworkType, Signal}
 import com.cc.signalinfo.signals.{ISignal, SignalInfo}
 import com.cc.signalinfo.util.PimpMyAndroid._
 import com.cc.signalinfo.util._
 import com.commonsware.cwac.loaderex.acl.SharedPreferencesLoader
-import scala.concurrent.{Await}
-import scala.concurrent.duration._
+
 
 /**
  * Make sure to add "android.permission.CHANGE_NETWORK_STATE"
@@ -114,10 +109,8 @@ class MainActivity extends BaseActivity {
         AppHelpers.launchTestingSettings(this)
       }
       else {
-        new WarningDialog(new CallBack {
-          override def setState(checked: Boolean) =
-            // if the user checked the box on the dialog, launch the activity
-            if (checked) AppHelpers.launchTestingSettings(MainActivity.this)
+        new WarningDialog((checked: Boolean) ⇒ {
+          if (checked) AppHelpers.launchTestingSettings(MainActivity.this)
         }).show(getSupportFragmentManager, "Warning")
       }
     })

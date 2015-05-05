@@ -32,7 +32,6 @@ import android.view.View
 import android.widget.{CheckBox, CompoundButton}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.config.AppSetup
-import com.cc.signalinfo.dialogs.interfaces.CallBack
 import com.cc.signalinfo.util.PimpMyAndroid.PimpMyView
 import com.cc.signalinfo.util.{AppHelpers}
 
@@ -42,7 +41,7 @@ import com.cc.signalinfo.util.{AppHelpers}
  * @author Wes Lanning
  * @version 2012-12-21
  */
-class WarningDialog(callBack: CallBack)
+class WarningDialog(callback: Boolean ⇒ Unit)
   extends DialogFragment
           with DialogInterface.OnShowListener
           with DialogInterface.OnClickListener
@@ -67,7 +66,7 @@ class WarningDialog(callBack: CallBack)
   }
 
   def onClick(dialogInterface: DialogInterface, i: Int) {
-    callBack.setState(AppHelpers.userConsent(getActivity.getPreferences(Context.MODE_PRIVATE)))
+    callback(AppHelpers.userConsent(getActivity.getPreferences(Context.MODE_PRIVATE)))
   }
 
   def onShow(dialog: DialogInterface) {

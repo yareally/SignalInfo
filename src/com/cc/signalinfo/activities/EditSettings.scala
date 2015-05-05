@@ -26,17 +26,19 @@
  */
 package com.cc.signalinfo.activities
 
-import android.annotation.TargetApi
-import android.content.Intent
-import android.os.Build
-import android.os.Bundle
-import com.actionbarsherlock.app.ActionBar
-import com.actionbarsherlock.app.SherlockPreferenceActivity
-import com.actionbarsherlock.view.MenuItem
-import com.cc.signalinfo.R
 import java.util.{List ⇒ Jlist}
+
+import android.annotation.TargetApi
+import android.content.{Context, Intent}
+import android.os.{Build, Bundle}
 import android.preference.PreferenceActivity
+import android.support.v7.widget._
+import android.util.{AttributeSet, TypedValue}
+import android.view.{LayoutInflater, MenuItem, View, ViewGroup}
+import android.widget.{LinearLayout, ListView}
+import com.cc.signalinfo.R
 import com.cc.signalinfo.fragments.SettingsFragment
+import com.cc.signalinfo.util.PimpMyAndroid.{PimpMyActivity, PimpMyToolbar}
 
 /**
  * Routes to the specified preference screen based on user input
@@ -47,57 +49,102 @@ import com.cc.signalinfo.fragments.SettingsFragment
  * @author Wes Lanning
  * @version 2013-05-09
  */
-class EditSettings extends SherlockPreferenceActivity
-{
-    override def onCreate(savedInstanceState: Bundle) {
-        super.onCreate(savedInstanceState)
-        val actionBar: ActionBar = getSupportActionBar
-        actionBar.setDisplayHomeAsUpEnabled(true)
+class EditSettings extends PreferenceActivity {
 
-        // for crappy old devices, load them without headers
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
-            //noinspection ScalaDeprecation
-            addPreferencesFromResource(R.xml.main_prefs)
-        }
+  override def onCreateView(name: String, context: Context, attrs: AttributeSet): View = {
+    val view = super.onCreateView(name, context, attrs)
+    if (view != null) return view
 
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+      name match {
+        case "EditText" ⇒ new AppCompatEditText(this, attrs)
+        case "Spinner" ⇒ new AppCompatSpinner(this, attrs)
+        case "CheckBox" ⇒ new AppCompatCheckBox(this, attrs)
+        case "RadioButton" ⇒ new AppCompatRadioButton(this, attrs)
+        case "CheckedTextView" ⇒ new AppCompatCheckedTextView(this, attrs)
+        case _ ⇒
+      }
+    }
+    null
+  }
+
+  override def onPostCreate(savedInstanceState: Bundle) {
+    super.onPostCreate(savedInstanceState)
+    var actionBar: Toolbar = null
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.ICE_CREAM_SANDWICH) {
+      val root = findViewById(android.R.id.list).getParent.getParent.getParent.asInstanceOf[LinearLayout]
+      actionBar = LayoutInflater.from(this).inflate(R.layout.settings_toolbar, root, false).asInstanceOf[Toolbar]
+      root.addView(actionBar, 0) // insert at top
+    }
+    else {
+      val root = this.find[ViewGroup](android.R.id.content)
+      val content = root.getChildAt(0).asInstanceOf[ListView]
+      root.removeAllViews()
+      actionBar = LayoutInflater.from(this).inflate(R.layout.settings_toolbar, root, false).asInstanceOf[Toolbar]
+
+      val tv = new TypedValue
+
+      val height = if (getTheme.resolveAttribute(R.attr.actionBarSize, tv, true)) {
+        TypedValue.complexToDimensionPixelSize(tv.data, getResources.getDisplayMetrics)
+      }
+      else {
+        actionBar.getHeight
+      }
+      content.setPadding(0, height, 0, 0)
+      root.addView(content)
+      root.addView(actionBar)
     }
 
-    /**
-     * For devices Android 3.0+, load the preference header layout
-     *
-     * @param target - the headers to load
-     */
-    @TargetApi(11)
-    override def onBuildHeaders(target: Jlist[PreferenceActivity.Header]) {
-        loadHeadersFromResource(R.xml.preference_headers, target)
+    actionBar.navClick((view: View) ⇒ {
+      EditSettings.this.finish()
+
+    })
+
+    // for crappy old devices, load them without headers
+    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.HONEYCOMB) {
+      //noinspection ScalaDeprecation
+      addPreferencesFromResource(R.xml.main_prefs)
     }
 
-    /**
-     * Android 4.4+ requires this
-     *
-     * @param fragmentName - frag to validate
-     * @return
-     */
-    override def isValidFragment (fragmentName: String): Boolean = {
-        if (classOf[SettingsFragment].getName.equals(fragmentName)) {
-            return true
-        }
-        false
-    }
+  }
 
-    /**
-     * Called to populate the ActionBar.
-     *
-     * @param item - item to populate
-     * @return true on create
-     */
-    override def onOptionsItemSelected(item: MenuItem): Boolean = {
-        item.getItemId match {
-            case android.R.id.home ⇒
-                val intent: Intent = new Intent(this, classOf[MainActivity])
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-                startActivity(intent)
-        }
-        true
+  /**
+   * For devices Android 3.0+, load the preference header layout
+   *
+   * @param target - the headers to load
+   */
+  @TargetApi(11)
+  override def onBuildHeaders(target: Jlist[PreferenceActivity.Header]) {
+    loadHeadersFromResource(R.xml.preference_headers, target)
+  }
+
+  /**
+   * Android 4.4+ requires this
+   *
+   * @param fragmentName - frag to validate
+   * @return
+   */
+  override def isValidFragment(fragmentName: String): Boolean = {
+    if (classOf[SettingsFragment].getName.equals(fragmentName)) {
+      return true
     }
+    false
+  }
+
+/*  /**
+   * Called to populate the ActionBar.
+   *
+   * @param item - item to populate
+   * @return true on create
+   */
+  override def onOptionsItemSelected(item: MenuItem): Boolean = {
+    item.getItemId match {
+      case android.R.id.home ⇒
+        val intent: Intent = new Intent(this, classOf[MainActivity])
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        startActivity(intent)
+    }
+    true
+  }*/
 }

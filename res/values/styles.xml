@@ -1,7 +1,7 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="MainTheme" parent="Theme.Sherlock">
+    <style name="MainTheme" parent="Theme.AppCompat">
         <!--<item name="scrollViewStyle">@android:style/Widget.ScrollView</item>-->
         <!-- Customize your theme here. -->
     </style>

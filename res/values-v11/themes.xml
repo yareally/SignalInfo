@@ -1,5 +1,5 @@
 <resources>
-    <style name="MainTheme" parent="Theme.Sherlock">
+    <style name="MainTheme" parent="Theme.AppCompat">
         <!--<item name="scrollViewStyle">@android:style/Widget.ScrollView</item>-->
         <!-- was parent="@android:style/Theme.Holo" -->
     </style>

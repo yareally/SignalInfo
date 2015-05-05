@@ -29,9 +29,10 @@
     <orderEntry type="module" module-name="gridlayout" />
     <orderEntry type="module" module-name="cwac-loaderex" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="module" module-name="actionbarsherlock" />
+    <orderEntry type="module" module-name="appcompat" />
     <orderEntry type="library" name="annotations" level="project" />
     <orderEntry type="library" name="scala-async" level="project" />
     <orderEntry type="library" name="scala-sdk-2.11.6 - min" level="application" />
+    <orderEntry type="library" name="android-support-v7-appcompat" level="project" />
   </component>
 </module>

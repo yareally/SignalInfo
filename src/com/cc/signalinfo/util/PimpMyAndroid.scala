@@ -4,6 +4,7 @@ import android.app.{AlertDialog, Dialog, Activity}
 import android.os.Bundle
 import android.support.v4.app.LoaderManager.LoaderCallbacks
 import android.support.v4.content.Loader
+import android.support.v7.widget.Toolbar
 import android.view.View
 import android.view.View.OnClickListener
 import android.widget.{TextView, Button}
@@ -45,6 +46,12 @@ object PimpMyAndroid {
       view.setText(txtId)
       view
     }
+  }
+
+  implicit class PimpMyToolbar(val a: Toolbar) extends AnyVal {
+    def navClick(funct: View ⇒ Unit) = a.setNavigationOnClickListener(new OnClickListener {
+      override def onClick(v: View): Unit = funct(v)
+    })
   }
 
   implicit class PimpMyActivity(val a: Activity) extends AnyVal {
