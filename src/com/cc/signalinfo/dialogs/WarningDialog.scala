@@ -32,6 +32,7 @@ import android.view.View
 import android.widget.{CheckBox, CompoundButton}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.config.AppSetup
+import com.cc.signalinfo.dialogs.interfaces.CallBack
 import com.cc.signalinfo.util.PimpMyAndroid.PimpMyView
 import com.cc.signalinfo.util.{AppHelpers}
 
@@ -41,7 +42,7 @@ import com.cc.signalinfo.util.{AppHelpers}
  * @author Wes Lanning
  * @version 2012-12-21
  */
-class WarningDialog
+class WarningDialog(callBack: CallBack)
   extends DialogFragment
           with DialogInterface.OnShowListener
           with DialogInterface.OnClickListener
@@ -52,7 +53,7 @@ class WarningDialog
     super.onCreateDialog(savedInstanceState)
     form = getActivity.getLayoutInflater.inflate(R.layout.warning_dialog, null)
     val builder: AlertDialog.Builder = new AlertDialog.Builder(getActivity)
-    form.findView[CheckBox](R.id.dialogNoPrompt).setOnCheckedChangeListener(this)
+    form.find[CheckBox](R.id.dialogNoPrompt).setOnCheckedChangeListener(this)
 
     val ad: AlertDialog = builder.setTitle(R.string.warningDialogTitle)
                           .setView(form)
@@ -66,9 +67,7 @@ class WarningDialog
   }
 
   def onClick(dialogInterface: DialogInterface, i: Int) {
-    if (AppHelpers.userConsent(getActivity.getPreferences(Context.MODE_PRIVATE))) {
-      AppHelpers.launchTestingSettings(getActivity)
-    }
+    callBack.setState(AppHelpers.userConsent(getActivity.getPreferences(Context.MODE_PRIVATE)))
   }
 
   def onShow(dialog: DialogInterface) {

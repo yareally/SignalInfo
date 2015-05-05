@@ -30,7 +30,7 @@ object PimpMyAndroid {
      * @tparam T - the type associated with the widget (Button, TextView, etc)
      * @return the found view with the desired type
      */
-    def findView[T](id: Int): T = {
+    def find[T](id: Int): T = {
       view.findViewById(id).asInstanceOf[T]
     }
   }
@@ -55,7 +55,7 @@ object PimpMyAndroid {
      * @tparam T - the type associated with the widget (Button, TextView, etc)
      * @return the found view with the desired type
      */
-    def findView[T](id: Int): T = {
+    def find[T](id: Int): T = {
       a.findViewById(id).asInstanceOf[T]
     }
 

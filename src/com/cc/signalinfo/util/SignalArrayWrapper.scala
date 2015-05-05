@@ -25,10 +25,11 @@
  */
 package com.cc.signalinfo.util
 
+import java.util.regex.Pattern
+
 import android.telephony.SignalStrength
 import android.util.Log
 import com.cc.signalinfo.config.AppSetup
-import java.util.regex.Pattern
 
 /**
  * Wraps the raw signal data in order to filter
@@ -39,17 +40,16 @@ import java.util.regex.Pattern
  * @author Wes Lanning
  * @version 2013-05-10
  */
-object SignalArrayWrapper
-{
-    final         val EMPTY_SIGNAL_ARRAY    = new Array[String](0)
-    private final val FILTER_INVALID_SIGNAL = Pattern.compile("-1\\b|-?99\\b|0x[\\d]+|-?[4-9][0-9]{3,}|-?[0-9]{4,}")
-    private final val FILTER_NON_NUM        = Pattern.compile("\\s?[^- \\d]+", Pattern.CASE_INSENSITIVE)
-    private final val FILTER_SIGNAL         = Pattern.compile("^0|^-1|^-?99|^-?[1-9][0-9]{3,}")
-    private final val ICS_ARRAY_SIZE        = 12
-    private final val ICS_BIG_ARRAY_SIZE    = 14
-    private final val LEGACY_BIG_ARRAY_SIZE = 10
-    private final val SPACE_STR             = Pattern.compile(" ")
-    private final val TAG                   = classOf[SignalArrayWrapper].getSimpleName
+object SignalArrayWrapper {
+  private final lazy    val EMPTY_SIGNAL_ARRAY    = new Array[String](0)
+  private final val FILTER_INVALID_SIGNAL = Pattern.compile("-1\\b|-?99\\b|0x[\\d]+|-?[4-9][0-9]{3,}|-?[0-9]{4,}")
+  private final val FILTER_NON_NUM        = Pattern.compile("\\s?[^- \\d]+", Pattern.CASE_INSENSITIVE)
+  private final val FILTER_SIGNAL         = Pattern.compile("^0|^-1|^-?99|^-?[1-9][0-9]{3,}")
+  private final val ICS_ARRAY_SIZE        = 12
+  private final val ICS_BIG_ARRAY_SIZE    = 14
+  private final val LEGACY_BIG_ARRAY_SIZE = 10
+  private final val SPACE_STR             = Pattern.compile(" ")
+  private final val TAG                   = classOf[SignalArrayWrapper].getSimpleName
 }
 
 /**
@@ -58,81 +58,71 @@ object SignalArrayWrapper
  *
  * @param signalArray - contains the raw signal info reported from the system
  */
-class SignalArrayWrapper(signalArray: String)
-{
-    import SignalArrayWrapper._
+class SignalArrayWrapper(signalArray: String) {
 
-    private val rawData       = signalArray
-    private var filteredArray = EMPTY_SIGNAL_ARRAY
+  import SignalArrayWrapper._
 
-    /**
-     * Wraps the raw signal data array produced by the system in order
+  lazy    val rawData       = signalArray
+  private var filteredArray = EMPTY_SIGNAL_ARRAY
 
-     *
-    to return a uniform signal array that follows ICS+ standards.
-     *
-     * @param signalStrength - contains the raw signal info reported from the system
-     */
-    def this(signalStrength: SignalStrength) {
-        this(signalStrength.toString)
+  /**
+   * Wraps the raw signal data array produced by the system in order
+
+   *
+  to return a uniform signal array that follows ICS+ standards.
+   *
+   * @param signalStrength - contains the raw signal info reported from the system
+   */
+  def this(signalStrength: SignalStrength) {
+    this(signalStrength.toString)
+  }
+
+  /**
+   * Returns a copy (not a reference) of the signal array after
+   * being reformatted to meet ICS+ expectations.
+   *
+   * @return the processed signal array in the form one expects in ICS+
+   */
+  def getFilteredArray: Array[String] = {
+    val arrayCopy = new Array[String](filteredArray.length)
+    System.arraycopy(filteredArray, 0, arrayCopy, 0, arrayCopy.length)
+    arrayCopy
+  }
+
+  /**
+   * Parses, filters and returns a copy (not a reference) of the signal array after
+   * being reformatted to meet ICS+ expectations.
+   *
+   * @return the processed signal array in the form one expects in ICS+
+   */
+  def filterSignals(rawData: String): Array[String] = {
+    // remove all invalid signals and put in our default string instead to make life easier
+
+    Log.d(TAG, s"rawData: $rawData")
+    var filteredData: String = FILTER_NON_NUM.matcher(rawData).replaceAll("").trim
+    Log.d(TAG, s"filtered after 1st regex: $filteredData")
+
+    filteredData = FILTER_INVALID_SIGNAL.matcher(filteredData).replaceAll(AppSetup.DEFAULT_TXT)
+    Log.d(TAG, s"filtered after 2nd regex: $filteredData")
+
+    val splitSignals: Array[String] = SPACE_STR.split(filteredData)
+    Log.d(TAG, s"splitsignals: ${splitSignals.toString }")
+
+    // TODO: fix stupid devices like Huawai and LG that do LTE_RSSI = LTE_Signal_Strength
+    var extendedSignalData = new Array[String](ICS_BIG_ARRAY_SIZE)
+    extendedSignalData = Arrays.copyOf(splitSignals, extendedSignalData.length)
+
+    if (splitSignals.length < extendedSignalData.length) {
+      java.util.Arrays.fill(
+        extendedSignalData.asInstanceOf[Array[Object]],
+        splitSignals.length,
+        extendedSignalData.length,
+        AppSetup.DEFAULT_TXT)
     }
-
-    /**
-     * Returns a copy (not a reference) of the signal array after
-     * being reformatted to meet ICS+ expectations.
-     *
-     * @return the processed signal array in the form one expects in ICS+
-     */
-    def getFilteredArray: Array[String] = {
-        val arrayCopy = new Array[String](filteredArray.length)
-        System.arraycopy(filteredArray, 0, arrayCopy, 0, arrayCopy.length)
-        arrayCopy
-    }
-
-    /**
-     * Parses, filters and returns a copy (not a reference) of the signal array after
-     * being reformatted to meet ICS+ expectations.
-     *
-     * @return the processed signal array in the form one expects in ICS+
-     */
-    def filterSignals(rawData: String): Array[String] = {
-        // remove all invalid signals and put in our default string instead to make life easier
-
-        Log.d(TAG, s"rawData: $rawData")
-        var filteredData: String = FILTER_NON_NUM.matcher(rawData).replaceAll("").trim
-        Log.d(TAG, s"filtered after 1st regex: $filteredData")
-
-        filteredData = FILTER_INVALID_SIGNAL.matcher(filteredData).replaceAll(AppSetup.DEFAULT_TXT)
-        Log.d(TAG, s"filtered after 2nd regex: $filteredData")
-
-        val splitSignals: Array[String] = SPACE_STR.split(filteredData)
-        Log.d(TAG, s"splitsignals: ${splitSignals.toString}")
-
-        // TODO: fix stupid devices like Huawai and LG that do LTE_RSSI = LTE_Signal_Strength
-        var extendedSignalData = new Array[String](ICS_BIG_ARRAY_SIZE)
-        extendedSignalData = Arrays.copyOf(splitSignals, extendedSignalData.length)
-
-        if (splitSignals.length < extendedSignalData.length) {
-            java.util.Arrays.fill(
-                extendedSignalData.asInstanceOf[Array[Object]],
-                splitSignals.length,
-                extendedSignalData.length,
-                AppSetup.DEFAULT_TXT)
-        }
-        Log.d(TAG, s"Extended Filtered Signal Data: ${extendedSignalData.toString}")
-        filteredArray = extendedSignalData
-        extendedSignalData
-    }
-
-    /**
-     * Gets the pre-filtered data from the signal array.
-     * Useful really only for debugging/testing purposes.
-     *
-     * @return raw signal data
-     */
-    def getRawData: String = {
-        rawData
-    }
+    Log.d(TAG, s"Extended Filtered Signal Data: ${extendedSignalData.toString }")
+    filteredArray = extendedSignalData
+    extendedSignalData
+  }
 }
 
 

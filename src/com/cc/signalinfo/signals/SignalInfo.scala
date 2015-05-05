@@ -26,40 +26,40 @@ object SignalInfo
      * @param tm - instance of telephonyManager
      * @return the given name for the network type the device is using currently for data
      */
-    def getConnectedNetworkString(tm: TelephonyManager): String = {
+    def networkType(tm: TelephonyManager): String = {
         tm.getNetworkType match {
             case NETWORK_TYPE_CDMA ⇒
-                return "CDMA"
+                "CDMA"
             case NETWORK_TYPE_EDGE ⇒
-                return "EDGE"
+                "EDGE"
             case NETWORK_TYPE_EVDO_0 ⇒
-                return "Ev-DO rev. 0"
+                "Ev-DO rev. 0"
             case NETWORK_TYPE_EVDO_A ⇒
-                return "Ev-DO rev. A"
+                "Ev-DO rev. A"
             case NETWORK_TYPE_GPRS ⇒
-                return "GPRS"
+                "GPRS"
             case NETWORK_TYPE_HSDPA ⇒
-                return "HSDPA"
+                "HSDPA"
             case NETWORK_TYPE_HSUPA ⇒
-                return "HSUPA"
+                "HSUPA"
             case NETWORK_TYPE_HSPA ⇒
-                return "HSPA"
+                "HSPA"
             case NETWORK_TYPE_1xRTT ⇒
-                return "1xRTT"
+                "1xRTT"
             case NETWORK_TYPE_UMTS ⇒
-                return "UMTS"
+                "UMTS"
             case NETWORK_TYPE_IDEN ⇒
-                return "iDen"
+                "iDen"
             case NETWORK_TYPE_EVDO_B ⇒
-                return "Ev-DO rev. B"
+                "Ev-DO rev. B"
             case NETWORK_TYPE_LTE ⇒
-                return "LTE"
+                "LTE"
             case NETWORK_TYPE_EHRPD ⇒
-                return "eHRPD"
+                "eHRPD"
             case NETWORK_TYPE_HSPAP ⇒
-                return "HSPA+"
+                "HSPA+"
             case _ ⇒
-                return "Unknown"
+                "Unknown"
         }
     }
 
@@ -277,7 +277,7 @@ abstract class SignalInfo(protected val networkType: NetworkType,
      * @return the given name for the network type the device is using currently for data
      */
     def getConnectedNetworkString: String = {
-        SignalInfo.getConnectedNetworkString(tm)
+        SignalInfo.networkType(tm)
     }
 
     /**
@@ -298,15 +298,15 @@ abstract class SignalInfo(protected val networkType: NetworkType,
     def getDeviceTypeString: String = {
         tm.getPhoneType match {
             case PHONE_TYPE_GSM ⇒
-                return "GSM Device"
+                "GSM Device"
             case PHONE_TYPE_CDMA ⇒
-                return "GSM Device"
+                "GSM Device"
             case PHONE_TYPE_NONE ⇒
-                return "No Cellular Radio"
+                "No Cellular Radio"
             case PHONE_TYPE_SIP ⇒
-                return "Voice over IP (VoIP)"
+                "Voice over IP (VoIP)"
             case _ ⇒
-                return "No Cellular Radio"
+                "No Cellular Radio"
         }
     }
 

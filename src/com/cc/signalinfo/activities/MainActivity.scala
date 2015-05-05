@@ -29,12 +29,15 @@ import java.util.{Collections, EnumMap ⇒ Emap, Map ⇒ Jmap}
 import android.content.res.{Resources, TypedArray}
 import android.content.{Context, SharedPreferences}
 import android.os.{Build, Bundle}
+import android.support.v4.app
+import android.support.v4.app.FragmentActivity
 import android.telephony.{PhoneStateListener, SignalStrength, TelephonyManager}
 import android.view.{View, WindowManager}
 import android.widget.{TextView, Toast}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.activities.MainActivity._
 import com.cc.signalinfo.config.AppSetup.DEFAULT_TXT
+import com.cc.signalinfo.dialogs.interfaces.CallBack
 import com.cc.signalinfo.dialogs.{NoSupportDialog, WarningDialog}
 import com.cc.signalinfo.enums.{NetworkType, Signal}
 import com.cc.signalinfo.signals.{ISignal, SignalInfo}
@@ -76,10 +79,8 @@ class MainActivity extends BaseActivity {
    *
    * @return
    */
-  private def Tm = {
-    if (tm == null) {
-      tm = this.getSysService[TelephonyManager](Context.TELEPHONY_SERVICE)
-    }
+  private def Tm: TelephonyManager = {
+    tm = if (tm == null) this.getSysService[TelephonyManager](Context.TELEPHONY_SERVICE) else tm
     tm
   }
 
@@ -113,7 +114,11 @@ class MainActivity extends BaseActivity {
         AppHelpers.launchTestingSettings(this)
       }
       else {
-        new WarningDialog().show(getSupportFragmentManager, "Warning")
+        new WarningDialog(new CallBack {
+          override def setState(checked: Boolean) =
+            // if the user checked the box on the dialog, launch the activity
+            if (checked) AppHelpers.launchTestingSettings(MainActivity.this)
+        }).show(getSupportFragmentManager, "Warning")
       }
     })
   }
@@ -122,20 +127,21 @@ class MainActivity extends BaseActivity {
    * Set the phone model, OS version, carrier name on the screen
    */
   private def setPhoneInfo() {
-    setTextViewText(R.id.deviceName, s"${Build.MANUFACTURER} ${Build.MODEL}")
-    setTextViewText(R.id.deviceModel, s"${Build.PRODUCT}/${Build.DEVICE} (${Build.ID}) ")
-    setTextViewText(R.id.androidVersion,
-      String.format(getString(R.string.androidVersion),
+    this.find[TextView](R.id.deviceName).text(s"${Build.MANUFACTURER} ${Build.MODEL}")
+    this.find[TextView](R.id.deviceModel).text(s"${Build.PRODUCT}/${Build.DEVICE} (${Build.ID})")
+    this.find[TextView](R.id.androidVersion).text(
+      String.format(
+        getString(R.string.androidVersion),
         Build.VERSION.RELEASE,
         Build.VERSION.SDK_INT.asInstanceOf[java.lang.Integer]))
 
-    setTextViewText(R.id.carrierName, Tm.getNetworkOperatorName)
-    setTextViewText(R.id.buildHost, Build.HOST)
+    this.find[TextView](R.id.carrierName).text(Tm.getNetworkOperatorName)
+    this.find[TextView](R.id.buildHost).text(Build.HOST)
     setNetworkTypeText()
   }
 
   private def setNetworkTypeText() {
-    setTextViewText(R.id.networkType, SignalInfo.getConnectedNetworkString(Tm))
+    this.find[TextView](R.id.networkType).text(SignalInfo.networkType(Tm))
   }
 
   /**
@@ -145,7 +151,6 @@ class MainActivity extends BaseActivity {
    */
   private def setPreferences(sharedPreferences: SharedPreferences) {
     val relativeReadings = getString(R.string.relativeReading)
-
     val signalMeasure = sharedPreferences.getString(getString(R.string.signalFormatKey), relativeReadings)
 
     val keepScreenOn = sharedPreferences.getBoolean(
@@ -219,12 +224,12 @@ class MainActivity extends BaseActivity {
         if (!StringUtils.isNullOrEmpty(sigValue) && DEFAULT_TXT != sigValue) {
           // should we show the percentage along with the dBm?
           val signalPercent: String = if (dbOnly) "" else s"(${signal.getRelativeEfficiency(k, fudgeSignal)})"
-          v.setText(s"$sigValue $unit $signalPercent")
+          v.text(s"$sigValue $unit $signalPercent")
         }
       }
       catch {
         case ignored: Resources.NotFoundException ⇒
-          v.setText(DEFAULT_TXT)
+          v.text(DEFAULT_TXT)
       }
     }
     setNetworkTypeText()
@@ -245,7 +250,7 @@ class MainActivity extends BaseActivity {
         val id: Int = sigInfoIds.getResourceId(i, -1)
 
         if (id != -1) {
-          val currentView: TextView = this.findView[TextView](id)
+          val currentView = this.find[TextView](id)
           signalTextViewMap.put(values(i), currentView)
         }
       }
@@ -279,8 +284,8 @@ class MainActivity extends BaseActivity {
       val debugMapStrict: Jmap[String, String] =
         new SignalMapWrapper(debugInfo.getFilteredArray, Tm).getPercentSignalMap(adjustReadings = false)
 
-      setTextViewText(R.id.debugArray,
-        s"${debugInfo.getRawData}" +
+      this.find[TextView](R.id.debugArray)
+        .text(s"${debugInfo.rawData}" +
           s"\n\n ${debugInfo.getFilteredArray.mkString(",")}" +
           s"\n\n ${debugMapRelative.toString}" +
           s"\n\n ${debugMapStrict.toString}")

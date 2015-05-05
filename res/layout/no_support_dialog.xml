@@ -30,6 +30,8 @@
     android:layout_height="match_parent"
     android:fillViewport="true"
     android:scrollbars="vertical"
+    android:scrollbarAlwaysDrawVerticalTrack="true"
+    android:scrollbarFadeDuration="10000"
     tools:context=".MainActivity"
     android:orientation="vertical">
     <LinearLayout

@@ -83,13 +83,21 @@ class NoSupportDialog
     ad.getButton(DialogInterface.BUTTON_POSITIVE).setEnabled(false)
 
     new CountDownTimer(5000, 1000) {
-      override def onTick(millisUntilFinished: Long) =
-        // some shitty samsung devices (or their impatient users) decide to crash here. Probably due to:
-        // a) OMG TOO MUCH SHIT TO READ (100 or so chars == too much) ABOUT WHY I CAN'T ACCESS THIS...FUCK THIS (force out of the dialog and no longer attached)
-        // b) Samsung sucks (obvious, but some wacky shit going on when I launch a process with those devices)
-        // c) combination of a & b
-        // adding getActivity to getString may have fixed, but not sure yet
-        ad.getButton(DialogInterface.BUTTON_POSITIVE).setText(s"${getActivity.getString(android.R.string.ok) } (${millisUntilFinished / 1000 })")
+      override def onTick(millisUntilFinished: Long) = {
+        // The tl;dr Samsung device owners crowd end up crashing here.
+        // I didn't realize why since the mobile users that it happens on can't ever bother to email me (shocker).
+        // However, I eventually managed to replicate it by pretending my device is a locked down sucky Samsung device
+        // by throwing exceptions to reach the "Your device sucks and is locked down dialog"
+        // and then pretending I'm a super impatient user who doesn't like to wait 5 seconds and read some useful info.
+        // By hitting the back button repeatedly while the dialog is counting down
+        // it causes the dialog to come detached from the activity and crashes the entire app
+        // for a few users with short attention spans
+
+        // Checking if the activity is still attached to the dialog prevents crashes from users going
+        // "OMG TOO MUCH SHIT TO READ ABOUT WHY I CAN'T ACCESS THIS SHORCUT...FUCK THIS" (mashing back button out of the dialog)
+        val okTxt = if (getActivity == null) "OK" else getActivity.getString(android.R.string.ok)
+        ad.getButton(DialogInterface.BUTTON_POSITIVE).setText(s"$okTxt (${millisUntilFinished / 1000 })")
+      }
 
       override def onFinish() {
         ad.getButton(DialogInterface.BUTTON_POSITIVE).text(android.R.string.ok).setEnabled(true)
