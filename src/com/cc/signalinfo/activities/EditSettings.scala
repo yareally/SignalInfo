@@ -82,7 +82,6 @@ class EditSettings extends PreferenceActivity {
       val content = root.getChildAt(0).asInstanceOf[ListView]
       root.removeAllViews()
       actionBar = LayoutInflater.from(this).inflate(R.layout.settings_toolbar, root, false).asInstanceOf[Toolbar]
-
       val tv = new TypedValue
 
       val height = if (getTheme.resolveAttribute(R.attr.actionBarSize, tv, true)) {
@@ -106,7 +105,6 @@ class EditSettings extends PreferenceActivity {
       //noinspection ScalaDeprecation
       addPreferencesFromResource(R.xml.main_prefs)
     }
-
   }
 
   /**
@@ -131,20 +129,4 @@ class EditSettings extends PreferenceActivity {
     }
     false
   }
-
-/*  /**
-   * Called to populate the ActionBar.
-   *
-   * @param item - item to populate
-   * @return true on create
-   */
-  override def onOptionsItemSelected(item: MenuItem): Boolean = {
-    item.getItemId match {
-      case android.R.id.home ⇒
-        val intent: Intent = new Intent(this, classOf[MainActivity])
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        startActivity(intent)
-    }
-    true
-  }*/
 }

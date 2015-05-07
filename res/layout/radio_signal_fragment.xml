@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/radioSignalScrollView"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:grid="http://schemas.android.com/apk/res/com.cc.signalinfo"
@@ -25,7 +26,6 @@
 
             <com.google.android.gms.ads.AdView
                 android:id="@+id/adView"
-                android:visibility="gone"
                 ads:adSize="BANNER"
                 ads:adUnitId="@string/banner_ad_unit_id"
                 grid:layout_columnSpan="2"

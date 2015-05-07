@@ -28,9 +28,11 @@ import java.util.{Collections, EnumMap ⇒ Emap, Map ⇒ Jmap}
 import android.content.res.{Resources, TypedArray}
 import android.content.{Context, SharedPreferences}
 import android.os.{Build, Bundle}
+import android.support.v4.view.WindowCompat
 import android.telephony.{PhoneStateListener, SignalStrength, TelephonyManager}
-import android.view.{View, WindowManager}
-import android.widget.{TextView, Toast}
+import android.view.ViewTreeObserver.OnScrollChangedListener
+import android.view.{ViewTreeObserver, Window, View, WindowManager}
+import android.widget.{ScrollView, TextView, Toast}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.activities.MainActivity._
 import com.cc.signalinfo.config.AppSetup.DEFAULT_TXT
@@ -40,7 +42,6 @@ import com.cc.signalinfo.signals.{ISignal, SignalInfo}
 import com.cc.signalinfo.util.PimpMyAndroid._
 import com.cc.signalinfo.util._
 import com.commonsware.cwac.loaderex.acl.SharedPreferencesLoader
-
 
 /**
  * Make sure to add "android.permission.CHANGE_NETWORK_STATE"
@@ -96,6 +97,20 @@ class MainActivity extends BaseActivity {
         preferences = sharedPreferences
         setPreferences(sharedPreferences)
       })
+
+
+    /*this.find[ScrollView](R.id.radioSignalScrollView)
+    .getViewTreeObserver.addOnScrollChangedListener(new OnScrollChangedListener {
+      override def onScrollChanged() {
+        val y: Float = MainActivity.this.find[ScrollView](R.id.radioSignalScrollView).getScrollY
+
+        if (y >= actionBarHeight && actionBar.isShowing) {
+          actionBar.hide()
+        } else if (y == 0 && !actionBar.isShowing) {
+          actionBar.show()
+        }
+      }
+    })*/
 
     getSupportLoaderManager.initLoader(0, null, loader)
     initClickEvents()

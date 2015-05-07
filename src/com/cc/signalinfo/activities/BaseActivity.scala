@@ -4,8 +4,10 @@ import java.util.Calendar
 
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.TypedArray
 import android.os.{Build, Bundle}
 import android.preference.PreferenceActivity
+import android.support.v4.view.WindowCompat
 import android.support.v7.app.ActionBarActivity
 import android.support.v7.app.ActionBar
 import android.util.Log
@@ -18,7 +20,7 @@ import com.cc.signalinfo.config.AppSetup
 import com.cc.signalinfo.config.AppSetup.enableStrictMode
 import com.cc.signalinfo.fragments.SettingsFragment
 import com.cc.signalinfo.util.PimpMyAndroid.{PimpMyActivity, PimpMyTextView}
-import com.google.android.gms.ads.{AdRequest, AdView}
+import com.google.android.gms.ads.{InterstitialAd, AdListener, AdRequest, AdView}
 
 /**
  * @author Wes Lanning
@@ -31,6 +33,7 @@ object BaseActivity {
 class BaseActivity extends ActionBarActivity {
   import BaseActivity.TAG
   protected var actionBar: ActionBar = null
+  protected var actionBarHeight: Float = 0f
 
   /**
    * Initialize the app.
@@ -38,10 +41,9 @@ class BaseActivity extends ActionBarActivity {
    * @param savedInstanceState - umm... the saved instance state
    */
   protected def onCreateApp(savedInstanceState: Bundle) {
+    //getWindow.requestFeature(WindowCompat.FEATURE_ACTION_BAR_OVERLAY)
     super.onCreate(savedInstanceState)
     enableStrictMode()
-    actionBar = getSupportActionBar
-    actionBar.setHomeButtonEnabled(true)
   }
 
   /**
@@ -53,12 +55,24 @@ class BaseActivity extends ActionBarActivity {
   protected def onCreate(layout: Int, savedInstanceState: Bundle) {
     this.onCreateApp(savedInstanceState)
     setContentView(layout)
+//    val styledAttrs: TypedArray = getTheme.obtainStyledAttributes(Array[Int](android.support.v7.appcompat.R.attr.actionBarSize))
+//    actionBarHeight = styledAttrs.getDimension(0, 0)
+//    styledAttrs.recycle()
+    actionBar = getSupportActionBar
+    actionBar.setHomeButtonEnabled(true)
 
     if (!AppSetup.DEBUG_BUILD) {
       val ad: AdView = this.find[AdView](R.id.adView)
+/*      val iad = new InterstitialAd(this)
+      iad.setAdListener(new AdListener {
+        override def onAdLoaded() {
+          super.onAdLoaded()
+        }
+      })*/
+
       val adRequest = new AdRequest.Builder().build()
       ad.loadAd(adRequest)
-      ad.setVisibility(View.VISIBLE)
+      // ad.setVisibility(View.VISIBLE)
     }
     formatFooter()
   }
