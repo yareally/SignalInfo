@@ -16,8 +16,7 @@ Android Device. Not all information may be available depending on the OEM/OS
 version of the device. I don't consider all of the code to be entirely "idiomatic Scala" due to performance considerations on Android
 and also time needed to refine the code to be less "Java like."
 
-However, the code is still more concise and I give some examples of how to cut down
-on some of the Java noise by using techniques such as implicits for anonymous Java methods:
+However, the code is still more concise and I give some examples of how to cut down on some of the Java noise by using techniques such as using enrich/extension (a.k.a. "Pimp my Library") methods for ridiculous Java Boilerplate:
 
 ```scala
 implicit class PimpMyTextView(val view: TextView) extends AnyVal {
