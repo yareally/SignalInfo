@@ -72,7 +72,8 @@ class BaseActivity extends ActionBarActivity {
 
       val adRequest = new AdRequest.Builder().build()
       ad.loadAd(adRequest)
-      // ad.setVisibility(View.VISIBLE)
+    } else {
+      this.find[AdView](R.id.adView).setVisibility(View.GONE)
     }
     formatFooter()
   }
