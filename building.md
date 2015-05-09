@@ -5,7 +5,7 @@ Although this is an opensource project, it's not a project I have gone out of my
 ### However, for anyone that does wish to build it, here are some tips:
 
 1. Scala 2.11 is required. Yes, there is a Java branch if you want to build that instead. However, I don't support it anymore and you're on your own for building it. If you have questions about building the Scala version and your first question isn't "How do I build this for Eclipse", then feel free to ask :)
-2. If you are having troubles with your IDE of choice, use Intellij IDEA (the stable version). That is what I use and I cannot offer IDE specific help otherwise. Will it build in Android Studio? Maybe, I don't know and don't care to find out really.
+2. If you are having troubles with your IDE of choice, use Intellij IDEA (the stable version of Ultimate or Community). That is what I use and I cannot offer IDE specific help otherwise. Will it build in Android Studio? Maybe, I don't know and don't care to find out really.
 4. The following dependencies are needed (all jars are under library directory):
   * scala-async.jar - For async stuff
   * android-support-v4.jar
