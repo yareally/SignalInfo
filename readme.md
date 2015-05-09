@@ -1,10 +1,10 @@
 # Advanced Signal Status
 
-![app image](misc/img/2015-05-09 04.30.27.png)
-
 * Language Used: ~~Java~~ Scala
 * Requires: Android 2.3+
 * License: MIT
+
+![app image](misc/img/2015-05-09 04.30.27.png)
 
 ## NOTE
 
