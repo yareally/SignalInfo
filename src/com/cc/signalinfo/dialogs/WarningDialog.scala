@@ -35,13 +35,11 @@ import com.cc.signalinfo.config.AppSetup
 import com.cc.signalinfo.util.PimpMyAndroid.PimpMyView
 import com.cc.signalinfo.util.{AppHelpers}
 
-
-
 /**
  * @author Wes Lanning
  * @version 2012-12-21
  */
-class WarningDialog(callback: Boolean ⇒ Unit)
+class WarningDialog
   extends DialogFragment
           with DialogInterface.OnShowListener
           with DialogInterface.OnClickListener
@@ -50,6 +48,7 @@ class WarningDialog(callback: Boolean ⇒ Unit)
 
   override def onCreateDialog(savedInstanceState: Bundle): Dialog = {
     super.onCreateDialog(savedInstanceState)
+
     form = getActivity.getLayoutInflater.inflate(R.layout.warning_dialog, null)
     val builder: AlertDialog.Builder = new AlertDialog.Builder(getActivity)
     form.find[CheckBox](R.id.dialogNoPrompt).setOnCheckedChangeListener(this)
@@ -66,7 +65,8 @@ class WarningDialog(callback: Boolean ⇒ Unit)
   }
 
   def onClick(dialogInterface: DialogInterface, i: Int) {
-    callback(AppHelpers.userConsent(getActivity.getPreferences(Context.MODE_PRIVATE)))
+    if (AppHelpers.userConsent(getActivity.getPreferences(Context.MODE_PRIVATE)))
+      AppHelpers.launchTestingSettings(getActivity)
   }
 
   def onShow(dialog: DialogInterface) {

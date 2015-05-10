@@ -26,12 +26,13 @@ package com.cc.signalinfo.activities
 
 import java.util.{Collections, EnumMap ⇒ Emap, Map ⇒ Jmap}
 import android.content.res.{Resources, TypedArray}
-import android.content.{Context, SharedPreferences}
+import android.content.{Intent, Context, SharedPreferences}
 import android.os.{Build, Bundle}
 import android.support.v4.view.WindowCompat
 import android.telephony.{PhoneStateListener, SignalStrength, TelephonyManager}
 import android.view.ViewTreeObserver.OnScrollChangedListener
 import android.view.{ViewTreeObserver, Window, View, WindowManager}
+import android.support.v7.widget
 import android.widget.{ScrollView, TextView, Toast}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.activities.MainActivity._
@@ -117,16 +118,18 @@ class MainActivity extends BaseActivity {
     setPhoneInfo()
   }
 
+  override def onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+
+  }
+
   def initClickEvents() {
     // for when the additional area setting button is pressed
     findViewById(R.id.additionalInfo).click((view: View) ⇒ {
       if (AppHelpers.userConsent(getPreferences(Context.MODE_PRIVATE))) {
-        AppHelpers.launchTestingSettings(this)
+        AppHelpers.launchTestingSettings(MainActivity.this)
       }
       else {
-        new WarningDialog((checked: Boolean) ⇒ {
-          if (checked) AppHelpers.launchTestingSettings(MainActivity.this)
-        }).show(getSupportFragmentManager, "Warning")
+        new WarningDialog().show(getSupportFragmentManager, "Warning")
       }
     })
   }
