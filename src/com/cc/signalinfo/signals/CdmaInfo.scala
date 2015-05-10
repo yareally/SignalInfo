@@ -63,8 +63,7 @@ class CdmaInfo(tm: TelephonyManager, pSignals: Jmap[Signal, String])
      * @return true if enabled
      */
     def enabled: Boolean = {
-        (!StringUtils.isNullOrEmpty(signals.get(Signal.CDMA_RSSI))
-            || !StringUtils.isNullOrEmpty(signals.get(Signal.EVDO_RSSI)))
+        SignalInfo.network(tm).equals(NetworkType.CDMA)
     }
 }
 
