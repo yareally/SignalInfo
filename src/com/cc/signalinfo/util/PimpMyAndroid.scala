@@ -73,7 +73,7 @@ object PimpMyAndroid {
      * @tparam T - the explicit type for the service
      * @return the system service
      */
-    def getSysService[T](serviceName: String): T = {
+    def service[T](serviceName: String): T = {
       a.getSystemService(serviceName).asInstanceOf[T]
     }
   }
@@ -107,7 +107,7 @@ object PimpMyAndroid {
        */
       override def onCreateLoader(i: Int, bundle: Bundle): Loader[T] = funct(i, bundle)
 
-      override def onLoaderReset(loader: Loader[T]): Unit = funct1(loader)
+      override def onLoaderReset(loader: Loader[T]): Unit = {}
 
       /**
        * After the preferences have been loaded, do the stuff here

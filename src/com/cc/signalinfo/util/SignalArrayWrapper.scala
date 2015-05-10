@@ -109,8 +109,7 @@ class SignalArrayWrapper(signalArray: String) {
     Log.d(TAG, s"splitsignals: ${splitSignals.toString }")
 
     // TODO: fix stupid devices like Huawai and LG that do LTE_RSSI = LTE_Signal_Strength
-    var extendedSignalData = new Array[String](ICS_BIG_ARRAY_SIZE)
-    extendedSignalData = Arrays.copyOf(splitSignals, extendedSignalData.length)
+    val extendedSignalData = Arrays.copyOf(splitSignals, new Array[String](ICS_BIG_ARRAY_SIZE).length)
 
     if (splitSignals.length < extendedSignalData.length) {
       java.util.Arrays.fill(

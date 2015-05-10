@@ -44,42 +44,27 @@
 
     <!-- === signal reading unit measurements === -->
 
-    <!-- decibel-milliwatts (also the default signal measurement) -->
-    <string name="dBm">db</string>
-    <!-- milliwatts -->
-    <string name="mW">mW</string>
-    <!-- microWatts -->
-    <string name="µW">µW</string>
-
     <!-- Display related preferences -->
-    <string name="displayPreferencesTitle">paramètres d\'affichage</string>
-    <string name="screenOnTitle">se garder allume l\'ecran</string>
-    <string name="keepScreenOnKey">keep_screen_on</string>
+    <string name="displayPreferencesTitle">Paramètres d\'affichage</string>
+    <string name="screenOnTitle">Se garder allume l\'ecran</string>
     <string name="screenOnSummary">Garder l\'écran si app se concentre</string>
 
     <!-- Summary of what each displayed signal type does under preferences -->
     <string formatted="false" name="signalTypeSummary">Pourcentage stricte est basée sur des plages définies par le 3GPP. Pourcentage rajusté est ajustée pour votre opérateur. 100% = le mieux, 0% = pas de signal
     </string>
 
-    <!-- === Drop down text strings for what signal type to display === -->
-    <string name="signalFormatKey">signal_type</string>
-
     <!-- Used for the text in the drop down list for selecting signal type to display -->
-    <string name="signalTypeTitle">choisir le format d\'affichage de signal</string>
+    <string name="signalTypeTitle">Choisir le format d\'affichage de signal</string>
     <string name="dbReadingOnly">Decibels (dBm) Only (default)</string>
     <string name="signalStrictPercentage">Décibels + pourcentage stricte</string>
     <string name="signalAdjustPercentage">Décibels + pourcentage rajusté</string>
 
     <!-- used for signal type value array -->
     <string name="signalTypeDialogTitle">Sélectionnez un Type de Signal</string>
-    <string name="dB">db</string>
-    <string name="strictReading">strict</string>
-    <string name="relativeReading">relative</string>
 
     <!-- for enable debugging preference -->
     <string name="debugPrefsTitle">Paramètres de débogage</string>
     <string name="enableDebugTitle">Activer la sortie de débogage</string>
-    <string name="enableDebugKey">enable_debug</string>
     <string name="enableDebugSummary">
         <![CDATA[Utiles si vous avez besoin de donner le développeur quelques infos supplémentaires. décharges supplémentaires d\'informations à l\'écran et logcat. je < 3 personnes qui me donnent des infos supplémentaire.]]></string>
 

@@ -1,5 +1,4 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<!--
+<?xml version='1.0' encoding='UTF-8'?><!--
   ~ /*
   ~ Copyright (c) 2015 Wes Lanning, http://codingcreation.com
   ~
@@ -31,16 +30,10 @@
     <string name="mainPreferenceHeaderTitle">Preferencias de señal</string>
     <string name="mainPreferenceHeaderSummary">Opciones relacionadas con cómo se muestran las señales.</string>
     <!--=== signal reading unit measurements ===-->
-    <!--decibel-milliwatts (also the default signal measurement)-->
-    <string name="dBm">dB</string>
-    <!--milliwatts-->
-    <string name="mW">mW</string>
-    <!--microWatts-->
-    <string name="µW">µW</string>
+
     <!--Display related preferences-->
     <string name="displayPreferencesTitle">Configuración de la pantalla</string>
     <string name="screenOnTitle">Seguir la pantalla</string>
-    <string name="keepScreenOnKey">keep_screen_on</string>
     <string name="screenOnSummary">Seguir la pantalla mientras la aplicación está enfocada</string>
     <!--Summary of what each displayed signal type does under preferences-->
     <!--=== Drop down text strings for what signal type to display ===-->
@@ -51,14 +44,18 @@
     <string name="signalAdjustPercentage">Decibelios + porcentaje ajustado</string>
     <!--used for signal type value array-->
     <string name="signalTypeDialogTitle">Seleccione un tipo de señal</string>
-    <string name="dB">dB</string>
     <string name="strictReading">estricta</string>
     <string name="relativeReading">relativa</string>
+
+    <!-- Summary of what each displayed signal type does under preferences -->
+    <string formatted="false" name="signalTypeSummary">Estricto % se basa en los intervalos definidos por el 3GPP. Relativo
+         % se ajusta para su compañía. 100% = la mejor, 0% = no hay señal
+    </string>
+
     <!--for enable debugging preference-->
     <string name="debugPrefsTitle">Configuración de depuración</string>
     <string name="enableDebugTitle">Permitir salida de depuración</string>
-    <string name="enableDebugKey">enable_debug</string>
   <string name="enableDebugSummary">
-        <![CDATA[Útil si alguna vez necesitas dar alguna información adicional. vuelca información adicional a la pantalla el desarrollador y logcat. me &lt; 3 personas que me den información adicional.]]></string>
+        <![CDATA[Útil si alguna vez necesitas dar alguna información adicional. vuelca información adicional a la pantalla el desarrollador y logcat. me <3 personas que me den información adicional.]]></string>
     <!--**************** /End Preferences related strings ****************-->
 </resources>

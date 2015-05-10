@@ -76,7 +76,7 @@ class MainActivity extends BaseActivity {
    * @return
    */
   private def Tm: TelephonyManager = {
-    tm = if (tm == null) this.getSysService[TelephonyManager](Context.TELEPHONY_SERVICE) else tm
+    tm = if (tm == null) this.service[TelephonyManager](Context.TELEPHONY_SERVICE) else tm
     tm
   }
 
