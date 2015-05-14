@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="AndroidDexCompilerConfiguration">
-    <option name="MAX_HEAP_SIZE" value="1200" />
-    <option name="FORCE_JUMBO" value="true" />
+    <option name="MAX_HEAP_SIZE" value="2560" />
+    <option name="PROGUARD_VM_OPTIONS" value="-Xmx2048m -XX:MaxPermSize=512m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8" />
   </component>
 </project>
-

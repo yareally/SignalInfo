@@ -100,7 +100,7 @@ class SignalMapWrapper(pNetworkMap: Jmap[NetworkType, ISignal])
      * @param adjustReadings - use strict % readings or adjust for carriers/android?
      * @return network signal info organized by gsm, cdma, lte, etc
      */
-    def getPercentSignalMap(adjustReadings: Boolean): Jmap[String, String] = {
+    def percentSignalMap(adjustReadings: Boolean): Jmap[String, String] = {
         import scala.collection.JavaConversions._
         val percentSignalMap = new Lmap[String, String]
 

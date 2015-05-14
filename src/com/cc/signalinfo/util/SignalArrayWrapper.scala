@@ -60,7 +60,7 @@ object SignalArrayWrapper {
  */
 class SignalArrayWrapper(signalArray: String) {
 
-  import SignalArrayWrapper._
+  import com.cc.signalinfo.util.SignalArrayWrapper._
 
   lazy    val rawData       = signalArray
   private var filteredArray = EMPTY_SIGNAL_ARRAY

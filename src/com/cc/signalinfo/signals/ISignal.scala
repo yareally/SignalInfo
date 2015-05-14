@@ -23,7 +23,7 @@ trait ISignal
      * @param name the name
      * @return the signal string
      */
-    def getSignalString(name: Signal): String
+    def signalString(name: Signal): String
 
     /**
      * Gets signal.
@@ -137,7 +137,7 @@ trait ISignal
      * @param fudgeReading - set to true, fudge the reading to make the user feel better while ignoring standards
      * @return the relative efficiency as a percent
      */
-    def getRelativeEfficiency(name: Signal, fudgeReading: Boolean): String
+    def relativeEfficiency(name: Signal, fudgeReading: Boolean): String
 
     /**
      * The percent from 0 (worst) 100 (best)

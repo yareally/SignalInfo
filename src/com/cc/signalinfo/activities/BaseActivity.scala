@@ -1,21 +1,16 @@
 package com.cc.signalinfo.activities
 
 import java.util.Calendar
-
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.content.res.TypedArray
 import android.os.{Build, Bundle}
 import android.preference.PreferenceActivity
-import android.support.v4.view.WindowCompat
 import android.support.v7.app.ActionBarActivity
 import android.support.v7.app.ActionBar
-import android.util.Log
-import android.view.View
-import android.widget.TextView
-import android.view.Menu
-import android.view.MenuItem
-import com.cc.signalinfo.R
+import android.util.{Log}
+import android.view._
+import android.widget.{TextView}
+import com.cc.signalinfo.{R}
 import com.cc.signalinfo.config.AppSetup
 import com.cc.signalinfo.config.AppSetup.enableStrictMode
 import com.cc.signalinfo.fragments.SettingsFragment
@@ -55,11 +50,12 @@ class BaseActivity extends ActionBarActivity {
   protected def onCreate(layout: Int, savedInstanceState: Bundle) {
     this.onCreateApp(savedInstanceState)
     setContentView(layout)
+    actionBar = getSupportActionBar
+    actionBar.setHomeButtonEnabled(true)
 //    val styledAttrs: TypedArray = getTheme.obtainStyledAttributes(Array[Int](android.support.v7.appcompat.R.attr.actionBarSize))
 //    actionBarHeight = styledAttrs.getDimension(0, 0)
 //    styledAttrs.recycle()
-    actionBar = getSupportActionBar
-    actionBar.setHomeButtonEnabled(true)
+
 
     if (!AppSetup.DEBUG_BUILD) {
       val ad: AdView = this.find[AdView](R.id.adView)

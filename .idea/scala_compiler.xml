@@ -6,5 +6,8 @@
     <option name="uncheckedWarnings" value="true" />
     <option name="featureWarnings" value="true" />
     <option name="explainTypeErrors" value="true" />
+    <parameters>
+      <parameter value="-Dfile.encoding=UTF-8" />
+    </parameters>
   </component>
 </project>

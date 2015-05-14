@@ -19,6 +19,8 @@ import com.cc.signalinfo.util.StringUtils.{isNullOrEmpty, safeEquals}
  */
 class LteInfo(tm: TelephonyManager, pSignals: Jmap[Signal, String]) extends SignalInfo(NetworkType.LTE, tm, pSignals) {
   possibleValues = Eset.range(Signal.LTE_SIG_STRENGTH, Signal.LTE_RSSI)
+  // used to calculate the RSSI for most LTE networks,
+  // but not all (though it's close enough without a good way to determine the band of LTE a device is using)
   private final val RSSI_CONSTANT = 17
 
   /**

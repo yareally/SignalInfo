@@ -28,12 +28,9 @@ import java.util.{Collections, EnumMap ⇒ Emap, Map ⇒ Jmap}
 import android.content.res.{Resources, TypedArray}
 import android.content.{Intent, Context, SharedPreferences}
 import android.os.{Build, Bundle}
-import android.support.v4.view.WindowCompat
 import android.telephony.{PhoneStateListener, SignalStrength, TelephonyManager}
-import android.view.ViewTreeObserver.OnScrollChangedListener
-import android.view.{ViewTreeObserver, Window, View, WindowManager}
-import android.support.v7.widget
-import android.widget.{ScrollView, TextView, Toast}
+import android.view.{View, WindowManager}
+import android.widget.{TextView, Toast}
 import com.cc.signalinfo.R
 import com.cc.signalinfo.activities.MainActivity._
 import com.cc.signalinfo.config.AppSetup.DEFAULT_TXT
@@ -53,7 +50,7 @@ import com.commonsware.cwac.loaderex.acl.SharedPreferencesLoader
  */
 class MainActivity extends BaseActivity {
   private lazy val signalTextViewMap                   = new Emap[Signal, TextView](classOf[Signal])
-  private lazy val signalStr      : PhoneStateListener = onSignalChanged((signalStrength: SignalStrength) ⇒ {
+  private lazy val signalStr      : PhoneStateListener = onSignalChanged((signalStrength) ⇒ {
     if (signalStrength != null) {
       lazy val signalWrapper = new SignalArrayWrapper(signalStrength.toString)
       filteredSignals = signalWrapper.filterSignals(signalStrength.toString)
@@ -224,17 +221,17 @@ class MainActivity extends BaseActivity {
     // intellij may lie and say the above is not needed, but it is
 
     val networkTypes: Jmap[NetworkType, ISignal] = signalMapWrapper.getNetworkMap
-    val signalDataMap: Jmap[Signal, TextView] = getSignalTextViewMap(sigInfoIds, refreshMap = false)
+    val signalDataMap: Jmap[Signal, TextView] = signalTextViewMap(sigInfoIds, refreshMap = false)
     val unit = getString(R.string.dBm)
 
     for ((k: Signal, v: TextView) ← signalDataMap) {
       try {
         val signal: ISignal = networkTypes.get(k.`type`)
-        val sigValue = signal.getSignalString(k)
+        val sigValue = signal.signalString(k)
 
         if (!StringUtils.isNullOrEmpty(sigValue) && DEFAULT_TXT != sigValue) {
           // should we show the percentage along with the dBm?
-          val signalPercent: String = if (dbOnly) "" else s"(${signal.getRelativeEfficiency(k, fudgeSignal)})"
+          val signalPercent: String = if (dbOnly) "" else s"(${signal.relativeEfficiency(k, fudgeSignal)})"
           v.text(s"$sigValue $unit $signalPercent")
         }
       }
@@ -253,7 +250,7 @@ class MainActivity extends BaseActivity {
    * @param refreshMap - should we recreate the map or reuse it? (in case we some reason added some, somehow)
    * @return map of the Signal data enumeration types (keys) and corresponding TextViews (values)
    */
-  def getSignalTextViewMap(sigInfoIds: TypedArray, refreshMap: Boolean): Jmap[Signal, TextView] = {
+  def signalTextViewMap(sigInfoIds: TypedArray, refreshMap: Boolean): Jmap[Signal, TextView] = {
     if (signalTextViewMap.isEmpty || refreshMap) {
       val values: Array[Signal] = Signal.values
 
@@ -291,9 +288,9 @@ class MainActivity extends BaseActivity {
         view.setVisibility(View.VISIBLE)
       }
       val debugMapRelative: Jmap[String, String] =
-        new SignalMapWrapper(debugInfo.getFilteredArray, Tm).getPercentSignalMap(adjustReadings = true)
+        new SignalMapWrapper(debugInfo.getFilteredArray, Tm).percentSignalMap(adjustReadings = true)
       val debugMapStrict: Jmap[String, String] =
-        new SignalMapWrapper(debugInfo.getFilteredArray, Tm).getPercentSignalMap(adjustReadings = false)
+        new SignalMapWrapper(debugInfo.getFilteredArray, Tm).percentSignalMap(adjustReadings = false)
 
       this.find[TextView](R.id.debugArray)
         .text(s"${debugInfo.rawData}" +

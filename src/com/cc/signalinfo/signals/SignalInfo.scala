@@ -151,7 +151,7 @@ abstract class SignalInfo(protected val networkType: NetworkType,
    * @param signalType - the signalType
    * @return the signal string or null if doesn't exist
    */
-  def getSignalString(signalType: Signal): String = {
+  def signalString(signalType: Signal): String = {
     signals.get(signalType)
   }
 
@@ -168,7 +168,7 @@ abstract class SignalInfo(protected val networkType: NetworkType,
    * @param fudgeReading - set to true, fudge the reading to make the user feel better while ignoring standards
    * @return the relative efficiency as a percent
    */
-  def getRelativeEfficiency(name: Signal, fudgeReading: Boolean): String = {
+  def relativeEfficiency(name: Signal, fudgeReading: Boolean): String = {
     var signalValue: Float =
       if (DEFAULT_TXT == signals.get(name)) {
         -1
@@ -221,7 +221,7 @@ abstract class SignalInfo(protected val networkType: NetworkType,
     val readings = new Lmap[String, String]
 
     for ((signalKey, signalValue) ← signals) {
-      readings(signalKey.name) = getRelativeEfficiency(signalKey, fudgeReading)
+      readings(signalKey.name) = relativeEfficiency(signalKey, fudgeReading)
     }
     readings
   }
